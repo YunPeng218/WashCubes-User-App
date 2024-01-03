@@ -1,2 +1,2 @@
 # washcubes-user-app
-# RIp Timmy
+# RIP Timmy
