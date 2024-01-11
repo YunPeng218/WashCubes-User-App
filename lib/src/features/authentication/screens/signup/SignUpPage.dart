@@ -1,10 +1,10 @@
-import 'OTPVerifyPage.dart';
+import '../../../../../OTPVerifyPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'LoginPage.dart';
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

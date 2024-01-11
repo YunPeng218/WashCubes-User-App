@@ -1,8 +1,7 @@
 import 'package:device_run_test/HomePage.dart';
+import 'package:device_run_test/src/features/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'BiometricSetup.dart';
-import 'OnboardingP1.dart';
 
 class OTPVerifyPage extends StatelessWidget {
   OTPVerifyPage({Key? key, required this.source}) : super(key: key);
@@ -99,7 +98,7 @@ class OTPVerifyPage extends StatelessWidget {
       // Navigate New Users to Onboarding Page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => OnboardingP1()),
+        MaterialPageRoute(builder: (context) => OnboardingScreen()),
       );
     }
 

@@ -1,7 +1,7 @@
 import 'package:device_run_test/src/utilities/theme/theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
-import 'SignUpPage.dart';
+import 'src/features/authentication/screens/signup/SignUpPage.dart';
 import 'OTPVerifyPage.dart';
 import 'HomePage.dart';
 
@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const SignUpPage()),
+                    context, MaterialPageRoute(builder: (context) => const SignUpScreen()),
                   );
                 },// Navigate to Sign Up Page
                 // style: TextButton.styleFrom(padding: EdgeInsets.only(top: 50.0)),
