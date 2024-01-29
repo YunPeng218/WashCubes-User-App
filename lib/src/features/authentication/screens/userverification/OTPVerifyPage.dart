@@ -1,4 +1,4 @@
-import 'package:device_run_test/HomePage.dart';
+import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
 import 'package:device_run_test/src/features/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

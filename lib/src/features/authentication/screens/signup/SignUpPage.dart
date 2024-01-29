@@ -1,4 +1,4 @@
-import '../../../../../OTPVerifyPage.dart';
+import '../userverification/OTPVerifyPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'LoginPage.dart';

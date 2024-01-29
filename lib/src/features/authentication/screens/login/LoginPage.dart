@@ -1,9 +1,9 @@
 import 'package:device_run_test/src/utilities/theme/theme.dart';
-import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
+//import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
-import 'src/features/authentication/screens/signup/SignUpPage.dart';
-import 'OTPVerifyPage.dart';
-import 'HomePage.dart';
+import '../signup/SignUpPage.dart';
+import '../userverification/OTPVerifyPage.dart';
+import '../home/HomePage.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

@@ -1,6 +1,7 @@
 import 'package:device_run_test/src/constraints/image_strings.dart';
 import 'package:device_run_test/src/constraints/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
 import 'package:device_run_test/src/constraints/colors.dart';
 // import 'package:liquid_swipe/liquid_swipe.dart';
 
@@ -55,6 +56,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPressed: () {
                   // Handle the action for the button on the last page
                   // You can navigate to the next screen or perform any other action
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   // padding: EdgeInsets.fromLTRB(70, 0, 70,0),

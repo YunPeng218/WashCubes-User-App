@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/authentication/screens/signup/SignUpPage.dart';
-import 'package:device_run_test/OTPVerifyPage.dart';
-import 'package:device_run_test/HomePage.dart';
+import 'package:device_run_test/src/features/authentication/screens/userverification/OTPVerifyPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
 import 'package:device_run_test/src/utilities/theme/theme.dart';
 import 'package:device_run_test/src/constraints/colors.dart';
 
