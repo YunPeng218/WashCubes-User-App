@@ -86,9 +86,9 @@ class LoginPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 // crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  IconButton(icon: Icon(Icons.camera_front, size: 40.0), onPressed: () {null;},),
-                  IconButton(icon: Icon(Icons.fingerprint, size: 40.0), onPressed: () {null;},),
-                  IconButton(icon: Icon(Icons.qr_code, size: 40.0), onPressed: () {null;},),
+                  IconButton(icon: const Icon(Icons.camera_front, size: 40.0), onPressed: () {null;},),
+                  IconButton(icon: const Icon(Icons.fingerprint, size: 40.0), onPressed: () {null;},),
+                  IconButton(icon: const Icon(Icons.qr_code, size: 40.0), onPressed: () {null;},),
                 ],
               ),
               // Add more widgets as needed

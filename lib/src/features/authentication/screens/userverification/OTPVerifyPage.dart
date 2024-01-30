@@ -1,3 +1,4 @@
+import 'package:device_run_test/src/constraints/colors.dart';
 import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
 import 'package:device_run_test/src/features/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class OTPVerifyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verification', style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text('Verification', style: Theme.of(context).textTheme.displaySmall,),
         centerTitle: true,
       ),
       body: Center(
@@ -22,7 +23,7 @@ class OTPVerifyPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 30.0),
-            const Text('Enter the OTP sent to +60*********'),
+            Text('Enter the OTP sent to +60*********', style: Theme.of(context).textTheme.headlineMedium,),
             const SizedBox(height: 30.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -30,9 +31,9 @@ class OTPVerifyPage extends StatelessWidget {
               children: List.generate(6, (index) => Container(
                 width: 40,
                 height: 40,
-                margin: EdgeInsets.only(right: 10),
+                margin: const EdgeInsets.only(right: 10),
                 decoration:  BoxDecoration (
-                  border:  Border.all(color: Color.fromARGB(255, 157, 213, 243)),
+                  border:  Border.all(color: AppColors.cBlueColor1),
                   borderRadius:  BorderRadius.circular(10),
                 ),
                 child: Center(
@@ -63,8 +64,8 @@ class OTPVerifyPage extends StatelessWidget {
               ),
               ),
             ),
-            SizedBox(height: 30.0),
-            Text("Didn't receive OTP code?"),
+            const SizedBox(height: 30.0),
+            Text("Didn't receive OTP code?", style: Theme.of(context).textTheme.headlineMedium,),
             TextButton(
               onPressed: () {null;},// Add your desired action here
               child: const Row(
@@ -72,7 +73,7 @@ class OTPVerifyPage extends StatelessWidget {
                 children: [
                   Text(
                     'Resend Code', 
-                    style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                    style: TextStyle(color: AppColors.cBlueColor2, decoration: TextDecoration.underline),
                   ),
                 ],
               ),
@@ -92,13 +93,13 @@ class OTPVerifyPage extends StatelessWidget {
       // Navigate Login Users to Home Page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => const HomePage()),
       );
     } else if (source == 'signup') {
       // Navigate New Users to Onboarding Page
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
+        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
       );
     }
 

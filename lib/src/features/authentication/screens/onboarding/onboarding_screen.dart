@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/constraints/image_strings.dart';
+import 'package:device_run_test/src/constraints/sizes.dart';
 import 'package:device_run_test/src/constraints/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
@@ -35,9 +36,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),),
           Padding(
-            padding: const EdgeInsets.fromLTRB(250.0, 0, 0, 70.0),
+            padding: const EdgeInsets.all(cDefaultSize),
             child: Align(
-              alignment: Alignment.center,
+              alignment: Alignment.centerRight,
               child: _currentPage < 2 ?IconButton(
                 icon: const Icon(
                   Icons.arrow_forward, size: 40.0,
@@ -47,7 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     // Advance to the next page
                     _pageController.animateToPage(
                       _currentPage + 1,
-                      duration: Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
                   }
@@ -58,15 +59,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   // You can navigate to the next screen or perform any other action
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  // padding: EdgeInsets.fromLTRB(70, 0, 70,0),
                   textStyle: Theme.of(context).textTheme.labelLarge,
                   backgroundColor: AppColors.cButtonColor,
                 ),
-                child: Text('Start'),
+                child: Text('Start', style: Theme.of(context).textTheme.headlineMedium,),
               ),
             ),
           ),
@@ -82,7 +82,7 @@ class OnboardingPage extends StatelessWidget {
   final String subtitle;
   final int currentIndex;
 
-  const OnboardingPage({required this.imagePath, required this.title, required this.subtitle, required this.currentIndex});
+  const OnboardingPage({super.key, required this.imagePath, required this.title, required this.subtitle, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +91,16 @@ class OnboardingPage extends StatelessWidget {
       children: [
         Image(image: AssetImage(imagePath),),
         DotsIndicator(itemCount: 3, currentIndex: currentIndex),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 30.0, 0, 15.0),
-          child: Text(title, style: Theme.of(context).textTheme.displayMedium,),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(40.0, 0, 40.0, 0),
-          child: Text(subtitle, style: Theme.of(context).textTheme.headlineSmall,),
+        
+        Container(
+          padding: const EdgeInsets.all(cDefaultSize),
+          child: Column(
+            children: [
+              Text(title, style: Theme.of(context).textTheme.displayMedium,),
+              const SizedBox(height: 10.0,),
+              Text(subtitle, style: Theme.of(context).textTheme.headlineSmall,),
+            ],
+          ),
         ),
       ],
     );
@@ -108,7 +111,7 @@ class DotsIndicator extends StatelessWidget {
   final int itemCount;
   final int currentIndex;
 
-  DotsIndicator({required this.itemCount, required this.currentIndex});
+  const DotsIndicator({super.key, required this.itemCount, required this.currentIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +125,7 @@ class DotsIndicator extends StatelessWidget {
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: index == currentIndex ? Colors.blue : Colors.grey,
+            color: index == currentIndex ? AppColors.cPrimaryColor : AppColors.cGreyColor2,
           ),
         ),
       ),

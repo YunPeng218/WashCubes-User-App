@@ -1,3 +1,4 @@
+import 'package:device_run_test/src/constraints/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/authentication/screens/signup/SignUpPage.dart';
 import 'package:device_run_test/src/features/authentication/screens/userverification/OTPVerifyPage.dart';
@@ -10,32 +11,32 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return MaterialApp(
       theme: CAppTheme.lightTheme,
       home: Scaffold(
-        body: Center(
+        body: Container(
+          padding: const EdgeInsets.all(cDefaultSize),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/logos/washcube_logo.png'),
-              const SizedBox(height: 40.0,),
+              Image.asset('assets/logos/washcube_logo.png', height: size.height * 0.2),
+              const SizedBox(height: cDefaultSize,),
               TextButton(
                 onPressed: () {
                   Navigator.push(
                     context, MaterialPageRoute(builder: (context) => OTPVerifyPage(source: 'login')),
                   );
-                },// Navigate to Sign Up Page
-                // style: TextButton.styleFrom(padding: EdgeInsets.only(top: 50.0)),
+                },// Navigate to Login Page
                 child: Container(
-                  width:  329,
-                  height:  46,
-                  //margin: EdgeInsets.only(top: 50.0),
+                  width:  double.infinity,
+                  height:  cButtonHeight,
                   decoration:  BoxDecoration (
-                    border:  Border.all(color: Colors.black),
+                    border:  Border.all(color: AppColors.cBlackColor),
                     borderRadius:  BorderRadius.circular(10),
                   ),
                   child: Center(
-                      child: Text('Login',textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,),
+                      child: Text('Login', style: Theme.of(context).textTheme.headlineMedium,),
                   ),
                 ),
               ),
@@ -46,18 +47,16 @@ class WelcomeScreen extends StatelessWidget {
                     context, MaterialPageRoute(builder: (context) => const SignUpScreen()),
                   );
                 },// Navigate to Sign Up Page
-                // style: TextButton.styleFrom(padding: EdgeInsets.only(top: 50.0)),
                 child: Container(
-                  width:  329,
-                  height:  46,
-                  //margin: EdgeInsets.only(top: 50.0),
+                  width:  double.infinity,
+                  height:  cButtonHeight,
                   decoration:  BoxDecoration (
-                    border:  Border.all(color: Colors.black),
+                    border:  Border.all(color: AppColors.cBlackColor),
                     borderRadius:  BorderRadius.circular(10),
                   ),
                   child: Center(
                     child: Center(
-                      child: Text('Sign Up',textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium,),
+                      child: Text('Sign Up', style: Theme.of(context).textTheme.headlineMedium,),
                     ),
                   ),
                 ),
@@ -68,16 +67,9 @@ class WelcomeScreen extends StatelessWidget {
                     context, MaterialPageRoute(builder: (context) => const HomePage()),
                   );
                 },// Add your desired action here
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Continue as Guest', 
-                      style: TextStyle(decoration: TextDecoration.underline, color: AppColors.cGreyColor3,), 
-                    ),
-                    Icon(Icons.arrow_forward_ios),
-                  ],
+                child: const Text(
+                  'Continue as Guest', 
+                  style: TextStyle(decoration: TextDecoration.underline, color: AppColors.cGreyColor3,), 
                 ),
               ),
               //start biometric icon
@@ -88,7 +80,6 @@ class WelcomeScreen extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   IconButton(icon: const Icon(Icons.camera_front, size: 40.0), onPressed: () {null;},),
                   IconButton(icon: const Icon(Icons.fingerprint, size: 40.0), onPressed: () {null;},),

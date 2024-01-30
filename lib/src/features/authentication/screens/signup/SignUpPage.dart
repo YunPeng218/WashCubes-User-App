@@ -1,3 +1,6 @@
+import 'package:device_run_test/src/constraints/colors.dart';
+import 'package:device_run_test/src/constraints/sizes.dart';
+
 import '../userverification/OTPVerifyPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,76 +15,69 @@ class SignUpScreen extends StatelessWidget {
       appBar: AppBar(
         // title: Text('Sign Up Page'),
       ),
-      body: Center(
+      body: Container(
+        padding: const EdgeInsets.all(cDefaultSize * 1.5),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(10, 0, 0, 29),
-              constraints: const BoxConstraints (maxWidth:  301),
-              child: const Text('Kindly provide your mobile number, and a verification OTP will sent to your mobile number via SMS or WhatsApp.'),
-            ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(10, 0, 220, 12),
-              child: const Text('MOBILE NUMBER', style: TextStyle(color: Colors.grey, fontSize: 10)),
-            ),
-            Container(
-              margin:  const EdgeInsets.fromLTRB(50, 0, 0, 20),
-              // width:  double.infinity,
-              // height:  50,
-              child: Row(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //Country Phone Code
-                  Container(
-                    width:  70,
-                    height:  40,
-                    decoration:  BoxDecoration (
-                      border:  Border.all(color: Color(0xFF000000)),
-                      borderRadius:  BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                      child: Text('MY +60',textAlign: TextAlign.center),
-                    ),
-                  ),
-                  //Phone No. Input Box
-                  Container(
-                    width:  200,
-                    height:  40,
-                    margin: const EdgeInsets.only(left: 10),
-                    padding: const EdgeInsets.fromLTRB(5, 17, 0, 0),
-                    decoration:  BoxDecoration (
-                      border:  Border.all(color: Color(0xFFD7ECF7)),
-                      borderRadius:  BorderRadius.circular(10),
-                    ),
-                    child: TextField(
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      keyboardType: TextInputType.number,
-                      maxLength: 11,
-                      decoration: const InputDecoration(
-                        hintText:'12-345 6789', 
-                        hintStyle: TextStyle(color: Colors.grey), 
-                        counterText: '',
-                        border: InputBorder.none
+            Text('Kindly provide your mobile number, and a verification OTP will sent to your mobile number via SMS or WhatsApp.', style: Theme.of(context).textTheme.headlineMedium,),
+            Form(
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: cFormHeight - 10),
+                child: Row(
+                  children: [
+                    //Country Phone Code
+                    Container(
+                      width:  70,
+                      height:  cButtonHeight,
+                      decoration:  BoxDecoration (
+                        border:  Border.all(color: AppColors.cBlackColor),
+                        borderRadius:  BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text('MY +60', style: Theme.of(context).textTheme.headlineSmall,),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 10,),
+                    //Phone No. Input Box
+                    Expanded(
+                      child: Container(
+                        width:  200,
+                        height:  cButtonHeight,
+                        decoration:  BoxDecoration (
+                          border:  Border.all(color: AppColors.cBlueColor1),
+                          borderRadius:  BorderRadius.circular(10),
+                        ),
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            // labelText: 'MOBILE NUMBER',
+                            hintText: '123456789',
+                            hintStyle: TextStyle(color: AppColors.cGreyColor3), 
+                            counterText: '',
+                            border: InputBorder.none,
+                          ),
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          keyboardType: TextInputType.number,
+                          maxLength: 11,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+            
             //Send OTP Button
             TextButton(
-              onPressed: () {Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => OTPVerifyPage(source: 'signup')),
-                  );},// Send to OTP Page
+              onPressed: () {
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => OTPVerifyPage(source: 'signup')),
+                );
+              },// Send to OTP Page
               child: Container(
-                width:  300,
-                height:  46,
-                // margin: EdgeInsets.only(top: 50.0),
+                width:  double.infinity,
+                height:  cButtonHeight,
                 decoration:  BoxDecoration (
-                  color: Color(0xFFD7ECF7),
-                  //border:  Border.all(color: Colors.black),
+                  color: AppColors.cButtonColor,
                   borderRadius:  BorderRadius.circular(10),
                   boxShadow:  const [
                     BoxShadow(
@@ -91,15 +87,15 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Send OTP', 
-                      style: TextStyle(color: Colors.black),
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    SizedBox(width: 8), 
-                    Icon(Icons.send_rounded, color: Colors.black),
+                    const SizedBox(width: 8), 
+                    const Icon(Icons.send_rounded, color: AppColors.cBlackColor),
                   ],
                 ),
               ),

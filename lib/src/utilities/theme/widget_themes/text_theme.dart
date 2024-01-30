@@ -5,12 +5,12 @@ class CTextTheme {
 
   static TextTheme lightTextTheme = TextTheme(
     displayLarge: GoogleFonts.lexend(
-      color: Color.fromRGBO(28, 28, 40, 1), 
+      color: const Color.fromRGBO(28, 28, 40, 1), 
       fontWeight: FontWeight.w500, 
       fontSize: 26,
     ),
     displayMedium: GoogleFonts.lexend(
-      color: Color.fromRGBO(28, 28, 40, 1), 
+      color: const Color.fromRGBO(28, 28, 40, 1), 
       fontWeight: FontWeight.w500, 
       fontSize: 19,
     ),
@@ -20,27 +20,27 @@ class CTextTheme {
       fontSize: 18,
     ),
     headlineLarge: GoogleFonts.lexend(
-      color: Color.fromRGBO(28, 28, 40, 1), 
+      color: const Color.fromRGBO(28, 28, 40, 1), 
       fontWeight: FontWeight.w500, 
       fontSize: 16,
     ),
     headlineMedium: GoogleFonts.lexend(
-      color: Color.fromRGBO(28, 28, 40, 1), 
+      color: const Color.fromRGBO(28, 28, 40, 1), 
       fontWeight: FontWeight.w500, 
       fontSize: 14,
     ),
     headlineSmall: GoogleFonts.lexend(
-      color: Color.fromRGBO(28, 28, 40, 1), 
+      color: const Color.fromRGBO(28, 28, 40, 1), 
       fontWeight: FontWeight.w400, 
       fontSize: 13,
     ),
     labelLarge: GoogleFonts.lexend(
-      color: Color.fromRGBO(28, 28, 40, 1), 
+      color: const Color.fromRGBO(28, 28, 40, 1), 
       fontWeight: FontWeight.w400, 
       fontSize: 11,
     ),
     labelMedium: GoogleFonts.lexend(
-      color: Color.fromRGBO(28, 28, 40, 1), 
+      color: const Color.fromRGBO(28, 28, 40, 1), 
       fontWeight: FontWeight.w400, 
       fontSize: 10,
     ),
