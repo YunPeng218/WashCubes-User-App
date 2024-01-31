@@ -13,9 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // themeMode: ThemeMode.system,
       title: 'WashCubes App',
       theme: CAppTheme.lightTheme,
-      home: const WelcomeScreen(), // Set the initial page to the LoginPage
+      debugShowCheckedModeBanner: false,
+      home: WelcomeScreen(), // Set the initial page to the LoginPage
     );
   }
 }

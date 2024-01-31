@@ -8,7 +8,9 @@ class OTPVerifyPage extends StatelessWidget {
   OTPVerifyPage({Key? key, required this.source}) : super(key: key);
   final String source;
   //Generate 6 controllers for the textfields
-  List<TextEditingController> controllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> controllers = List.generate(6, (_) => TextEditingController());
+  final List<FocusNode> focusNodes = List.generate(6, (_) => FocusNode());
+  final List<bool> isTextFieldEnabled = List.generate(6, (index) => index == 0);
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class OTPVerifyPage extends StatelessWidget {
                 child: Center(
                   child: TextField(
                     controller: controllers[index],// Connecting Controller to Each TextField
+                    focusNode: focusNodes[index], // Assign FocusNode
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     keyboardType: TextInputType.number,
                     maxLength: 1,
@@ -53,9 +56,10 @@ class OTPVerifyPage extends StatelessWidget {
                         if (index == 5 && _isOTPFilled()) {
                           // Move to Post-verification Process Depending on the Enter Method
                           _handlePostVerification(context);
-                        } else {
+                        } else if (index < 5){
                           // Focus the next TextField
-                          FocusScope.of(context).nextFocus();
+                          FocusScope.of(context).requestFocus(focusNodes[index + 1]);
+                          isTextFieldEnabled[index + 1] = true;
                         }
                       }
                     },
