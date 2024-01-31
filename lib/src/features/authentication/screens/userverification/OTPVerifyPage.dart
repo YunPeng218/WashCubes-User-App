@@ -42,6 +42,7 @@ class OTPVerifyPage extends StatelessWidget {
                   child: TextField(
                     controller: controllers[index],// Connecting Controller to Each TextField
                     focusNode: focusNodes[index], // Assign FocusNode
+                    enabled: isTextFieldEnabled[index], // Enable or disable the TextField
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     keyboardType: TextInputType.number,
                     maxLength: 1,
@@ -58,8 +59,9 @@ class OTPVerifyPage extends StatelessWidget {
                           _handlePostVerification(context);
                         } else if (index < 5){
                           // Focus the next TextField
-                          FocusScope.of(context).requestFocus(focusNodes[index + 1]);
                           isTextFieldEnabled[index + 1] = true;
+                          FocusScope.of(context).requestFocus(focusNodes[index + 1]);
+                          
                         }
                       }
                     },
