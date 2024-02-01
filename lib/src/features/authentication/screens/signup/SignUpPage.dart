@@ -1,5 +1,5 @@
-import 'package:device_run_test/src/constraints/colors.dart';
-import 'package:device_run_test/src/constraints/sizes.dart';
+import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/textfield_theme.dart';
 
 import '../userverification/OTPVerifyPage.dart';

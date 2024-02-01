@@ -1,11 +1,11 @@
-import 'package:device_run_test/src/constraints/sizes.dart';
+import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/textfield_theme.dart';
 import 'package:flutter/material.dart';
 // import 'package:device_run_test/src/features/authentication/screens/signup/SignUpPage.dart';
 import 'package:device_run_test/src/features/authentication/screens/userverification/OTPVerifyPage.dart';
 import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
-import 'package:device_run_test/src/constraints/colors.dart';
+import 'package:device_run_test/src/constants/colors.dart';
 import 'package:flutter/services.dart';
 
 class WelcomeScreen extends StatelessWidget {

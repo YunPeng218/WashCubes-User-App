@@ -1,9 +1,9 @@
-import 'package:device_run_test/src/constraints/image_strings.dart';
-import 'package:device_run_test/src/constraints/sizes.dart';
-import 'package:device_run_test/src/constraints/text_strings.dart';
+import 'package:device_run_test/src/constants/image_strings.dart';
+import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
-import 'package:device_run_test/src/constraints/colors.dart';
+import 'package:device_run_test/src/constants/colors.dart';
 // import 'package:liquid_swipe/liquid_swipe.dart';
 
 class OnboardingScreen extends StatefulWidget {

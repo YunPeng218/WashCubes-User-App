@@ -1,4 +1,4 @@
-import 'package:device_run_test/src/constraints/colors.dart';
+import 'package:device_run_test/src/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/utilities/theme/theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
