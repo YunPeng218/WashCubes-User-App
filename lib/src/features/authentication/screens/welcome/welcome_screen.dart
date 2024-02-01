@@ -1,3 +1,4 @@
+import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/textfield_theme.dart';
@@ -22,7 +23,7 @@ class WelcomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/logos/washcube_logo.png', height: size.height * 0.2),
+            Image.asset(cAppLogo, height: size.height * 0.2),
             const SizedBox(height: cDefaultSize,),
             Container(
               padding: const EdgeInsets.symmetric(vertical: cFormHeight - 30),
