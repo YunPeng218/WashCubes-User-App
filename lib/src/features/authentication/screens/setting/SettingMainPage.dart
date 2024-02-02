@@ -1,11 +1,12 @@
-import 'package:device_run_test/FeedbackPage.dart';
-import 'package:device_run_test/PolicyPage.dart';
 import 'package:flutter/material.dart';
-
 import 'EditProfilePage.dart';
 import 'FAQsPage.dart';
+import 'PolicyPage.dart';
+import 'FeedbackPage.dart';
 
 class SettingMainPage extends StatelessWidget {
+  const SettingMainPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,14 +14,14 @@ class SettingMainPage extends StatelessWidget {
         // backgroundColor: Colors.white,
         // elevation: 0,
         // leading: Icon(Icons.arrow_back, color: Colors.black),
-        actions: <Widget>[
+        actions: const <Widget>[
           Icon(Icons.settings, color: Colors.black),
           SizedBox(width: 10),
         ],
       ),
       body: ListView(
         children: <Widget>[
-          UserHeader(),
+          const UserHeader(),
           ProfileOption(
             title: 'Edit Profile',
             icon: Icons.edit,
@@ -75,6 +76,7 @@ class SettingMainPage extends StatelessWidget {
           ),
         ],
       ),
+      //BottomNavBar
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -96,9 +98,11 @@ class SettingMainPage extends StatelessWidget {
 }
 
 class UserHeader extends StatelessWidget {
+  const UserHeader({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    return const ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage('https://via.placeholder.com/150'),
         radius: 30,
@@ -113,18 +117,22 @@ class UserHeader extends StatelessWidget {
 class ProfileOption extends StatelessWidget {
   final String title;
   final IconData icon;
+  final VoidCallback onTap;
 
-  const ProfileOption({Key? key, required this.title, required this.icon, required Null Function() onTap}) : super(key: key);
+  const ProfileOption(
+      {Key? key,
+      required this.title,
+      required this.icon,
+      required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(icon, color: Colors.grey),
       title: Text(title),
-      trailing: Icon(Icons.chevron_right, color: Colors.grey),
-      onTap: () {
-        // Handle the tap event
-      },
+      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      onTap: onTap,
     );
   }
 }

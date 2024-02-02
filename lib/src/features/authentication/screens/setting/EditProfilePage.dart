@@ -31,7 +31,7 @@ class EditProfilePage extends StatelessWidget {
 class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         CircleAvatar(
           backgroundImage: NetworkImage('https://via.placeholder.com/150'),
