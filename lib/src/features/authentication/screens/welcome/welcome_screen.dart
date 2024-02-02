@@ -102,7 +102,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             TextButton(
               onPressed: () {
                 Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => const BiometricSetupPage()),
+                  context, MaterialPageRoute(builder: (context) => const HomePage()),
                 );
               },
               child: const Text(
