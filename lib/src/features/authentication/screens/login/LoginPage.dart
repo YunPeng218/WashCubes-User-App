@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => OTPVerifyPage(source: 'login')),
+                    context, MaterialPageRoute(builder: (context) => OTPVerifyPage()),
                   );
                 },// Navigate to Sign Up Page
                 // style: TextButton.styleFrom(padding: EdgeInsets.only(top: 50.0)),

@@ -2,27 +2,54 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/nearbylocation/NearbyLocationPage.dart';
 import 'package:flutter/material.dart';
+import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/features/authentication/screens/welcome/welcome_screen.dart';
+import 'package:device_run_test/src/utilities/theme/theme.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //import 'ProfilePage.dart'; 
 
-void main() {
-  runApp(const MyApp());
-}
+// void main() {
+//   runApp(const MyApp());
+// }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: HomePage(),
+//     );
+//   }
+// }
+
+class HomePage extends StatefulWidget {
+  final token;
+  const HomePage({Key? key, this.token}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-    );
-  }
+  _HomePageState createState() => _HomePageState();
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class _HomePageState extends State<HomePage> {
 
+  late String userID;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.token != null) {
+      Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
+      userID = jwtDecodedToken['_id'];
+    } else {
+      userID = 'Guest';
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
