@@ -1,3 +1,4 @@
+import 'package:device_run_test/SelectItemPage.dart';
 import 'package:flutter/material.dart';
 void main() {
   runApp(MyApp());
@@ -48,10 +49,46 @@ class LaundryServicePicker extends StatelessWidget {
               crossAxisSpacing: 16.0,
               mainAxisSpacing: 16.0,
               children: <Widget>[
-                ServiceCard(serviceName: 'Wash & Fold', iconName: 'icons/wash_fold.png'),
-                ServiceCard(serviceName: 'Dry Cleaning', iconName: 'icons/dry_cleaning.png'),
-                ServiceCard(serviceName: 'Handwash', iconName: 'icons/handwash.png'),
-                ServiceCard(serviceName: 'Laundry & Iron', iconName: 'icons/laundry_iron.png'),
+                ServiceCard(
+                    serviceName: 'Wash & Fold',
+                    iconName: 'assets/images/laundry_service/dry_cleaning.png',
+                    onTap:(){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SelectYourItemPage()),
+                      );
+                    },
+                ),
+                ServiceCard(
+                  serviceName: 'Dry Cleaning',
+                  iconName: 'assets/images/laundry_service/handwash.png',
+                  onTap:(){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SelectYourItemPage()),
+                    );
+                  },
+                ),
+                ServiceCard(
+                  serviceName: 'Handwash',
+                  iconName: 'assets/images/laundry_service/laundry_and_iron.png',
+                  onTap:(){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SelectYourItemPage()),
+                    );
+                  },
+                ),
+                ServiceCard(
+                  serviceName: 'Laundry & Iron',
+                  iconName: 'assets/images/laundry_service/wash_and_fold.png',
+                  onTap:(){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SelectYourItemPage()),
+                    );
+                  },
+                ),
                 // Assuming you have an icon for the chatbot as well
                 // ServiceCard(serviceName: 'Chat with Support', iconName: 'icons/support_chat.png'),
               ],
@@ -67,7 +104,7 @@ class ServiceCard extends StatelessWidget {
   final String serviceName;
   final String iconName;
 
-  ServiceCard({required this.serviceName, required this.iconName});
+  ServiceCard({required this.serviceName, required this.iconName, required Null Function() onTap});
 
   @override
   Widget build(BuildContext context) {

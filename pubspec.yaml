@@ -20,7 +20,6 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
-
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -30,7 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    qr_code_scanner: ^0.5.2
+
 
 
 
@@ -89,6 +88,8 @@ flutter:
     - assets/logos/
     - assets/images/onboard_image/
     - assets/images/homepage_image/
+    - assets/images/laundry_service/
+    - assets/images/select_item/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
