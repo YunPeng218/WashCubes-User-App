@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/features/authentication/screens/biometricSetup/biometric_setup_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
 import 'package:device_run_test/src/features/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
       prefs.setString('token', myToken);
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomePage(token: myToken),),(Route<dynamic> route) => false);
     } else if (jsonResponse['status'] == 'newUser') {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => OnboardingScreen(),),(Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => BiometricSetupPage(),),(Route<dynamic> route) => false);
     } else if (jsonResponse['status'] == 'wrongOTP') {
       showDialog(
         context: context,
