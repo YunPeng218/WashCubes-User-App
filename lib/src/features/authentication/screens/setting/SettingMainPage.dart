@@ -10,9 +10,9 @@ class SettingMainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: Icon(Icons.arrow_back, color: Colors.black),
+        // backgroundColor: Colors.white,
+        // elevation: 0,
+        // leading: Icon(Icons.arrow_back, color: Colors.black),
         actions: <Widget>[
           Icon(Icons.settings, color: Colors.black),
           SizedBox(width: 10),

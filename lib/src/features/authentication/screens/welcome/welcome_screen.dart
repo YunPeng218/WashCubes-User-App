@@ -11,6 +11,8 @@ import 'package:device_run_test/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:device_run_test/src/features/authentication/screens/onboarding/onboarding_screen.dart';
 
+import '../biometricSetup/biometric_setup_screen.dart';
+
 class WelcomeScreen extends StatefulWidget {
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();

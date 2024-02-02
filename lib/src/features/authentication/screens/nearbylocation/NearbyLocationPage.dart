@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../home/HomePage.dart';
 import 'NearbyLocationListPage.dart';
 // import 'package:location/location.dart';
-import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
 
 class NearbyLocationPage extends StatefulWidget {
   const NearbyLocationPage({Key? key}) : super(key: key);
@@ -173,8 +173,8 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: NearbyLocationPage(),
-  ));
-}
+// void main() {
+//   runApp(MaterialApp(
+//     home: NearbyLocationPage(),
+//   ));
+// }
