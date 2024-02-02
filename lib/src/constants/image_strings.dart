@@ -2,6 +2,10 @@
 const String cAppLogoName = "assets/logos/i3Cubes_logo&name.png";
 const String cAppLogo = "assets/logos/i3Cubes_logo.png";
 
+//Biometric Screen Images
+const String cFingerprintImage = "assets/images/biometric_image/fingerprint_image.png";
+const String cFacialScanImage = "assets/images/biometric_image/facial_scan_image.png";
+
 //Onboarding Screen Images
 const String cOnboardingImage1 = "assets/images/onboard_image/onboard_p1.png";
 const String cOnboardingImage2 = "assets/images/onboard_image/onboard_p2.png";

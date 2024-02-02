@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../constants/colors.dart';
 import '../../../../constants/sizes.dart';
 import '../../../../constants/text_strings.dart';
+import '../../../../utilities/theme/widget_themes/elevatedbutton_theme.dart';
 
 class ChatBotScreen extends StatefulWidget {
   const ChatBotScreen({super.key});
@@ -33,10 +34,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
           //End Button
           ElevatedButton(
             onPressed: (){},
-            style: ElevatedButton.styleFrom(
-              textStyle: Theme.of(context).textTheme.labelLarge,
-              backgroundColor: AppColors.cButtonColor,
-            ),
+            style: CElevatedButtonTheme.lightElevatedButtonTheme.style,
             child: Text("End", style: Theme.of(context).textTheme.headlineMedium,),
             ),
         ],
