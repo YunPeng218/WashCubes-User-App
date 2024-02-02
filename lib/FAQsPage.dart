@@ -36,7 +36,7 @@ class FAQsPage extends StatelessWidget {
         //   },
         // ),
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,s
+        foregroundColor: Colors.black,
       ),
       body: ListView(
         children: faqData.map<Widget>((faq) {
