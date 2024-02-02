@@ -9,8 +9,6 @@ import 'package:device_run_test/src/utilities/theme/theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../../SettingMainPage.dart';
 //import 'ProfilePage.dart'; 
 
 // void main() {
