@@ -1,6 +1,7 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/nearbylocation/NearbyLocationPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/setting/SettingMainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/features/authentication/screens/welcome/welcome_screen.dart';
