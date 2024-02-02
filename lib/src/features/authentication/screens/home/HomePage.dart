@@ -1,6 +1,7 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/nearbylocation/NearbyLocationPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/setting/SettingMainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/features/authentication/screens/welcome/welcome_screen.dart';
@@ -67,12 +68,12 @@ class _HomePageState extends State<HomePage> {
                   CircleAvatar(
                     backgroundImage:AssetImage(cAvatar),
                     child: GestureDetector(
-                      // onTap: () {
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(builder: (context) => ProfilePage()),
-                      //   );
-                      // },
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SettingMainPage()),
+                        );
+                      },
                       child: null, 
                     ),
                   ),

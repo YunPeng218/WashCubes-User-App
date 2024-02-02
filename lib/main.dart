@@ -2,7 +2,7 @@ import 'package:device_run_test/src/features/authentication/screens/welcome/welc
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/utilities/theme/theme.dart';
 
-import 'SettingMainPage.dart';
+import 'src/features/authentication/screens/setting/SettingMainPage.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 void main() {
