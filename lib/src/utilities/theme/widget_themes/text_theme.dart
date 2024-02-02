@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CTextTheme {
+  CTextTheme._();
 
   static TextTheme lightTextTheme = TextTheme(
     displayLarge: GoogleFonts.lexend(

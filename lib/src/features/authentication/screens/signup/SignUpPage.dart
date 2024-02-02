@@ -1,5 +1,6 @@
-import 'package:device_run_test/src/constraints/colors.dart';
-import 'package:device_run_test/src/constraints/sizes.dart';
+import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/textfield_theme.dart';
 
 import '../userverification/OTPVerifyPage.dart';
 import 'package:flutter/material.dart';
@@ -20,48 +21,25 @@ class SignUpScreen extends StatelessWidget {
         child: Column(
           children: [
             Text('Kindly provide your mobile number, and a verification OTP will sent to your mobile number via SMS or WhatsApp.', style: Theme.of(context).textTheme.headlineMedium,),
-            Form(
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: cFormHeight - 10),
-                child: Row(
-                  children: [
-                    //Country Phone Code
-                    Container(
-                      width:  70,
-                      height:  cButtonHeight,
-                      decoration:  BoxDecoration (
-                        border:  Border.all(color: AppColors.cBlackColor),
-                        borderRadius:  BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text('MY +60', style: Theme.of(context).textTheme.headlineSmall,),
-                      ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: cFormHeight - 20),
+              //width:  double.infinity,
+              height:  cFormHeight + 30,
+              child: Form(
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                    inputDecorationTheme: CTextFormFieldTheme.lightInputDecorationTheme,
+                  ),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Enter Phone Number Starts with 60',
+                      hintText: '60123456789', 
+                      counterText: '',
                     ),
-                    const SizedBox(width: 10,),
-                    //Phone No. Input Box
-                    Expanded(
-                      child: Container(
-                        width:  200,
-                        height:  cButtonHeight,
-                        decoration:  BoxDecoration (
-                          border:  Border.all(color: AppColors.cBlueColor1),
-                          borderRadius:  BorderRadius.circular(10),
-                        ),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            // labelText: 'MOBILE NUMBER',
-                            hintText: '123456789',
-                            hintStyle: TextStyle(color: AppColors.cGreyColor3), 
-                            counterText: '',
-                            border: InputBorder.none,
-                          ),
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                          keyboardType: TextInputType.number,
-                          maxLength: 11,
-                        ),
-                      ),
-                    ),
-                  ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    keyboardType: TextInputType.number,
+                    maxLength: 13,
+                  ),
                 ),
               ),
             ),
@@ -70,7 +48,7 @@ class SignUpScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => OTPVerifyPage(source: 'signup')),
+                  context, MaterialPageRoute(builder: (context) => OTPVerifyPage()),
                 );
               },// Send to OTP Page
               child: Container(
