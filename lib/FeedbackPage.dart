@@ -1,19 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FeedbackRatingsPage(),
-    );
-  }
-}
-
 class FeedbackRatingsPage extends StatefulWidget {
   @override
   _FeedbackRatingsPageState createState() => _FeedbackRatingsPageState();

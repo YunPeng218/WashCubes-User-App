@@ -1,18 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FAQsPage(),
-    );
-  }
-}
-
 class FAQsPage extends StatelessWidget {
   final List<Map<String, String>> faqData = [
     {
@@ -40,12 +27,16 @@ class FAQsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('FAQs'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     Navigator.push(
+        //     context,
+        //         MaterialPageRoute(builder: (context) => const SettingMainPage()),
+        //   },
+        // ),
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.black,s
       ),
       body: ListView(
         children: faqData.map<Widget>((faq) {
