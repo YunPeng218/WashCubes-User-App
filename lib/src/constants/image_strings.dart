@@ -19,3 +19,11 @@ const String cSpecialEventImage2 = "assets/images/homepage_image/special_event_2
 const String cSpecialEventImage3 = "assets/images/homepage_image/special_event_3.png";
 const String cSpecialEventImage4 = "assets/images/homepage_image/special_event_4.png";
 const String cChatBotLogo = "assets/images/homepage_image/chatbot_icon.png";
+
+//Select Item
+Map<String, String> itemImages = {
+  'All Garments': 'assets/images/select_item/all_garment.png',
+  'Bottom': 'assets/images/select_item/bottom.png',
+  'Curtain': 'assets/images/select_item/curtain.png',
+  'Comforter Cover / Bedsheet': 'assets/images/select_item/bed_sheet.png',
+};
