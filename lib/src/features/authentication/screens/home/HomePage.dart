@@ -1,7 +1,9 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/nearbylocation/NearbyLocationPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/notification/notification_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/setting/SettingMainPage.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/elevatedbutton_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/features/authentication/screens/welcome/welcome_screen.dart';
@@ -9,7 +11,6 @@ import 'package:device_run_test/src/utilities/theme/theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 // void main() {
 //   runApp(const MyApp());
@@ -36,7 +37,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   late String userID;
 
   @override
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
       userID = 'Guest';
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,17 +64,27 @@ class _HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.notifications, color: Colors.blue),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationScreen()),
+                      );
+                    },
+                    icon: const Icon(Icons.notifications_none),
+                  ),
                   CircleAvatar(
-                    backgroundImage:AssetImage(cAvatar),
+                    backgroundImage: const AssetImage(cAvatar),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => SettingMainPage()),
+                          MaterialPageRoute(
+                              builder: (context) => SettingMainPage()),
                         );
                       },
-                      child: null, 
+                      child: null,
                     ),
                   ),
                 ],
@@ -97,23 +107,25 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const NearbyLocationPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const NearbyLocationPage()),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  onPrimary: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                ),
+                style: CElevatedButtonTheme.lightElevatedButtonTheme.style,
+                // ElevatedButton.styleFrom(
+                //   primary: Colors.blue,
+                //   onPrimary: Colors.white,
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(30.0),
+                //   ),
+                //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                // ),
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Icon(Icons.location_on),
                     Text("Taylor's University"),
-                    Icon(Icons.arrow_forward_ios),
+                    Icon(Icons.keyboard_arrow_down_rounded),
                   ],
                 ),
               ),
@@ -134,8 +146,7 @@ class _HomePageState extends State<HomePage> {
                       width: 200,
                       height: 200,
                       child: Image.asset(
-                          'assets/images/homepage_image/special_event_${index + 1}.png'
-                      ),
+                          'assets/images/homepage_image/special_event_${index + 1}.png'),
                     );
                   },
                 ),
@@ -146,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               // Ongoing Order Section
-              const SizedBox(height: 5),// ...
+              const SizedBox(height: 5), // ...
 
               Container(
                 padding: const EdgeInsets.all(10),
@@ -204,7 +215,8 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Container(
                                 height: 10,
-                                width: 200 * 0.7, // Assuming the container is 200 wide, 70% filled
+                                width: 200 *
+                                    0.7, // Assuming the container is 200 wide, 70% filled
                                 decoration: BoxDecoration(
                                   color: Colors.blue,
                                   borderRadius: BorderRadius.circular(10),
@@ -215,7 +227,9 @@ class _HomePageState extends State<HomePage> {
                                 top: -2,
                                 child: Text(
                                   '70%',
-                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
@@ -255,18 +269,16 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               )
-
-
             ],
           ),
         ),
-        
       ),
       //ChatBot Trimi Button
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const ChatBotScreen()),
+            context,
+            MaterialPageRoute(builder: (context) => const ChatBotScreen()),
           );
         },
         tooltip: 'Increment',

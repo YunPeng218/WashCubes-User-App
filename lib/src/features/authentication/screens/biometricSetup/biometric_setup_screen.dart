@@ -23,10 +23,20 @@ class BiometricSetupPage extends StatelessWidget {
         centerTitle: true,
         actions: [
           //End Button
-          TextButton(onPressed: (){Navigator.push(
-          context, MaterialPageRoute(builder: (context) => OnboardingScreen()),
-        );},
-          child: Text('Skip', style: TextStyle(decoration: TextDecoration.underline, color: AppColors.cGreyColor3,),)),
+          TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+                );
+              },
+              child: const Text(
+                'Skip',
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  color: AppColors.cGreyColor3,
+                ),
+              )),
         ],
       ),
       body: Container(
@@ -34,13 +44,13 @@ class BiometricSetupPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(height: 60.0),
+            const SizedBox(height: 60.0),
             Text(
-              'Enabling Touch ID or Face ID will give you faster access.', 
+              'Enabling Touch ID or Face ID will give you faster access.',
               style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 60.0,),
+            const SizedBox(height: 60.0,),
             //Biometric Image
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -49,21 +59,27 @@ class BiometricSetupPage extends StatelessWidget {
                 Image.asset(cFacialScanImage, height: size.height * 0.15),
               ],
             ),
-            SizedBox(height: 50.0,),
+            const SizedBox(height: 50.0,),
             //Enable Button
             ElevatedButton(
-              onPressed: (){}, 
+              onPressed: () {},
+              style: CElevatedButtonTheme.lightElevatedButtonTheme.style,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CupertinoIcons.checkmark_alt, color: AppColors.cBlackColor,),
-                  Text('Enable', style: Theme.of(context).textTheme.headlineSmall,)
+                  const Icon(
+                    CupertinoIcons.checkmark_alt,
+                    color: AppColors.cBlackColor,
+                  ),
+                  Text(
+                    'Enable',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  )
                 ],
               ),
-              style: CElevatedButtonTheme.lightElevatedButtonTheme.style,
             ),
-            Text(
-              'You can turn this feature on or off at any time under Settings.', 
+            const Text(
+              'You can turn this feature on or off at any time under Settings.',
               style: TextStyle(color: AppColors.cGreyColor3),
               textAlign: TextAlign.center,
             ),
