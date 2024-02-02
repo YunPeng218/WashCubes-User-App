@@ -1,4 +1,6 @@
+import 'package:device_run_test/EditProfilePage.dart';
 import 'package:flutter/material.dart';
+import 'package:device_run_test/EditProfilePage.dart';
 
 class SettingMainPage extends StatelessWidget {
   @override
@@ -16,7 +18,7 @@ class SettingMainPage extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           UserHeader(),
-          ProfileOption(title: 'Edit Profile', icon: Icons.edit),
+          ProfileOption(title: 'Edit Profile', icon: Icons.edit, page: EditProfilePage()),
           //ProfileOption(title: 'Referral', icon: Icons.card_giftcard),
           //ProfileOption(title: 'Rewards', icon: Icons.star),
           ProfileOption(title: 'Settings', icon: Icons.settings),
@@ -66,8 +68,9 @@ class UserHeader extends StatelessWidget {
 class ProfileOption extends StatelessWidget {
   final String title;
   final IconData icon;
+  final Page page;
 
-  const ProfileOption({Key? key, required this.title, required this.icon}) : super(key: key);
+  const ProfileOption({Key? key, required this.title, required this.icon, required this.page}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
