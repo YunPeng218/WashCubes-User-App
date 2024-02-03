@@ -3,7 +3,6 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton
 import 'package:device_run_test/src/utilities/theme/widget_themes/textfield_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/authentication/screens/userverification/OTPVerifyPage.dart';
-import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,6 @@ import 'package:device_run_test/config.dart';
 import 'package:http/http.dart' as http;
 import 'package:device_run_test/src/features/authentication/screens/onboarding/onboarding_screen.dart';
 
-import '../biometricSetup/biometric_setup_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -46,6 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
@@ -65,26 +64,43 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   data: Theme.of(context).copyWith(
                     inputDecorationTheme: CTextFormFieldTheme.lightInputDecorationTheme,
                   ),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Enter Phone Number Starts with 60',
-                      hintText: '60123456789', 
-                      counterText: '',
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      inputDecorationTheme: CTextFormFieldTheme.lightInputDecorationTheme,
                     ),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    keyboardType: TextInputType.number,
-                    maxLength: 13,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a value';
-                      }
-                      RegExp pattern = RegExp(r'^(601)[0-46-9][0-9]{7,8}$');
-                      if (!pattern.hasMatch(value)) {
-                        return 'Invalid phone number pattern';
-                      }
-                      return null;
-                    },
+                    child: TextField(
+                      controller: phoneNumberController,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Enter Phone Number Starts with 60',
+                        hintText: '60123456789', 
+                        errorStyle: TextStyle(color: Colors.red),
+                        errorText: isNotValidate ? errorText : null,
+                      ),
+                    ),
                   ),
+
+                  // TextFormField(
+                  //   decoration: const InputDecoration(
+                  //     labelText: 'Enter Phone Number Starts with 60',
+                  //     hintText: '60123456789', 
+                  //     counterText: '',
+                  //   ),
+                  //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  //   keyboardType: TextInputType.number,
+                  //   maxLength: 13,
+                  //   validator: (value) {
+                  //     if (value == null || value.isEmpty) {
+                  //       return 'Please enter a value';
+                  //     }
+                  //     RegExp pattern = RegExp(r'^(601)[0-46-9][0-9]{7,8}$');
+                  //     if (!pattern.hasMatch(value)) {
+                  //       return 'Invalid phone number pattern';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                 ),
               ),
             ),
@@ -102,7 +118,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             TextButton(
               onPressed: () {
                 Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => const HomePage()),
+                  context, MaterialPageRoute(builder: (context) => const OnboardingScreen()),
                 );
               },
               child: const Text(

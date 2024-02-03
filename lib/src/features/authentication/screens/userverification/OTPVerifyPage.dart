@@ -1,7 +1,6 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/features/authentication/screens/biometricSetup/biometric_setup_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
-import 'package:device_run_test/src/features/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -44,21 +43,21 @@ class _OTPPageState extends State<OTPVerifyPage> {
       prefs.setString('token', myToken);
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomePage(token: myToken),),(Route<dynamic> route) => false);
     } else if (jsonResponse['status'] == 'newUser') {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => BiometricSetupPage(),),(Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const BiometricSetupPage(),),(Route<dynamic> route) => false);
     } else if (jsonResponse['status'] == 'wrongOTP') {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error'),
-            content: Text('The OTP entered is incorrect. Please try again.'),
+            content: Text('The OTP entered is incorrect. Please try again.', style: Theme.of(context).textTheme.headlineMedium,),
             actions: [
               TextButton(
                 onPressed: () {
                   // Close the dialog
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: Text('OK', style: Theme.of(context).textTheme.headlineMedium,),
               ),
             ],
           );
@@ -82,6 +81,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
             const SizedBox(height: 30.0),
             Text('Enter the OTP sent to +60*********', style: Theme.of(context).textTheme.headlineMedium,),
             const SizedBox(height: 30.0),
+            //Pin Code Field
             PinCodeTextField(
               appContext: context,
               controller: phoneNumberController,
@@ -89,15 +89,16 @@ class _OTPPageState extends State<OTPVerifyPage> {
               enableActiveFill: true,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              pastedTextStyle: Theme.of(context).textTheme.headlineMedium,
               pinTheme: PinTheme(
                 shape: PinCodeFieldShape.box,
                 borderRadius: BorderRadius.circular(8),
                 fieldWidth: 50,
-                inactiveColor: Colors.white,
-                selectedColor: Colors.lightBlue,
-                activeFillColor: Colors.white,
-                selectedFillColor: Colors.white,
-                inactiveFillColor: Colors.grey
+                inactiveColor: AppColors.cPrimaryColor,
+                selectedColor: AppColors.cPrimaryColor,
+                activeFillColor: AppColors.cWhiteColor,
+                selectedFillColor: AppColors.cWhiteColor,
+                inactiveFillColor: AppColors.cWhiteColor,
                 
               ),
               onChanged: (value) {
@@ -114,6 +115,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
             ),
             const SizedBox(height: 30.0),
             Text("Didn't receive OTP code?", style: Theme.of(context).textTheme.headlineMedium,),
+            //OTP Resend Link
             TextButton(
               onPressed: () {resendOTP();},// Resend OTP Code
               child: const Row(
