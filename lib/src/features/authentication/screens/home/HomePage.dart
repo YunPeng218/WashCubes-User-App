@@ -1,3 +1,4 @@
+import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/nearbylocation/NearbyLocationPage.dart';
@@ -6,11 +7,7 @@ import 'package:device_run_test/src/features/authentication/screens/setting/Sett
 import 'package:device_run_test/src/utilities/theme/widget_themes/elevatedbutton_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/features/authentication/screens/welcome/welcome_screen.dart';
-import 'package:device_run_test/src/utilities/theme/theme.dart';
-import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // void main() {
 //   runApp(const MyApp());
@@ -54,52 +51,53 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      // Notification icon and circle avatar
+      appBar: AppBar(
+        //Notification Icon Button
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const NotificationScreen()),
+            );
+          },
+          icon: const Icon(Icons.notifications_none),
+        ),
+        //Avatar Icon
+        actions: <Widget>[
+          CircleAvatar(
+            backgroundImage: const AssetImage(cAvatar),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SettingMainPage()),
+                );
+              },
+              child: null,
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Notification icon and circle avatar
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NotificationScreen()),
-                      );
-                    },
-                    icon: const Icon(Icons.notifications_none),
-                  ),
-                  CircleAvatar(
-                    backgroundImage: const AssetImage(cAvatar),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SettingMainPage()),
-                        );
-                      },
-                      child: null,
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(height: 16),
               // Good Morning Text
-              const Text(
+              Text(
                 'Good Morning, Trimity!',
-                style: TextStyle(fontSize: 14),
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
               // Discover Text
-              const Text(
+              Text(
                 'Discover your closest\nlaundry lockers',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 16),
               // Location Button
@@ -120,20 +118,20 @@ class _HomePageState extends State<HomePage> {
                 //   ),
                 //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 // ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.location_on),
-                    Text("Taylor's University"),
-                    Icon(Icons.keyboard_arrow_down_rounded),
+                    const Icon(Icons.location_on, color: AppColors.cPrimaryColor,),
+                    Text("Taylor's University", style: Theme.of(context).textTheme.labelLarge),
+                    const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.cBlackColor,),
                   ],
                 ),
               ),
               const SizedBox(height: 16),
               // Special Event Title
-              const Text(
+              Text(
                 'Special Event',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.displaySmall,
               ),
               // RecyclerView for images
               SizedBox(
@@ -152,13 +150,15 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const Divider(),
-              const Text(
-                'Ongoing Order',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
               // Ongoing Order Section
+              // Ongoing Order Title
+              Text(
+                'Ongoing Order',
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+              
               const SizedBox(height: 5), // ...
-
+              // Ongoing Order Box
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
+                      color: AppColors.cGreyColor2.withOpacity(0.3),
                       spreadRadius: 1,
                       blurRadius: 6,
                       offset: const Offset(0, 3),
@@ -189,47 +189,43 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          const Text(
+                          Text(
                             'Laundry In Progress',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.displaySmall,
                           ),
                           const SizedBox(height: 4),
-                          const Text(
+                          Text(
                             '“Leave it to Trimi - cleaning magic in progress!”',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
+                            style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           const SizedBox(height: 10),
+                          //Order Progress Bar
                           Stack(
                             children: <Widget>[
+                              //Entire Order Progress Bar
                               Container(
                                 height: 10,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: AppColors.cWhiteColor,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
+                              //Current Order Progress Bar
                               Container(
                                 height: 10,
                                 width: 200 *
                                     0.7, // Assuming the container is 200 wide, 70% filled
                                 decoration: BoxDecoration(
-                                  color: Colors.blue,
+                                  color: AppColors.cPrimaryColor,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              const Positioned(
+                              Positioned(
                                 right: 10,
                                 top: -2,
                                 child: Text(
                                   '70%',
-                                  style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold),
+                                  style: Theme.of(context).textTheme.labelMedium,
                                 ),
                               ),
                             ],
@@ -240,14 +236,14 @@ class _HomePageState extends State<HomePage> {
                               // Implement the button action
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.white, // Button color
-                              onPrimary: Colors.black, // Text color
+                              foregroundColor: Colors.black, // Text color
+                              backgroundColor: Colors.white, // Button Fill color
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side: BorderSide(color: Colors.grey.shade300),
+                                side: const BorderSide(color: AppColors.cGreyColor1),
                               ),
                             ),
-                            child: const Text('Check'),
+                            child: Text('Check', style: Theme.of(context).textTheme.labelMedium,),
                           ),
                         ],
                       ),
@@ -284,6 +280,8 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Increment',
         child: Image.asset(cChatBotLogo),
       ),
+      //BottomNavBar
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'EditProfilePage.dart';
 import 'FAQsPage.dart';
@@ -77,22 +78,7 @@ class SettingMainPage extends StatelessWidget {
         ],
       ),
       //BottomNavBar
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
-          ),
-        ],
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
