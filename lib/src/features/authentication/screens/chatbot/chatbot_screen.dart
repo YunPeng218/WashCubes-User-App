@@ -86,7 +86,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                       ),
                       IconButton(
                         onPressed: (){}, 
-                        icon: Icon(Icons.send_rounded, color: AppColors.cPrimaryColor,),
+                        icon: const Icon(Icons.send_rounded, color: AppColors.cPrimaryColor,),
                       ),
                     ],
                   ),

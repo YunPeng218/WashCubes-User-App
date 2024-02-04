@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/foundation.dart';
 
-void main() => runApp(MaterialApp(home: QRScanPage()));
+void main() => runApp(const MaterialApp(home: QRScanPage()));
 
 class QRScanPage extends StatefulWidget {
+  const QRScanPage({super.key});
+
   @override
   State<StatefulWidget> createState() => _QRScanPageState();
 }
@@ -56,7 +58,7 @@ class _QRScanPageState extends State<QRScanPage> {
               child: (result != null)
                   ? Text(
                   'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                  : Text('Scan a code'),
+                  : const Text('Scan a code'),
             ),
           ),
           Expanded(
@@ -72,7 +74,7 @@ class _QRScanPageState extends State<QRScanPage> {
                     return Icon(snapshot.data == true ? Icons.flash_on : Icons.flash_off);
                   },
                 ),
-                label: Text('Tap to turn light on'),
+                label: const Text('Tap to turn light on'),
               ),
             ),
           )

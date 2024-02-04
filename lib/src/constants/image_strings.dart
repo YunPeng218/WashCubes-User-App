@@ -18,11 +18,25 @@ const String cSpecialEventImage1 = "assets/images/homepage_image/special_event_1
 const String cSpecialEventImage2 = "assets/images/homepage_image/special_event_2.png";
 const String cSpecialEventImage3 = "assets/images/homepage_image/special_event_3.png";
 const String cSpecialEventImage4 = "assets/images/homepage_image/special_event_4.png";
+
+//Trimi Mascot Icons
 const String cChatBotLogo = "assets/images/homepage_image/chatbot_icon.png";
 const String cTrimiDefault = "assets/logos/TrimiDefault.png";
+
+//Order Status Images
+const String cReservedIcon = "assets/images/order_status_image/reserve_icon.png";
+const String cDropOffIcon = "assets/images/order_status_image/dropoff_icon.png";
+const String cCollectedOperatorIcon = "assets/images/order_status_image/operator_collection_icon.png";
+const String cInProgressIcon = "assets/images/order_status_image/inprogress_icon.png";
+const String cPrepCompletionIcon = "assets/images/order_status_image/preparation_complete_icon.png";
+const String cDeliveryIcon = "assets/images/order_status_image/out_of_delivery_icon.png";
+const String cCollectionIcon = "assets/images/order_status_image/collection_ready_icon.png";
+const String cCompleteIcon = "assets/images/order_status_image/completed_icon.png";
+const String cAllGarments = "assets/images/order_status_image/all_garments.png";
+
 //Select Item
 Map<String, String> itemImages = {
-  'All Garments': 'assets/images/select_item/all_garment.png',
+  'Top': 'assets/images/select_item/top.png',
   'Bottom': 'assets/images/select_item/bottom.png',
   'Curtain': 'assets/images/select_item/curtain.png',
   'Comforter Cover / Bedsheet': 'assets/images/select_item/bed_sheet.png',

@@ -6,7 +6,7 @@ class COutlinedButtonTheme {
 
   static final lightOutlinedButtonTheme = OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      side: BorderSide(color: AppColors.cBlackColor), // Border color
+      side: const BorderSide(color: AppColors.cBlackColor), // Border color
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0), // Button border radius
       ),

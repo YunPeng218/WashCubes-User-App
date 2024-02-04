@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class FeedbackRatingsPage extends StatefulWidget {
+  const FeedbackRatingsPage({super.key});
+
   @override
   _FeedbackRatingsPageState createState() => _FeedbackRatingsPageState();
 }
@@ -29,31 +31,31 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedback Ratings'),
+        title: const Text('Feedback Ratings'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         children: [
-          Text(
+          const Text(
             'Rate Our Service',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 8),
-          Text('Are you satisfied with our service?'),
+          const SizedBox(height: 8),
+          const Text('Are you satisfied with our service?'),
           RatingBar.builder(
             initialRating: _rating,
             minRating: 1,
             direction: Axis.horizontal,
             allowHalfRating: true,
             itemCount: 5,
-            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-            itemBuilder: (context, _) => Icon(
+            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+            itemBuilder: (context, _) => const Icon(
               Icons.star,
               color: Colors.amber,
             ),
@@ -63,8 +65,8 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
               });
             },
           ),
-          SizedBox(height: 16),
-          Text(
+          const SizedBox(height: 16),
+          const Text(
             'Tell us what can be improved?',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
@@ -86,18 +88,18 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
               );
             }).toList(),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           TextField(
             controller: _feedbackController,
             maxLines: 5,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Tell us how we can improve...',
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           ElevatedButton(
-            child: Text('Submit'),
+            child: const Text('Submit'),
             onPressed: () {
               // Implement submission logic
               print('Rating: $_rating');

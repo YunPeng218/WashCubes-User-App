@@ -7,22 +7,26 @@ import 'NearbyLocationPage.dart';
 // }
 
 class NearbyLocationListPage extends StatelessWidget {
+  const NearbyLocationListPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: NearbyLocationsScreen(),
     );
   }
 }
 
 class NearbyLocationsScreen extends StatefulWidget {
+  const NearbyLocationsScreen({super.key});
+
   @override
   _NearbyLocationsScreenState createState() => _NearbyLocationsScreenState();
 }
 
 class _NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
   Position? _currentPosition;
-  List<LocationData> _locations = [
+  final List<LocationData> _locations = [
     LocationData(
       name: "Taylor’s University",
       latitude: 3.0698,
@@ -106,7 +110,7 @@ class _NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NearbyLocationPage()),
+              MaterialPageRoute(builder: (context) => const NearbyLocationPage()),
             );
           },
         ),
@@ -129,10 +133,10 @@ class _NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
         onPressed: () {
           _getCurrentLocation();
         },
-        child: Icon(
+        backgroundColor: const Color(0xFFD7ECF7),
+        child: const Icon(
           Icons.location_on,
           color: Colors.black),
-        backgroundColor: Color(0xFFD7ECF7),
       ),
     );
   }
@@ -160,7 +164,7 @@ class LocationCard extends StatelessWidget {
   final String address;
   final bool isAvailable;
 
-  LocationCard({
+  const LocationCard({super.key, 
     required this.name,
     required this.distance,
     required this.address,

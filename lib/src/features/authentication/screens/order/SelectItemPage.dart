@@ -2,32 +2,36 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: SelectYourItemPage(),
     );
   }
 }
 
 class SelectYourItemPage extends StatefulWidget {
+  const SelectYourItemPage({super.key});
+
   @override
   _SelectYourItemPageState createState() => _SelectYourItemPageState();
 }
 
 class _SelectYourItemPageState extends State<SelectYourItemPage> {
   Map<String, double> prices = {
-    'All Garments': 6.0,
+    'Top': 6.0,
     'Bottom': 8.0,
     'Curtain': 8.0,
     'Comforter Cover / Bedsheet': 6.0,
   };
   Map<String, int> quantities = {
-    'All Garments': 0,
+    'Top': 0,
     'Bottom': 0,
     'Curtain': 0,
     'Comforter Cover / Bedsheet': 0,
@@ -42,12 +46,12 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Handle back button
           },
         ),
-        title: Text('Select your item'),
+        title: const Text('Select your item'),
         centerTitle: true,
       ),
       body: Column(
@@ -69,7 +73,7 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.remove),
+                        icon: const Icon(Icons.remove),
                         onPressed: quantities[key]! > 0 ? () {
                           setState(() {
                             quantities[key] = (quantities[key] ?? 0) - 1;
@@ -78,7 +82,7 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
                       ),
                       Text('${quantities[key]}'),
                       IconButton(
-                        icon: Icon(Icons.add),
+                        icon: const Icon(Icons.add),
                         onPressed: () {
                           setState(() {
                             quantities[key] = (quantities[key] ?? 0) + 1;
@@ -93,26 +97,26 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
           ),
           Container(
             color: Colors.grey[200],
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Total Est. Price',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'RM ${totalEstPrice.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              child: Text('Check Out'),
+              child: const Text('Check Out'),
               onPressed: () {
                 // Check out action
               },

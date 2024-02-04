@@ -1,6 +1,6 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/features/authentication/screens/biometricSetup/biometric_setup_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
+import 'package:device_run_test/src/features/authentication/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -10,6 +10,8 @@ import 'package:device_run_test/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OTPVerifyPage extends StatefulWidget {
+  const OTPVerifyPage({super.key});
+
   @override
   _OTPPageState createState() => _OTPPageState();
 }
@@ -49,7 +51,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
+            title: const Text('Error'),
             content: Text('The OTP entered is incorrect. Please try again.', style: Theme.of(context).textTheme.headlineMedium,),
             actions: [
               TextButton(

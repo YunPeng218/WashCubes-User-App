@@ -1,9 +1,9 @@
 import 'package:device_run_test/src/utilities/theme/theme.dart';
 //import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
-import '../signup/SignUpPage.dart';
-import '../userverification/OTPVerifyPage.dart';
-import '../home/HomePage.dart';
+import '../signup/signup_screen.dart';
+import '../userverification/otp_screen.dart';
+import '../home/home_screen.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => OTPVerifyPage()),
+                    context, MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
                   );
                 },// Navigate to Sign Up Page
                 // style: TextButton.styleFrom(padding: EdgeInsets.only(top: 50.0)),

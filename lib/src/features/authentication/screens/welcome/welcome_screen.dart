@@ -2,7 +2,7 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/textfield_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:device_run_test/src/features/authentication/screens/userverification/OTPVerifyPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/userverification/otp_screen.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +12,8 @@ import 'package:device_run_test/src/features/authentication/screens/onboarding/o
 
 
 class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({super.key});
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -27,7 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     if (phoneNumberController.text.isNotEmpty) {
       if (pattern.hasMatch(phoneNumberController.text)) {
         Navigator.push(
-          context, MaterialPageRoute(builder: (context) => OTPVerifyPage()),
+          context, MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
         );
         await http.post(Uri.parse(otpverification), body: {"phoneNumber": phoneNumberController.text});
       } else {
@@ -75,7 +77,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       decoration: InputDecoration(
                         labelText: 'Enter Phone Number Starts with 60',
                         hintText: '60123456789', 
-                        errorStyle: TextStyle(color: Colors.red),
+                        errorStyle: const TextStyle(color: Colors.red),
                         errorText: isNotValidate ? errorText : null,
                       ),
                     ),

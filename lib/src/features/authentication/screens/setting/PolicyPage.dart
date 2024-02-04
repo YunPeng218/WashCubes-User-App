@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
 class PolicyPage extends StatelessWidget {
+  const PolicyPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Privacy Policy'),
+        title: const Text('Privacy Policy'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         padding: EdgeInsets.all(16),
         child: Text(
           // Replace with actual privacy policy text

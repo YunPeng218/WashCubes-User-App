@@ -48,7 +48,7 @@ class SignUpScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => OTPVerifyPage()),
+                  context, MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
                 );
               },// Send to OTP Page
               child: Container(

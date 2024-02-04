@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SummaryPage(),
+      home: const SummaryPage(),
     );
   }
 }
@@ -22,20 +24,22 @@ class SummaryPage extends StatelessWidget {
   final int quantity = 5;
   final double totalPrice = 30.00;
 
+  const SummaryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Summary'),
+        title: const Text('Summary'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Handle back button press
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert),
             onPressed: () {
               // Handle more options
             },
@@ -45,27 +49,27 @@ class SummaryPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListTile(
+          const ListTile(
             title: Text('WASH & FOLD', style: TextStyle(fontWeight: FontWeight.bold)),
             subtitle: Text('ORDER ID : #906912'),
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon(Icons.local_laundry_service, size: 50), // Replace with actual image/icon
-            title: Text('All Garments'),
+            leading: const Icon(Icons.local_laundry_service, size: 50), // Replace with actual image/icon
+            title: const Text('All Garments'),
             subtitle: Text('RM $pricePerKg/kg'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.remove),
+                  icon: const Icon(Icons.remove),
                   onPressed: () {
                     // Handle decrement
                   },
                 ),
                 Text('$quantity'),
                 IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: () {
                     // Handle increment
                   },
@@ -74,45 +78,45 @@ class SummaryPage extends StatelessWidget {
               ],
             ),
           ),
-          Divider(),
-          ListTile(
+          const Divider(),
+          const ListTile(
             title: Text('Self Pick Up Information'),
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.access_time),
             title: Text('Time'),
             subtitle: Text('25 NOV, 14:00 - 16:00'),
             trailing: Icon(Icons.navigate_next),
           ),
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.location_on),
             title: Text('Location'),
             subtitle: Text('TAYLOR’S UNIVERSITY'),
             trailing: Icon(Icons.navigate_next),
           ),
-          Divider(),
-          ListTile(
+          const Divider(),
+          const ListTile(
             title: Text('Voucher'),
             trailing: Icon(Icons.navigate_next),
           ),
-          Divider(),
+          const Divider(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Total Est. Price', style: TextStyle(fontSize: 18)),
-                Text('RM $totalPrice', style: TextStyle(fontSize: 18)),
+                const Text('Total Est. Price', style: TextStyle(fontSize: 18)),
+                Text('RM $totalPrice', style: const TextStyle(fontSize: 18)),
               ],
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                child: Text('Continue'),
+                child: const Text('Continue'),
                 onPressed: () {
                   // Handle continue press
                 },

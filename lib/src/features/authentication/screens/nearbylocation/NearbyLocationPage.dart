@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../home/HomePage.dart';
+import '../home/home_screen.dart';
 import 'NearbyLocationListPage.dart';
 // import 'package:location/location.dart';
 
@@ -23,29 +23,29 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
   Set<Marker> _createMarkers() {
     return {
       Marker(
-        markerId: MarkerId('marker_1'),
-        position: LatLng(3.1309800148010254, 101.62559509277344),
+        markerId: const MarkerId('marker_1'),
+        position: const LatLng(3.1309800148010254, 101.62559509277344),
         icon: BitmapDescriptor.defaultMarkerWithHue(
             BitmapDescriptor.hueAzure),
-        infoWindow: InfoWindow(
+        infoWindow: const InfoWindow(
           title: 'Tropicana City Office Tower',
         ),
       ),
       Marker(
-        markerId: MarkerId('marker_2'),
-        position: LatLng(3.0649349689483643, 101.6168441772461),
+        markerId: const MarkerId('marker_2'),
+        position: const LatLng(3.0649349689483643, 101.6168441772461),
         icon: BitmapDescriptor.defaultMarkerWithHue(
             BitmapDescriptor.hueAzure),
-        infoWindow: InfoWindow(
+        infoWindow: const InfoWindow(
           title: 'Taylor’s University',
         ),
       ),
       Marker(
-        markerId: MarkerId('marker_3'),
-        position: LatLng(3.0635976791381836, 101.6085433959961),
+        markerId: const MarkerId('marker_3'),
+        position: const LatLng(3.0635976791381836, 101.6085433959961),
         icon: BitmapDescriptor.defaultMarkerWithHue(
             BitmapDescriptor.hueAzure),
-        infoWindow: InfoWindow(
+        infoWindow: const InfoWindow(
           title: 'Sunway Geo Residences',
         ),
       ),
@@ -58,10 +58,10 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
       appBar: AppBar(
         title: const Text('Nearby Locations'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => const HomePage()),
             );
           },
         ),
@@ -75,12 +75,12 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                 });
                 _showAlertDialog(context);
               },
+              backgroundColor: const Color(0xFFD7ECF7),
+              mini: true,
               child: const Icon(
                 Icons.map,
                 color: Colors.black,
               ),
-              backgroundColor: Color(0xFFD7ECF7),
-              mini: true,
             ),
           ),
         ],
@@ -102,10 +102,10 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFD7ECF7),
+                      color: const Color(0xFFD7ECF7),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: TextButton(
@@ -113,11 +113,11 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => NearbyLocationListPage(),
+                            builder: (context) => const NearbyLocationListPage(),
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         'List',
                         style: TextStyle(
                           color: Colors.black,

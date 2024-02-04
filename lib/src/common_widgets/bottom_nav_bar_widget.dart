@@ -1,5 +1,6 @@
 import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
+import 'package:device_run_test/src/features/authentication/screens/home/home_screen.dart';
+import 'package:device_run_test/src/features/authentication/screens/order/LaundryServicePicker.dart';
 import 'package:device_run_test/src/features/authentication/screens/setting/SettingMainPage.dart';
 import 'package:flutter/material.dart';
 
@@ -27,10 +28,10 @@ class BottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: IconButton(
             onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => const HomePage()),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LaundryServicePicker()),
+              );
             },
             icon: const Icon(Icons.shopping_basket_outlined),
             color: AppColors.cWhiteColor,

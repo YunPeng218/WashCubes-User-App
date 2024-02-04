@@ -1,10 +1,14 @@
-import 'package:device_run_test/SelectItemPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/home/home_screen.dart';
+import 'package:device_run_test/src/features/authentication/screens/order/SelectItemPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/order/order_status_screen.dart';
 import 'package:flutter/material.dart';
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,29 +17,31 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LaundryServicePicker(),
+      home: const LaundryServicePicker(),
     );
   }
 }
 
 class LaundryServicePicker extends StatelessWidget {
+  const LaundryServicePicker({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            // Handle back button
-          },
-        ),
-        title: Text('Pick your Laundry Service'),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     // Handle back button
+        //   },
+        // ),
+        title: const Text('Pick your Laundry Service'),
         centerTitle: true,
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text(
               'One service is available for a single order.',
               textAlign: TextAlign.center,
@@ -55,7 +61,7 @@ class LaundryServicePicker extends StatelessWidget {
                     onTap:(){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SelectYourItemPage()),
+                        MaterialPageRoute(builder: (context) => const HomePage()),
                       );
                     },
                 ),
@@ -65,7 +71,7 @@ class LaundryServicePicker extends StatelessWidget {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SelectYourItemPage()),
+                      MaterialPageRoute(builder: (context) => const SelectYourItemPage()),
                     );
                   },
                 ),
@@ -75,7 +81,7 @@ class LaundryServicePicker extends StatelessWidget {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SelectYourItemPage()),
+                      MaterialPageRoute(builder: (context) => const SelectYourItemPage()),
                     );
                   },
                 ),
@@ -85,13 +91,24 @@ class LaundryServicePicker extends StatelessWidget {
                   onTap:(){
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SelectYourItemPage()),
+                      MaterialPageRoute(builder: (context) => const SelectYourItemPage()),
                     );
                   },
                 ),
                 // Assuming you have an icon for the chatbot as well
                 // ServiceCard(serviceName: 'Chat with Support', iconName: 'icons/support_chat.png'),
               ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OrderStatusScreen()),
+                );},
+              child: Text('order status',),
             ),
           ),
         ],
@@ -104,7 +121,7 @@ class ServiceCard extends StatelessWidget {
   final String serviceName;
   final String iconName;
 
-  ServiceCard({required this.serviceName, required this.iconName, required Null Function() onTap});
+  const ServiceCard({super.key, required this.serviceName, required this.iconName, required Null Function() onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +133,7 @@ class ServiceCard extends StatelessWidget {
           Image.asset(iconName, height: 80), // Replace with NetworkImage if your images are network-based
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: Text(serviceName, style: TextStyle(fontSize: 18)),
+            child: Text(serviceName, style: const TextStyle(fontSize: 18)),
           ),
         ],
       ),

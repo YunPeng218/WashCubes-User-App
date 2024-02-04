@@ -29,7 +29,7 @@ class SettingMainPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EditProfilePage()),
+                MaterialPageRoute(builder: (context) => const EditProfilePage()),
               );
             },
           ),
@@ -51,7 +51,7 @@ class SettingMainPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => FeedbackRatingsPage()),
+                MaterialPageRoute(builder: (context) => const FeedbackRatingsPage()),
               );
             },
           ),
@@ -71,14 +71,14 @@ class SettingMainPage extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PolicyPage()),
+                MaterialPageRoute(builder: (context) => const PolicyPage()),
               );
             },
           ),
         ],
       ),
       //BottomNavBar
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

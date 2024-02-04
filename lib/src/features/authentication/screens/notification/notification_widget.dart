@@ -14,7 +14,7 @@ class NotificationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(cDefaultSize - 10),
+      padding: const EdgeInsets.all(cDefaultSize - 10),
       height: cFormHeight * 3,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

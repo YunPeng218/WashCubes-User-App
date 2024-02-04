@@ -1,5 +1,5 @@
 import 'package:device_run_test/src/features/authentication/screens/welcome/welcome_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/home/HomePage.dart';
+import 'package:device_run_test/src/features/authentication/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/utilities/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +28,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: (token != null)
           ? HomePage(token: token)
-          : WelcomeScreen());
+          : const WelcomeScreen());
   }
 }

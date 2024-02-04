@@ -22,11 +22,13 @@ class FAQsPage extends StatelessWidget {
     // Add other FAQs here
   ];
 
+  FAQsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FAQs'),
+        title: const Text('FAQs'),
         // leading: IconButton(
         //   icon: Icon(Icons.arrow_back),
         //   onPressed: () {
@@ -44,7 +46,7 @@ class FAQsPage extends StatelessWidget {
             title: Text(faq['question']!),
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Text(faq['answer']!),
               ),
             ],
