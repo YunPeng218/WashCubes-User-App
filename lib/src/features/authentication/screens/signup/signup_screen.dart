@@ -2,7 +2,7 @@ import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/textfield_theme.dart';
 
-import '../userverification/OTPVerifyPage.dart';
+import '../userverification/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'LoginPage.dart';
