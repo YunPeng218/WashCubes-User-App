@@ -30,7 +30,7 @@ class BottomNavBar extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LaundryServicePicker()),
+                MaterialPageRoute(builder: (context) => const LaundryServicePicker()),
               );
             },
             icon: const Icon(Icons.shopping_basket_outlined),

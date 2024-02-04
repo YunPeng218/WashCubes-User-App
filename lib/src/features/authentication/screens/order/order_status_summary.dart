@@ -73,7 +73,7 @@ class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
                 height: 50,
               ),
               //Order Summary & Details
-              OrderStatusDetailWidget(),
+              const OrderStatusDetailWidget(),
             ],
           ),
         ),

@@ -99,7 +99,7 @@ class OrderStatusDetailWidget extends StatelessWidget {
                 'Location',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              Row(
+              const Row(
                 children: [
                   Text(
                     "TAYLOR'S UNIVERSITY",

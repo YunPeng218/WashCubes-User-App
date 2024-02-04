@@ -101,14 +101,14 @@ class LaundryServicePicker extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const OrderStatusScreen()),
                 );},
-              child: Text('order status',),
+              child: const Text('order status',),
             ),
           ),
         ],
