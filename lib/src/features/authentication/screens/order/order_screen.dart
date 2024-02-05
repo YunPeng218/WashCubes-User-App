@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/features/authentication/screens/order/order_status_detail_widget.dart';
+import 'package:device_run_test/src/features/authentication/screens/order/order_status_screen.dart';
 import 'package:flutter/material.dart';
 import '../../../../common_widgets/bottom_nav_bar_widget.dart';
 import 'create_order_camera.dart';
@@ -104,7 +105,7 @@ class OrderCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const OrderStatusDetailWidget()),
+            MaterialPageRoute(builder: (context) => const OrderStatusScreen()),
           );
           // Handle the tap if necessary
         },

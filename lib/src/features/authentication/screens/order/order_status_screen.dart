@@ -50,7 +50,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
                 height: 50,
               ),
               //Order Summary & Details
-              // const OrderStatusDetailWidget(),
+              const OrderStatusDetailWidget(),
             ],
           ),
         ),
