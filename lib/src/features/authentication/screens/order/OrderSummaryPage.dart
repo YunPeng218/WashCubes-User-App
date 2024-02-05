@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import '../payment/payment_method.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Laundry Service Summary',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SummaryPage(),
-    );
-  }
-}
+// void main() {
+//   runApp(const MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Laundry Service Summary',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: const SummaryPage(),
+//     );
+//   }
+// }
 
 class SummaryPage extends StatelessWidget {
   final double pricePerKg = 6.00;
@@ -118,6 +120,10 @@ class SummaryPage extends StatelessWidget {
               child: ElevatedButton(
                 child: const Text('Continue'),
                 onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PaymentScreen()),
+                  );
                   // Handle continue press
                 },
               ),

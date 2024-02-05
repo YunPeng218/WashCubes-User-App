@@ -90,40 +90,40 @@ class OrderStatusDetailWidget extends StatelessWidget {
           ),
         ),
         //Location Detail Row
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Location',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const Row(
-                children: [
-                  Text(
-                    "TAYLOR'S UNIVERSITY",
-                    style: TextStyle(color: AppColors.cGreyColor3),
-                  ),
-                  Icon(
-                    Icons.edit_outlined,
-                    color: AppColors.cGreyColor3,
-                  ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const NearbyLocationPage()),
-                  //     );
-                  //   },
-                  //   child: null,
-                  // ),
-                ],
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text(
+        //         'Location',
+        //         style: Theme.of(context).textTheme.headlineMedium,
+        //       ),
+        //       const Row(
+        //         children: [
+        //           Text(
+        //             "TAYLOR'S UNIVERSITY",
+        //             style: TextStyle(color: AppColors.cGreyColor3),
+        //           ),
+        //           Icon(
+        //             Icons.edit_outlined,
+        //             color: AppColors.cGreyColor3,
+        //           ),
+        //           // GestureDetector(
+        //           //   onTap: () {
+        //           //     Navigator.push(
+        //           //       context,
+        //           //       MaterialPageRoute(
+        //           //           builder: (context) => const NearbyLocationPage()),
+        //           //     );
+        //           //   },
+        //           //   child: null,
+        //           // ),
+        //         ],
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ],
     );
   }

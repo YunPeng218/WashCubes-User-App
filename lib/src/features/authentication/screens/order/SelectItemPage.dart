@@ -1,20 +1,23 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SelectYourItemPage(),
-    );
-  }
-}
+import 'OrderSummaryPage.dart';
+import 'checkout_details_popup.dart';
+//
+// void main() {
+//   runApp(const MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return const MaterialApp(
+//       home: SelectYourItemPage(),
+//     );
+//   }
+// }
 
 class SelectYourItemPage extends StatefulWidget {
   const SelectYourItemPage({super.key});
@@ -119,6 +122,10 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
               child: const Text('Check Out'),
               onPressed: () {
                 // Check out action
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SummaryPage()),
+                );
               },
             ),
           ),

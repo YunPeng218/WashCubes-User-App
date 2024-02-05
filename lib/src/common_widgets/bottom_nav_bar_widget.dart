@@ -4,6 +4,8 @@ import 'package:device_run_test/src/features/authentication/screens/order/Laundr
 import 'package:device_run_test/src/features/authentication/screens/setting/SettingMainPage.dart';
 import 'package:flutter/material.dart';
 
+import '../features/authentication/screens/order/order_screen.dart';
+
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
 
@@ -30,7 +32,7 @@ class BottomNavBar extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LaundryServicePicker()),
+                MaterialPageRoute(builder: (context) => OrderPage()),
               );
             },
             icon: const Icon(Icons.shopping_basket_outlined),

@@ -2,25 +2,25 @@ import 'package:device_run_test/src/features/authentication/screens/home/home_sc
 import 'package:device_run_test/src/features/authentication/screens/order/SelectItemPage.dart';
 import 'package:device_run_test/src/features/authentication/screens/order/order_status_screen.dart';
 import 'package:flutter/material.dart';
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Laundry Service Picker',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: const LaundryServicePicker(),
-    );
-  }
-}
+// void main() {
+//   runApp(const MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Laundry Service Picker',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//         visualDensity: VisualDensity.adaptivePlatformDensity,
+//       ),
+//       home: const LaundryServicePicker(),
+//     );
+//   }
+// }
 
 class LaundryServicePicker extends StatelessWidget {
   const LaundryServicePicker({super.key});
@@ -94,6 +94,17 @@ class LaundryServicePicker extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const SelectYourItemPage()),
                     );
                   },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SelectYourItemPage()),
+                      );},
+                    child: const Text('Sample Service',),
+                  ),
                 ),
                 // Assuming you have an icon for the chatbot as well
                 // ServiceCard(serviceName: 'Chat with Support', iconName: 'icons/support_chat.png'),
