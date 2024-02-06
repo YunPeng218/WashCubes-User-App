@@ -1,3 +1,4 @@
+import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class FAQsPage extends StatelessWidget {
@@ -28,30 +29,24 @@ class FAQsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FAQs'),
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     Navigator.push(
-        //     context,
-        //         MaterialPageRoute(builder: (context) => const SettingMainPage()),
-        //   },
-        // ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        title: Text('FAQs', style: Theme.of(context).textTheme.displaySmall,),
+        centerTitle: true,
       ),
-      body: ListView(
-        children: faqData.map<Widget>((faq) {
-          return ExpansionTile(
-            title: Text(faq['question']!),
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(faq['answer']!),
-              ),
-            ],
-          );
-        }).toList(),
+      body: Padding(
+        padding: const EdgeInsets.all(cDefaultSize - 10),
+        child: ListView(
+          children: faqData.map<Widget>((faq) {
+            return ExpansionTile(
+              title: Text(faq['question']!, style: Theme.of(context).textTheme.headlineMedium,),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(faq['answer']!, style: Theme.of(context).textTheme.labelLarge,),
+                ),
+              ],
+            );
+          }).toList(),
+        ),
       ),
     );
   }

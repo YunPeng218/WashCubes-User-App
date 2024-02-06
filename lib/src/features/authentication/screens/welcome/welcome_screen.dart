@@ -113,7 +113,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               },
               style: COutlinedButtonTheme.lightOutlinedButtonTheme.style,
               child: Center(
-                  child: Text('Login', style: Theme.of(context).textTheme.headlineMedium,),
+                  child: Text('Continue', style: Theme.of(context).textTheme.headlineMedium,),
               ),
             ),
             const SizedBox(height: 5.0,),

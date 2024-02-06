@@ -1,3 +1,4 @@
+import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 
 import 'card_input.dart';
@@ -22,18 +23,21 @@ import 'card_input.dart';
 
 class BankSelectionScreen extends StatelessWidget {
   final List<Bank> banks = [
-    Bank(name: 'Maybank', logoPath: 'assets/maybank_logo.png'),
-    Bank(name: 'CIMB', logoPath: 'assets/cimb_logo.png'),
-    Bank(name: 'Public Bank', logoPath: 'assets/publicbank_logo.png'),
-    Bank(name: 'Hong Leong Bank', logoPath: 'assets/hongleong_logo.png'),
+    Bank(name: 'Maybank', logoPath: cMaybank),
+    Bank(name: 'CIMB', logoPath: cCIMB),
+    Bank(name: 'Public Bank', logoPath: cPublicBank),
+    Bank(name: 'Hong Leong Bank', logoPath: cHongLeongBank),
     // ... add other banks here
   ];
+
+  BankSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Your Option'),
+        title: Text('Select Your Option', style: Theme.of(context).textTheme.displaySmall,),
+        centerTitle: true,
       ),
       body: ListView.builder(
         itemCount: banks.length,
@@ -42,11 +46,11 @@ class BankSelectionScreen extends StatelessWidget {
             leading: CircleAvatar(
               backgroundImage: AssetImage(banks[index].logoPath),
             ),
-            title: Text(banks[index].name),
-            trailing: Icon(Icons.arrow_forward_ios),
+            title: Text(banks[index].name, style: Theme.of(context).textTheme.headlineMedium,),
+            trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
               // Handle the bank selection
-              print('Selected: ${banks[index].name}');
+              // print('Selected: ${banks[index].name}');
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => PaymentFormScreen()),

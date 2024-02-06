@@ -1,3 +1,5 @@
+import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -31,23 +33,18 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Feedback Ratings'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        title: Text('Feedback Ratings', style: Theme.of(context).textTheme.displaySmall,),
+        centerTitle: true,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text(
+          Text(
             'Rate Our Service',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.displayMedium,
           ),
-          const SizedBox(height: 8),
-          const Text('Are you satisfied with our service?'),
+          const Text('Are you satisfied with our service?', style: TextStyle(color: AppColors.cGreyColor2),),
+          const SizedBox(height: 10.0,),
           RatingBar.builder(
             initialRating: _rating,
             minRating: 1,
@@ -65,10 +62,10 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
               });
             },
           ),
-          const SizedBox(height: 16),
-          const Text(
+          const SizedBox(height: 10.0,),
+          Text(
             'Tell us what can be improved?',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           Wrap(
             spacing: 8,
@@ -94,17 +91,17 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
             maxLines: 5,
             decoration: const InputDecoration(
               hintText: 'Tell us how we can improve...',
-              border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: cDefaultSize),
           ElevatedButton(
-            child: const Text('Submit'),
+            child: Text('Submit', style: Theme.of(context).textTheme.headlineMedium,),
             onPressed: () {
               // Implement submission logic
-              print('Rating: $_rating');
-              print('Improvements: ${_selectedImprovements.join(', ')}');
-              print('Feedback: ${_feedbackController.text}');
+              // print('Rating: $_rating');
+              // print('Improvements: ${_selectedImprovements.join(', ')}');
+              // print('Feedback: ${_feedbackController.text}');
+              Navigator.pop(context);
             },
           ),
         ],

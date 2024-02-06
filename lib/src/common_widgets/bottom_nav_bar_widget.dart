@@ -1,7 +1,6 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/features/authentication/screens/home/home_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/LaundryServicePicker.dart';
-import 'package:device_run_test/src/features/authentication/screens/setting/SettingMainPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/setting/account_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../features/authentication/screens/order/order_screen.dart';
@@ -32,7 +31,7 @@ class BottomNavBar extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => OrderPage()),
+                MaterialPageRoute(builder: (context) => const OrderPage()),
               );
             },
             icon: const Icon(Icons.shopping_basket_outlined),

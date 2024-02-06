@@ -93,6 +93,7 @@ flutter:
     - assets/images/select_item/
     - assets/images/biometric_image/
     - assets/images/order_status_image/
+    - assets/images/bank_image/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

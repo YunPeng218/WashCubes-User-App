@@ -41,3 +41,9 @@ Map<String, String> itemImages = {
   'Curtain': 'assets/images/select_item/curtain.png',
   'Comforter Cover / Bedsheet': 'assets/images/select_item/bed_sheet.png',
 };
+
+//Bank Logos
+const String cMaybank = "assets/images/bank_image/maybank_logo.png";
+const String cCIMB = "assets/images/bank_image/cimb_logo.png";
+const String cPublicBank = "assets/images/bank_image/publicbank_logo.png";
+const String cHongLeongBank = "assets/images/bank_image/hongleongbank_logo.png";

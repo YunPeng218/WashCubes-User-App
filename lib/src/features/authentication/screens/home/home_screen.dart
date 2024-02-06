@@ -3,7 +3,7 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
 import 'package:device_run_test/src/features/authentication/screens/nearbylocation/NearbyLocationPage.dart';
 import 'package:device_run_test/src/features/authentication/screens/notification/notification_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/setting/SettingMainPage.dart';
+import 'package:device_run_test/src/features/authentication/screens/setting/account_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/elevatedbutton_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';

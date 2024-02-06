@@ -58,11 +58,7 @@ class CheckoutDetailPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        child: Text('Show Bottom Sheet'),
-        onPressed: () => _showModalBottomSheet(context),
-      ),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showModalBottomSheet(context));
+    return Container();
   }
 }
