@@ -1,9 +1,9 @@
 import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
-import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/nearbylocation/NearbyLocationPage.dart';
-import 'package:device_run_test/src/features/authentication/screens/notification/notification_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/setting/account_screen.dart';
+import 'package:device_run_test/src/features/screens/chatbot/chatbot_screen.dart';
+import 'package:device_run_test/src/features/screens/nearbylocation/NearbyLocationPage.dart';
+import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
+import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/elevatedbutton_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
@@ -121,9 +121,16 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.location_on, color: AppColors.cPrimaryColor,),
-                    Text("Taylor's University", style: Theme.of(context).textTheme.labelLarge),
-                    const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.cBlackColor,),
+                    const Icon(
+                      Icons.location_on,
+                      color: AppColors.cPrimaryColor,
+                    ),
+                    Text("Taylor's University",
+                        style: Theme.of(context).textTheme.labelLarge),
+                    const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: AppColors.cBlackColor,
+                    ),
                   ],
                 ),
               ),
@@ -156,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                 'Ongoing Order',
                 style: Theme.of(context).textTheme.displaySmall,
               ),
-              
+
               const SizedBox(height: 5), // ...
               // Ongoing Order Box
               Container(
@@ -225,7 +232,8 @@ class _HomePageState extends State<HomePage> {
                                 top: -2,
                                 child: Text(
                                   '70%',
-                                  style: Theme.of(context).textTheme.labelMedium,
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
                                 ),
                               ),
                             ],
@@ -237,13 +245,18 @@ class _HomePageState extends State<HomePage> {
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.black, // Text color
-                              backgroundColor: Colors.white, // Button Fill color
+                              backgroundColor:
+                                  Colors.white, // Button Fill color
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side: const BorderSide(color: AppColors.cGreyColor1),
+                                side: const BorderSide(
+                                    color: AppColors.cGreyColor1),
                               ),
                             ),
-                            child: Text('Check', style: Theme.of(context).textTheme.labelMedium,),
+                            child: Text(
+                              'Check',
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
                           ),
                         ],
                       ),

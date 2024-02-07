@@ -1,8 +1,8 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/checkout_details_popup.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/select_item_screen.dart';
+import 'package:device_run_test/src/features/screens/order/checkout_details_popup.dart';
+import 'package:device_run_test/src/features/screens/order/select_item_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../payment/payment_method.dart';
@@ -37,7 +37,10 @@ class SummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Summary', style: Theme.of(context).textTheme.displaySmall,),
+        title: Text(
+          'Summary',
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -49,9 +52,9 @@ class SummaryPage extends StatelessWidget {
                 //Alert Dialog PopUp of Backtrack Confirmation
                 return AlertDialog(
                   content: Text(
-                      "Are you sure you want to cancel the order?",
-                      style: Theme.of(context).textTheme.headlineSmall,
-                      ),
+                    "Are you sure you want to cancel the order?",
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                   actions: [
                     Row(
                       children: [
@@ -61,7 +64,9 @@ class SummaryPage extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) =>const SelectYourItemPage()),
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SelectYourItemPage()),
                               );
                             },
                             child: Text(
@@ -102,21 +107,37 @@ class SummaryPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('WASH & FOLD', style: Theme.of(context).textTheme.headlineMedium,),
-                  Text('ORDER ID : #906912', style: Theme.of(context).textTheme.headlineSmall,),
+                  Text(
+                    'WASH & FOLD',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  Text(
+                    'ORDER ID : #906912',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                 ],
               ),
-              const SizedBox(height: 20.0,),
+              const SizedBox(
+                height: 20.0,
+              ),
               //All Garments Row
               Row(
                 children: [
-                  Image.asset(cAllGarments), 
-                  const SizedBox(width: 20.0,),
+                  Image.asset(cAllGarments),
+                  const SizedBox(
+                    width: 20.0,
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('All Garments', style: Theme.of(context).textTheme.headlineLarge,),
-                      Text('RM $pricePerKg/kg', style: Theme.of(context).textTheme.labelLarge,),
+                      Text(
+                        'All Garments',
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      ),
+                      Text(
+                        'RM $pricePerKg/kg',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         // mainAxisSize: MainAxisSize.min,
@@ -130,7 +151,11 @@ class SummaryPage extends StatelessWidget {
                                   quantity - 1;
                                 },
                               ),
-                              Text('$quantity', style: Theme.of(context).textTheme.headlineMedium,),
+                              Text(
+                                '$quantity',
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
                               IconButton(
                                 icon: const Icon(Icons.add),
                                 onPressed: () {
@@ -140,7 +165,10 @@ class SummaryPage extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Text('RM ${pricePerKg * quantity}', style: Theme.of(context).textTheme.headlineMedium,),
+                          Text(
+                            'RM ${pricePerKg * quantity}',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
                         ],
                       ),
                     ],
@@ -149,13 +177,19 @@ class SummaryPage extends StatelessWidget {
               ),
               const Divider(),
               ListTile(
-                title: Text('Self Pick Up Information', style: Theme.of(context).textTheme.headlineMedium,),
+                title: Text(
+                  'Self Pick Up Information',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
               ),
               ListTile(
                 leading: const Icon(Icons.access_time),
-                title: Text('Time', style: Theme.of(context).textTheme.labelLarge,),
+                title: Text(
+                  'Time',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
                 trailing: TextButton(
-                  onPressed: (){
+                  onPressed: () {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -166,49 +200,80 @@ class SummaryPage extends StatelessWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('25 NOV, 14:00 - 16:00', style: Theme.of(context).textTheme.labelLarge,),
-                      const Icon(Icons.navigate_next, color: AppColors.cBlackColor,),
+                      Text(
+                        '25 NOV, 14:00 - 16:00',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const Icon(
+                        Icons.navigate_next,
+                        color: AppColors.cBlackColor,
+                      ),
                     ],
                   ),
                 ),
               ),
               ListTile(
                 leading: const Icon(Icons.location_on),
-                title: Text('Location', style: Theme.of(context).textTheme.labelLarge,),
+                title: Text(
+                  'Location',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
                 trailing: TextButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('TAYLOR’S UNIVERSITY', style: Theme.of(context).textTheme.labelLarge,),
-                      const Icon(Icons.navigate_next, color: AppColors.cBlackColor,),
+                      Text(
+                        'TAYLOR’S UNIVERSITY',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const Icon(
+                        Icons.navigate_next,
+                        color: AppColors.cBlackColor,
+                      ),
                     ],
                   ),
                 ),
               ),
               const Divider(),
               ListTile(
-                title: Text('Voucher', style: Theme.of(context).textTheme.headlineSmall,),
+                title: Text(
+                  'Voucher',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 trailing: TextButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('APPLY', style: Theme.of(context).textTheme.headlineSmall,),
-                      const Icon(Icons.navigate_next, color: AppColors.cBlackColor,),
+                      Text(
+                        'APPLY',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      const Icon(
+                        Icons.navigate_next,
+                        color: AppColors.cBlackColor,
+                      ),
                     ],
                   ),
                 ),
               ),
               // const Divider(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Total Est. Price', style: Theme.of(context).textTheme.displaySmall,),
-                    Text('RM $totalPrice', style: Theme.of(context).textTheme.displaySmall,),
+                    Text(
+                      'Total Est. Price',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    Text(
+                      'RM $totalPrice',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
                   ],
                 ),
               ),
@@ -223,7 +288,8 @@ class SummaryPage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PaymentScreen(totalPrice: totalPrice)),
+              MaterialPageRoute(
+                  builder: (context) => PaymentScreen(totalPrice: totalPrice)),
             );
           },
           child: Text(

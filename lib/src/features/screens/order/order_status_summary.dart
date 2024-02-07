@@ -1,7 +1,7 @@
 import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/order_status_detail_widget.dart';
+import 'package:device_run_test/src/features/screens/order/order_status_detail_widget.dart';
 import 'package:flutter/material.dart';
 
 class OrderStatusSummaryScreen extends StatefulWidget {

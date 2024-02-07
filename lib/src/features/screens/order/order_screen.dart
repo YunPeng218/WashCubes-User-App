@@ -1,10 +1,10 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
-import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/notification/notification_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/order_status_screen.dart';
+import 'package:device_run_test/src/features/screens/chatbot/chatbot_screen.dart';
+import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
+import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
 import 'package:flutter/material.dart';
-import '../../../../common_widgets/bottom_nav_bar_widget.dart';
+import '../../../common_widgets/bottom_nav_bar_widget.dart';
 import 'create_order_camera.dart';
 
 class OrderPage extends StatelessWidget {
@@ -37,15 +37,27 @@ class OrderPage extends StatelessWidget {
                   //Alert Pop Up
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text("i3wash Would Like to Access the Camera", textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall,),
-                      content: Text("Allow access to your camera?", textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall,),
+                      title: Text(
+                        "i3wash Would Like to Access the Camera",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      content: Text(
+                        "Allow access to your camera?",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
                       actions: <Widget>[
                         //Row & Expanded Widget For Button Centering
                         Row(
                           children: [
                             Expanded(
                               child: TextButton(
-                                child: Text("Don't Allow", style: Theme.of(context).textTheme.headlineSmall,),
+                                child: Text(
+                                  "Don't Allow",
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -53,12 +65,17 @@ class OrderPage extends StatelessWidget {
                             ),
                             Expanded(
                               child: TextButton(
-                                child: Text("OK", style: Theme.of(context).textTheme.headlineSmall,),
+                                child: Text(
+                                  "OK",
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => CreateOrderCameraPage(),
+                                      builder: (context) =>
+                                          CreateOrderCameraPage(),
                                     ),
                                   );
                                 },
@@ -66,26 +83,38 @@ class OrderPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        
                       ],
                     );
                   },
                 );
-
               },
               icon: const Icon(Icons.add, color: AppColors.cBlackColor),
-              label: Text('Create', style: Theme.of(context).textTheme.headlineMedium,),
+              label: Text(
+                'Create',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
             ),
           )
-
         ],
       ),
       // ListView of Orders
       body: ListView(
         children: const <Widget>[
-          OrderCard(orderNumber: '131233213', date: 'NOV 23', location: 'Taylor’s University', status: 'Collected by Operator'),
-          OrderCard(orderNumber: '131233233', date: 'NOV 24', location: 'Taylor’s University', status: 'Order Error'),
-          OrderCard(orderNumber: '131233443', date: 'NOV 26', location: 'Taylor’s University', status: 'In Progress'),
+          OrderCard(
+              orderNumber: '131233213',
+              date: 'NOV 23',
+              location: 'Taylor’s University',
+              status: 'Collected by Operator'),
+          OrderCard(
+              orderNumber: '131233233',
+              date: 'NOV 24',
+              location: 'Taylor’s University',
+              status: 'Order Error'),
+          OrderCard(
+              orderNumber: '131233443',
+              date: 'NOV 26',
+              location: 'Taylor’s University',
+              status: 'In Progress'),
         ],
       ),
       //ChatBot Trimi Button
@@ -124,15 +153,25 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(8.0),
-      color: status == 'Order Error' ? Colors.red.shade100 : Colors.blue.shade100,
+      color:
+          status == 'Order Error' ? Colors.red.shade100 : Colors.blue.shade100,
       child: ListTile(
         title: Text(date, style: Theme.of(context).textTheme.labelLarge),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Order No: $orderNumber', style: Theme.of(context).textTheme.headlineLarge,),
-            Text('Location: $location', style: Theme.of(context).textTheme.labelLarge,),
-            Text('Status: $status', style: Theme.of(context).textTheme.labelLarge,),
+            Text(
+              'Order No: $orderNumber',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            Text(
+              'Location: $location',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            Text(
+              'Status: $status',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
           ],
         ),
         trailing: const Icon(Icons.arrow_forward_ios_rounded),

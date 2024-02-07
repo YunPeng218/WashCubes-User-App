@@ -2,8 +2,8 @@ import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/notification/notification_screen.dart';
+import 'package:device_run_test/src/features/screens/chatbot/chatbot_screen.dart';
+import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'edit_profile_screen.dart';
 import 'faq_screen.dart';
@@ -40,7 +40,8 @@ class SettingMainPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const EditProfilePage()),
+                  MaterialPageRoute(
+                      builder: (context) => const EditProfilePage()),
                 );
               },
             ),
@@ -63,7 +64,8 @@ class SettingMainPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FeedbackRatingsPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const FeedbackRatingsPage()),
                 );
               },
             ),
@@ -120,8 +122,14 @@ class UserHeader extends StatelessWidget {
         backgroundImage: AssetImage(cAvatar),
         radius: 30,
       ),
-      title: Text('Trimity Wang', style: Theme.of(context).textTheme.displaySmall,),
-      subtitle: const Text('#90601912023', style: TextStyle(color: AppColors.cGreyColor2),),
+      title: Text(
+        'Trimity Wang',
+        style: Theme.of(context).textTheme.displaySmall,
+      ),
+      subtitle: const Text(
+        '#90601912023',
+        style: TextStyle(color: AppColors.cGreyColor2),
+      ),
     );
   }
 }
@@ -132,17 +140,17 @@ class ProfileOption extends StatelessWidget {
   final VoidCallback onTap;
 
   const ProfileOption(
-      {Key? key,
-      required this.title,
-      required this.icon,
-      required this.onTap})
+      {Key? key, required this.title, required this.icon, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(icon, color: AppColors.cBlueColor4),
-      title: Text(title, style: Theme.of(context).textTheme.headlineMedium,),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       onTap: onTap,
     );

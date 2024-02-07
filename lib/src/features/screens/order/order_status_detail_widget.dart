@@ -1,5 +1,5 @@
 import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/order_status_summary.dart';
+import 'package:device_run_test/src/features/screens/order/order_status_summary.dart';
 import 'package:flutter/material.dart';
 
 class OrderStatusDetailWidget extends StatelessWidget {
@@ -21,7 +21,7 @@ class OrderStatusDetailWidget extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               TextButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -2,10 +2,10 @@ import 'package:device_run_test/src/common_widgets/chat_widget.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../constants/colors.dart';
-import '../../../../constants/sizes.dart';
-import '../../../../constants/text_strings.dart';
-import '../../../../utilities/theme/widget_themes/elevatedbutton_theme.dart';
+import '../../../constants/colors.dart';
+import '../../../constants/sizes.dart';
+import '../../../constants/text_strings.dart';
+import '../../../utilities/theme/widget_themes/elevatedbutton_theme.dart';
 
 class ChatBotScreen extends StatefulWidget {
   const ChatBotScreen({super.key});
@@ -26,17 +26,25 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
         title: Row(
           children: [
             Image.asset(cChatBotLogo),
-            const SizedBox(width: 8.0,),
-            Text('Trimi', style: Theme.of(context).textTheme.displaySmall,),
+            const SizedBox(
+              width: 8.0,
+            ),
+            Text(
+              'Trimi',
+              style: Theme.of(context).textTheme.displaySmall,
+            ),
           ],
         ),
         actions: [
           //End Button
           ElevatedButton(
-            onPressed: (){},
+            onPressed: () {},
             style: CElevatedButtonTheme.lightElevatedButtonTheme.style,
-            child: Text("End", style: Theme.of(context).textTheme.headlineMedium,),
+            child: Text(
+              "End",
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
+          ),
         ],
       ),
       //Body containing chat bubble section & user input bar
@@ -47,25 +55,25 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             children: [
               Flexible(
                 child: ListView.builder(
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    return ChatWidget(
-                      msg: chatMessages[index]["msg"].toString(),
-                      chatIndex: int.parse(chatMessages[index]["chatIndex"].toString()),
-                    );
-                  }
-                ),
+                    itemCount: 6,
+                    itemBuilder: (context, index) {
+                      return ChatWidget(
+                        msg: chatMessages[index]["msg"].toString(),
+                        chatIndex: int.parse(
+                            chatMessages[index]["chatIndex"].toString()),
+                      );
+                    }),
               ),
               //Text Input Bar
-              if(_isTyping) ...[
+              if (_isTyping) ...[
                 Container(
-                  width:  double.infinity,
-                  height:  cButtonHeight + 10,
-                  decoration:  BoxDecoration (
+                  width: double.infinity,
+                  height: cButtonHeight + 10,
+                  decoration: BoxDecoration(
                     border: Border.all(
                       color: AppColors.cPrimaryColor,
                     ),
-                    borderRadius:  BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
@@ -85,8 +93,11 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                         ),
                       ),
                       IconButton(
-                        onPressed: (){}, 
-                        icon: const Icon(Icons.send_rounded, color: AppColors.cPrimaryColor,),
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.send_rounded,
+                          color: AppColors.cPrimaryColor,
+                        ),
                       ),
                     ],
                   ),

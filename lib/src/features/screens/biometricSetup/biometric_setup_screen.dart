@@ -1,11 +1,11 @@
 import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/features/authentication/screens/onboarding/onboarding_screen.dart';
+import 'package:device_run_test/src/features/screens/onboarding/onboarding_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/elevatedbutton_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../constants/image_strings.dart';
-import '../../../../constants/sizes.dart';
+import '../../../constants/image_strings.dart';
+import '../../../constants/sizes.dart';
 
 class BiometricSetupPage extends StatelessWidget {
   const BiometricSetupPage({super.key});
@@ -27,7 +27,8 @@ class BiometricSetupPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const OnboardingScreen()),
                 );
               },
               child: const Text(
@@ -50,7 +51,9 @@ class BiometricSetupPage extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 60.0,),
+            const SizedBox(
+              height: 60.0,
+            ),
             //Biometric Image
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -59,7 +62,9 @@ class BiometricSetupPage extends StatelessWidget {
                 Image.asset(cFacialScanImage, height: size.height * 0.15),
               ],
             ),
-            const SizedBox(height: 50.0,),
+            const SizedBox(
+              height: 50.0,
+            ),
             //Enable Button
             ElevatedButton(
               onPressed: () {},

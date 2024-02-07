@@ -1,4 +1,4 @@
-import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
+import 'package:device_run_test/src/features/screens/chatbot/chatbot_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -45,8 +45,8 @@ class SupportAlertWidget extends StatelessWidget {
                               builder: (context) => const ChatBotScreen()),
                         );
                       },
-                      style: COutlinedButtonTheme
-                          .lightOutlinedButtonTheme.style,
+                      style:
+                          COutlinedButtonTheme.lightOutlinedButtonTheme.style,
                       child: Text(
                         'Chat with Trimi',
                         style: Theme.of(context).textTheme.headlineSmall,
@@ -60,8 +60,8 @@ class SupportAlertWidget extends StatelessWidget {
                     Expanded(
                         child: OutlinedButton(
                       onPressed: () {},
-                      style: COutlinedButtonTheme
-                          .lightOutlinedButtonTheme.style,
+                      style:
+                          COutlinedButtonTheme.lightOutlinedButtonTheme.style,
                       child: Text(
                         'Contact Customer Hotline',
                         style: Theme.of(context).textTheme.headlineSmall,

@@ -1,7 +1,7 @@
 import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/order_status_detail_widget.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/order_status_widget.dart';
+import 'package:device_run_test/src/features/screens/order/order_status_detail_widget.dart';
+import 'package:device_run_test/src/features/screens/order/order_status_widget.dart';
 import 'package:flutter/material.dart';
 
 class OrderStatusScreen extends StatefulWidget {
@@ -27,16 +27,15 @@ class _OrderStatusState extends State<OrderStatusScreen> {
         //Customer Support Icon Button
         actions: [
           IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const SupportAlertWidget();
-                },
-              );
-            },
-            icon: const Icon(Icons.headset_mic_outlined)
-          ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const SupportAlertWidget();
+                  },
+                );
+              },
+              icon: const Icon(Icons.headset_mic_outlined)),
         ],
       ),
       body: SingleChildScrollView(

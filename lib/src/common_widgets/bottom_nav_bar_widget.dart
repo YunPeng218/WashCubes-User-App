@@ -1,9 +1,9 @@
 import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/features/authentication/screens/home/home_screen.dart';
-import 'package:device_run_test/src/features/authentication/screens/setting/account_screen.dart';
+import 'package:device_run_test/src/features/screens/home/home_screen.dart';
+import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../features/authentication/screens/order/order_screen.dart';
+import '../features/screens/order/order_screen.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -44,7 +44,8 @@ class BottomNavBar extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SettingMainPage()),
+                MaterialPageRoute(
+                    builder: (context) => const SettingMainPage()),
               );
             },
             icon: const Icon(Icons.person_outlined),

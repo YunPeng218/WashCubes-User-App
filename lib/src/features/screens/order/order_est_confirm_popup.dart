@@ -1,4 +1,4 @@
-import 'package:device_run_test/src/features/authentication/screens/chatbot/chatbot_screen.dart';
+import 'package:device_run_test/src/features/screens/chatbot/chatbot_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,8 @@ class OrderEstConfirmationAlertWidget extends StatelessWidget {
     //Alert Dialog PopUp of Order Price Estimation Confirmation
     return AlertDialog(
       // title: Text("If your order exceeds the estimated price, we'll provide further instructions. Click 'Continue' to agree to our Terms and Conditions and Privacy Policy."),
-      content: SingleChildScrollView(//Keep size to necessary height
+      content: SingleChildScrollView(
+        //Keep size to necessary height
         child: Column(
           children: [
             Row(
@@ -45,8 +46,8 @@ class OrderEstConfirmationAlertWidget extends StatelessWidget {
                               builder: (context) => const ChatBotScreen()),
                         );
                       },
-                      style: COutlinedButtonTheme
-                          .lightOutlinedButtonTheme.style,
+                      style:
+                          COutlinedButtonTheme.lightOutlinedButtonTheme.style,
                       child: Text(
                         'Cancel',
                         style: Theme.of(context).textTheme.headlineSmall,
@@ -60,8 +61,8 @@ class OrderEstConfirmationAlertWidget extends StatelessWidget {
                     Expanded(
                         child: OutlinedButton(
                       onPressed: () {},
-                      style: COutlinedButtonTheme
-                          .lightOutlinedButtonTheme.style,
+                      style:
+                          COutlinedButtonTheme.lightOutlinedButtonTheme.style,
                       child: Text(
                         'Continue',
                         style: Theme.of(context).textTheme.headlineSmall,

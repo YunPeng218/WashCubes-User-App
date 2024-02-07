@@ -1,7 +1,7 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/features/authentication/screens/order/order_est_confirm_popup.dart';
+import 'package:device_run_test/src/features/screens/order/order_est_confirm_popup.dart';
 import 'package:flutter/material.dart';
 
 import 'order_summary_screen.dart';
@@ -44,13 +44,20 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Select your item', style: Theme.of(context).textTheme.displayLarge, ),
-            const SizedBox(height: cDefaultSize * 0.5,),
+            Text(
+              'Select your item',
+              style: Theme.of(context).textTheme.displayLarge,
+            ),
+            const SizedBox(
+              height: cDefaultSize * 0.5,
+            ),
             Text(
               'Select your items and quantity for Total Est. Price.',
               style: Theme.of(context).textTheme.headlineSmall,
             ),
-            const SizedBox(height: cDefaultSize,),
+            const SizedBox(
+              height: cDefaultSize,
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: prices.length,
@@ -137,16 +144,20 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
                         content: Text(
                           "If your order exceeds the estimated price, we'll provide further instructions. Click 'Continue' to agree to our Terms and Conditions and Privacy Policy.",
                           style: Theme.of(context).textTheme.headlineSmall,
-                          ),
+                        ),
                         actions: [
                           Row(
                             children: [
                               Expanded(
                                 child: OutlinedButton(
-                                  onPressed: () {Navigator.of(context).pop();},
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
                                   child: Text(
                                     'Cancel',
-                                    style: Theme.of(context).textTheme.headlineSmall,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall,
                                   ),
                                 ),
                               ),
@@ -156,11 +167,17 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) =>const SummaryPage()),
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const SummaryPage()),
                                     );
                                   },
-                                  child: 
-                                  Text('Confirm',style: Theme.of(context).textTheme.headlineSmall,),
+                                  child: Text(
+                                    'Confirm',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall,
+                                  ),
                                 ),
                               ),
                             ],

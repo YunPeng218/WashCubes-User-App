@@ -20,12 +20,18 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
     return Scaffold(
       //App Bar Title
       appBar: AppBar(
-        title: Text('Scan QR Code', style: Theme.of(context).textTheme.displaySmall,),
+        title: Text(
+          'Scan QR Code',
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
         centerTitle: true,
       ),
       body: Column(
         children: <Widget>[
-          Text('Place the QR Code within the frame to scan', style: Theme.of(context).textTheme.headlineMedium,),
+          Text(
+            'Place the QR Code within the frame to scan',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
           //Camera Function w/ QR Code Scanner
           Expanded(
             flex: 5,
@@ -37,13 +43,16 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
           //Light Button
           ElevatedButton(
             //onPressed: _turnOnLight,
-            onPressed: (){
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LaundryServicePicker()),
               );
             },
-            child: Text('Tap to turn light on', style: Theme.of(context).textTheme.labelLarge,),
+            child: Text(
+              'Tap to turn light on',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
           ),
         ],
       ),
@@ -58,11 +67,21 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
   //QR Code Scanner Function
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
+    print('CALLED');
+    controller.scannedDataStream.listen(
+      (scanData) {
+        print('CALLED2: $scanData');
+        setState(() {
+          result = scanData;
+        });
+      },
+      onError: (error) {
+        print('Error in scannedDataStream: $error');
+      },
+      onDone: () {
+        print('scannedDataStream is done');
+      },
+    );
   }
 
   @override

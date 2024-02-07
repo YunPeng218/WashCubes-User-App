@@ -1,4 +1,4 @@
-import 'package:device_run_test/src/features/authentication/models/user.dart';
+import 'package:device_run_test/src/features/models/user.dart';
 
 // DEFINE ORDER CLASS
 class Order {
