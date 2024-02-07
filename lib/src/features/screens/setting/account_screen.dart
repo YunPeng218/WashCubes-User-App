@@ -2,7 +2,7 @@ import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/features/screens/chatbot/chatbot_screen.dart';
+import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:flutter/material.dart';
 import 'edit_profile_screen.dart';
@@ -100,7 +100,7 @@ class SettingMainPage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const ChatBotScreen()),
+            MaterialPageRoute(builder: (context) => const ChatbotScreen()),
           );
         },
         tooltip: 'Increment',

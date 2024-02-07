@@ -1,4 +1,4 @@
-import 'package:device_run_test/src/features/screens/chatbot/chatbot_screen.dart';
+import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +43,7 @@ class OrderEstConfirmationAlertWidget extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ChatBotScreen()),
+                              builder: (context) => const ChatbotScreen()),
                         );
                       },
                       style:

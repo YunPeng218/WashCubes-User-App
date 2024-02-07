@@ -48,6 +48,8 @@ dependencies:
   jwt_decoder: ^2.0.1
   qr_code_scanner: ^1.0.1
   flutter_svg: ^2.0.9
+  chat_gpt_sdk: ^3.0.1
+  dash_chat_2: ^0.0.20
 
 dev_dependencies:
   flutter_test:
