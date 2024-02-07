@@ -4,7 +4,10 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
+import 'package:device_run_test/src/features/screens/userverification/otp_screen.dart';
+import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile_screen.dart';
 import 'faq_screen.dart';
 import 'policy_screen.dart';
@@ -88,6 +91,21 @@ class SettingMainPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const PolicyPage()),
+                );
+              },
+            ),
+            const Divider(),
+            ProfileOption(
+              title: 'Logout',
+              icon: Icons.logout,
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => const WelcomeScreen(),
+                  ),
+                  (Route<dynamic> route) => false,
                 );
               },
             ),
