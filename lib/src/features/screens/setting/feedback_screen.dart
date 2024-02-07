@@ -1,7 +1,13 @@
+import 'dart:convert';
+
+import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class FeedbackRatingsPage extends StatefulWidget {
   const FeedbackRatingsPage({super.key});
@@ -11,7 +17,7 @@ class FeedbackRatingsPage extends StatefulWidget {
 }
 
 class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
-  double _rating = 0;
+  double _rating = 5;
   final _improvementOptions = [
     'Overall Service',
     'Pick Up and Delivery Service',
@@ -20,7 +26,7 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
     'Order Status Updates',
     'Customer Support'
   ];
-  final _selectedImprovements = <String>{};
+  List<String> _selectedImprovements = [];
   final _feedbackController = TextEditingController();
 
   @override
@@ -97,15 +103,64 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
           ElevatedButton(
             child: Text('Submit', style: Theme.of(context).textTheme.headlineMedium,),
             onPressed: () {
-              // Implement submission logic
-              // print('Rating: $_rating');
-              // print('Improvements: ${_selectedImprovements.join(', ')}');
-              // print('Feedback: ${_feedbackController.text}');
-              Navigator.pop(context);
+              _handleSubmitFeedback();
             },
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _handleSubmitFeedback() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+
+    // Decode the token and get the user ID
+    Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
+    String userId = jwtDecodedToken['_id'];
+
+    // Create the newFeedback map
+    Map<String, dynamic> newFeedback = {
+      'user.userID': userId,
+      'starRating': _rating,
+      'improvementCategories': _selectedImprovements,
+      'message': _feedbackController.text,
+    };
+
+    try {
+        // Continue with submitting feedback
+        final response = await http.post(
+          Uri.parse(feedback),
+          body: json.encode(newFeedback),
+          headers: {'Content-Type': 'application/json'},
+        );
+
+        if (response.statusCode == 200) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Feedback Submitted Successfully'),
+                content: Text('Thank you for your feedback!'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      // Close the dialog
+                      Navigator.of(context).pop();
+                      // Navigate back to the previous screen
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          print('Failed to submit feedback. Status code: ${response.statusCode}');
+        }
+    } catch (error) {
+      print('Error submitting feedback: $error');
+    }
   }
 }
