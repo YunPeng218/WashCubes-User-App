@@ -1,23 +1,5 @@
 import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         appBar: AppBar(
-//           title: Text('Sample App'),
-//         ),
-//         body: MyHomePage(),
-//       ),
-//     );
-//   }
-// }
-
 class CheckoutDetailPopUp extends StatelessWidget {
   const CheckoutDetailPopUp({super.key});
 
@@ -40,7 +22,8 @@ class CheckoutDetailPopUp extends StatelessWidget {
                   itemCount: 5,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text('25 NOV, ${14 + index * 2}:00 - ${16 + index * 2}:00'),
+                      title: Text(
+                          '25 NOV, ${14 + index * 2}:00 - ${16 + index * 2}:00'),
                       onTap: () {
                         // Handle the time slot selection
                         Navigator.pop(context); // Close the modal on selection
@@ -58,7 +41,8 @@ class CheckoutDetailPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _showModalBottomSheet(context));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _showModalBottomSheet(context));
     return Container();
   }
 }

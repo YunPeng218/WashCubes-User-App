@@ -3,40 +3,43 @@ import 'package:flutter/material.dart';
 
 import 'card_input.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Bank Selection',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//         visualDensity: VisualDensity.adaptivePlatformDensity,
-//       ),
-//       home: BankSelectionScreen(),
-//     );
-//   }
-// }
+import 'package:device_run_test/src/features/models/order.dart';
+import 'package:device_run_test/src/features/models/locker.dart';
+import 'package:device_run_test/src/features/models/user.dart';
 
-class BankSelectionScreen extends StatelessWidget {
+class BankSelectionScreen extends StatefulWidget {
+  final Order? order;
+  final LockerSite? lockerSite;
+  final LockerCompartment? compartment;
+  final User? user;
+
+  const BankSelectionScreen(
+      {super.key,
+      required this.order,
+      required this.lockerSite,
+      required this.compartment,
+      required this.user});
+
+  @override
+  _BankSelectionScreenState createState() => _BankSelectionScreenState();
+}
+
+class _BankSelectionScreenState extends State<BankSelectionScreen> {
   final List<Bank> banks = [
     Bank(name: 'Maybank', logoPath: cMaybank),
     Bank(name: 'CIMB', logoPath: cCIMB),
     Bank(name: 'Public Bank', logoPath: cPublicBank),
     Bank(name: 'Hong Leong Bank', logoPath: cHongLeongBank),
-    // ... add other banks here
   ];
-
-  BankSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Your Option', style: Theme.of(context).textTheme.displaySmall,),
+        title: Text(
+          'Select Your Option',
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
         centerTitle: true,
       ),
       body: ListView.builder(
@@ -46,14 +49,21 @@ class BankSelectionScreen extends StatelessWidget {
             leading: CircleAvatar(
               backgroundImage: AssetImage(banks[index].logoPath),
             ),
-            title: Text(banks[index].name, style: Theme.of(context).textTheme.headlineMedium,),
+            title: Text(
+              banks[index].name,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
-              // Handle the bank selection
-              // print('Selected: ${banks[index].name}');
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PaymentFormScreen()),
+                MaterialPageRoute(
+                    builder: (context) => PaymentFormScreen(
+                          order: widget.order,
+                          lockerSite: widget.lockerSite,
+                          compartment: widget.compartment,
+                          user: widget.user,
+                        )),
               );
             },
           );

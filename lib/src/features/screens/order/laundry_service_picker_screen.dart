@@ -1,29 +1,74 @@
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/screens/home/home_screen.dart';
-import 'package:device_run_test/src/features/screens/order/select_item_screen.dart';
-import 'package:flutter/material.dart';
-// void main() {
-//   runApp(const MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Laundry Service Picker',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//         visualDensity: VisualDensity.adaptivePlatformDensity,
-//       ),
-//       home: const LaundryServicePicker(),
-//     );
-//   }
-// }
 
-class LaundryServicePicker extends StatelessWidget {
-  const LaundryServicePicker({super.key});
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:device_run_test/src/features/screens/order/select_item_screen.dart';
+
+import 'package:device_run_test/config.dart';
+import 'package:device_run_test/src/features/models/locker.dart';
+import 'package:device_run_test/src/features/models/service.dart';
+
+class LaundryServicePicker extends StatefulWidget {
+  final LockerSite lockerSite;
+  //final LockerCompartment? compartment;
+  final String selectedCompartmentSize;
+
+  LaundryServicePicker(
+      {required this.lockerSite, required this.selectedCompartmentSize});
+
+  @override
+  _LaundryServicePickerState createState() => _LaundryServicePickerState();
+}
+
+class _LaundryServicePickerState extends State<LaundryServicePicker> {
+  List<Service> services = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchServices();
+  }
+
+  // GET SERVICES FROM BACKEND
+  Future<void> fetchServices() async {
+    try {
+      final response = await http.get(Uri.parse(url + 'services'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data.containsKey('services')) {
+          final List<dynamic> serviceData = data['services'];
+          final List<Service> fetchedServices =
+              serviceData.map((service) => Service.fromJson(service)).toList();
+          setState(() {
+            services = fetchedServices;
+          });
+        } else {
+          print('Response data does not contain services.');
+        }
+      } else {
+        throw Exception('Failed to load services');
+      }
+    } catch (error) {
+      print('Error fetching services: $error');
+    }
+  }
+
+  // HANDLE SERVICE SELECTION FROM USER
+  void handleServiceSelection(Service selectedService) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SelectItems(
+            lockerSite: widget.lockerSite,
+            selectedCompartmentSize: widget.selectedCompartmentSize,
+            service: selectedService),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,93 +85,39 @@ class LaundryServicePicker extends StatelessWidget {
           ),
       body: Container(
         padding: const EdgeInsets.all(cDefaultSize),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Pick your Laundry Service',
-              style: Theme.of(context).textTheme.displayLarge,
-            ),
-            const SizedBox(
-              height: cDefaultSize * 0.5,
-            ),
-            Text(
-              'One service is available for a single order.',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(
-              height: cDefaultSize,
-            ),
-            //Laundry Service Buttons
-            Expanded(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            'Pick your Laundry Service',
+            style: Theme.of(context).textTheme.displayLarge,
+          ),
+          const SizedBox(
+            height: cDefaultSize * 0.5,
+          ),
+          Text(
+            'Note: Only one service is available for a single order.',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          const SizedBox(
+            height: cDefaultSize,
+          ),
+          //Laundry Service Buttons
+          Expanded(
               child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                children: <Widget>[
-                  ServiceCard(
-                    serviceName: 'Wash & Fold',
-                    iconName: 'assets/images/laundry_service/wash_and_fold.png',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomePage()),
-                      );
-                    },
-                  ),
-                  ServiceCard(
-                    serviceName: 'Dry Cleaning',
-                    iconName: 'assets/images/laundry_service/dry_cleaning.png',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SelectYourItemPage()),
-                      );
-                    },
-                  ),
-                  ServiceCard(
-                    serviceName: 'Handwash',
-                    iconName: 'assets/images/laundry_service/handwash.png',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SelectYourItemPage()),
-                      );
-                    },
-                  ),
-                  ServiceCard(
-                    serviceName: 'Laundry & Iron',
-                    iconName:
-                        'assets/images/laundry_service/laundry_and_iron.png',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SelectYourItemPage()),
-                      );
-                    },
-                  ),
-                  ServiceCard(
-                    serviceName: 'Ironing',
-                    iconName: 'assets/images/laundry_service/ironing.png',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SelectYourItemPage()),
-                      );
-                    },
-                  ),
-                  // Assuming you have an icon for the chatbot as well
-                  // ServiceCard(serviceName: 'Chat with Support', iconName: 'icons/support_chat.png'),
-                ],
-              ),
-            ),
-          ],
-        ),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16.0,
+                  mainAxisSpacing: 16.0,
+                  children: List.generate(services.length, (index) {
+                    final service = services[index];
+                    return ServiceCard(
+                      serviceName: service.name,
+                      iconName:
+                          'assets/images/laundry_service/${service.name.replaceAll(' ', '')}.png',
+                      onTap: () {
+                        handleServiceSelection(service);
+                      },
+                    );
+                  }))),
+        ]),
       ),
     );
   }

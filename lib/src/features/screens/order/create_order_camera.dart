@@ -1,7 +1,9 @@
+import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import 'laundry_service_picker_screen.dart';
+import 'package:device_run_test/src/features/screens/order/locker_compartment_select.dart';
 
 class CreateOrderCameraPage extends StatefulWidget {
   const CreateOrderCameraPage({super.key});
@@ -46,7 +48,7 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LaundryServicePicker()),
+                MaterialPageRoute(builder: (context) => LockerSiteSelect()),
               );
             },
             child: Text(

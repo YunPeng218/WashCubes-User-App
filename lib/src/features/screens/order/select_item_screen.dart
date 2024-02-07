@@ -3,18 +3,33 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/screens/order/order_est_confirm_popup.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:device_run_test/config.dart';
 
 import 'order_summary_screen.dart';
 import 'checkout_details_popup.dart';
 
-class SelectYourItemPage extends StatefulWidget {
-  const SelectYourItemPage({super.key});
+import 'package:device_run_test/src/features/models/locker.dart';
+import 'package:device_run_test/src/features/models/service.dart';
+import 'package:device_run_test/src/features/models/order.dart';
+
+class SelectItems extends StatefulWidget {
+  final LockerSite lockerSite;
+  //final LockerCompartment? compartment;
+  final String selectedCompartmentSize;
+  final Service service;
+
+  SelectItems(
+      {required this.lockerSite,
+      required this.selectedCompartmentSize,
+      required this.service});
 
   @override
-  _SelectYourItemPageState createState() => _SelectYourItemPageState();
+  _SelectItemsState createState() => _SelectItemsState();
 }
 
-class _SelectYourItemPageState extends State<SelectYourItemPage> {
+class _SelectItemsState extends State<SelectItems> {
   Map<String, double> prices = {
     'Top': 6.0,
     'Bottom': 8.0,
@@ -27,10 +42,78 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
     'Curtain': 0,
     'Comforter Cover / Bedsheet': 0,
   };
-
   double get totalEstPrice => quantities.entries
       .map((e) => e.value * prices[e.key]!)
       .reduce((value, element) => value + element);
+
+  Map<String, int> selectedQuantity = {};
+
+  // UPDATE ESTIMATED PRICE
+  double updateEstimatedPrice() {
+    double estimatedPrice = 0.0;
+    for (var item in widget.service.items) {
+      int quantity = selectedQuantity[item.id] ?? 0;
+      estimatedPrice += item.price * quantity;
+    }
+    return estimatedPrice;
+  }
+
+  // SEND ORDER DETAILS TO SERVER
+  Future<void> sendOrderToServer() async {
+    Navigator.of(context).pop();
+
+    try {
+      Map<String, dynamic> orderDetails = {
+        // 'lockerSiteId': widget.lockerSite.id,
+        // 'compartmentId': widget.compartment?.id,
+        // 'compartmentNumber': widget.compartment?.compartmentNumber,
+        'serviceId': widget.service.id,
+        'orderItems': [],
+      };
+
+      for (var item in widget.service.items) {
+        int quantity = selectedQuantity[item.id] ?? 0;
+        if (quantity > 0) {
+          orderDetails['orderItems']
+              .add({'itemId': item.id, 'quantity': quantity});
+        }
+      }
+
+      final response = await http.post(
+        Uri.parse(url + 'orders/create-order'),
+        body: json.encode(orderDetails),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        // Handle the success scenario, e.g., navigate to the next screen
+        final Map<String, dynamic> data = json.decode(response.body);
+        if (data.containsKey('newOrder')) {
+          final dynamic orderData = data['newOrder'];
+          final Order order = Order.fromJson(orderData);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OrderSummary(
+                  lockerSite: widget.lockerSite,
+                  // compartment: widget.compartment,
+                  selectedCompartmentSize: widget.selectedCompartmentSize,
+                  service: widget.service,
+                  order: order),
+            ),
+          );
+        } else {
+          print('Response data does not contain services.');
+        }
+        // Navigator.push(...);
+      } else {
+        print(
+            'Failed to send order details. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error sending order details: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,45 +143,29 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: prices.length,
-                itemBuilder: (context, index) {
-                  String key = prices.keys.elementAt(index);
+                shrinkWrap: true,
+                itemCount: widget.service.items.length,
+                itemBuilder: ((context, index) {
+                  ServiceItem item = widget.service.items[index];
                   return ListTile(
                     leading: Image.asset(
-                      itemImages[key]!, // Use the image asset path from the map
+                      'assets/images/select_item/top.png', // Use the image asset path from the map
                       width: 24, // Set the desired width
                       height: 24, // Set the desired height
                     ), // Replace with your own icons
-                    title: Text(key),
-                    subtitle: Text('RM ${prices[key]}/kg'),
-                    //item count +-
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.remove),
-                          onPressed: quantities[key]! > 0
-                              ? () {
-                                  setState(() {
-                                    quantities[key] =
-                                        (quantities[key] ?? 0) - 1;
-                                  });
-                                }
-                              : null,
-                        ),
-                        Text('${quantities[key]}'),
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () {
-                            setState(() {
-                              quantities[key] = (quantities[key] ?? 0) + 1;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+                    title: Text(item.name),
+                    subtitle: Text(
+                        'RM ${item.price.toStringAsFixed(2)}/${item.unit}'),
+                    trailing: QuantitySelector(
+                        initialQuantity: selectedQuantity[item.id] ?? 0,
+                        onChanged: (quantity) {
+                          setState(() {
+                            // Update the selected quantities map
+                            selectedQuantity[item.id] = quantity;
+                          });
+                        }),
                   );
-                },
+                }),
               ),
             ),
           ],
@@ -122,7 +189,7 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
                         color: AppColors.cWhiteColor),
                   ),
                   Text(
-                    'RM ${totalEstPrice.toStringAsFixed(2)}',
+                    'RM ${updateEstimatedPrice().toStringAsFixed(2)}',
                     style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -136,6 +203,30 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
                 ),
                 onPressed: () {
                   // Check out action
+                  bool noItemSelected =
+                      selectedQuantity.values.every((value) => value == 0);
+
+                  if (noItemSelected) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('OOPS! No items selected.'),
+                          content: Text('Please select some items to procced.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    return;
+                  }
+
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -164,13 +255,8 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const SummaryPage()),
-                                    );
+                                  onPressed: () async {
+                                    await sendOrderToServer();
                                   },
                                   child: Text(
                                     'Confirm',
@@ -196,6 +282,57 @@ class _SelectYourItemPageState extends State<SelectYourItemPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+// QUANTITY SELECTOR
+class QuantitySelector extends StatefulWidget {
+  final int initialQuantity;
+  final Function(int) onChanged;
+
+  QuantitySelector({required this.initialQuantity, required this.onChanged});
+
+  @override
+  _QuantitySelectorState createState() => _QuantitySelectorState();
+}
+
+class _QuantitySelectorState extends State<QuantitySelector> {
+  int quantity = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    quantity = widget.initialQuantity;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.remove),
+          onPressed: () {
+            if (quantity > 0) {
+              setState(() {
+                quantity--;
+                widget.onChanged(quantity);
+              });
+            }
+          },
+        ),
+        Text('${quantity}'),
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            setState(() {
+              quantity++;
+              widget.onChanged(quantity);
+            });
+          },
+        ),
+      ],
     );
   }
 }

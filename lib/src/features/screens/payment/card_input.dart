@@ -1,25 +1,28 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/config.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import '../order/order_screen.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
-//
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Payment Form',
-//       home: PaymentFormScreen(),
-//     );
-//   }
-// }
+import 'package:device_run_test/src/features/models/order.dart';
+import 'package:device_run_test/src/features/models/locker.dart';
+import 'package:device_run_test/src/features/models/user.dart';
 
 class PaymentFormScreen extends StatefulWidget {
-  const PaymentFormScreen({super.key});
+  final Order? order;
+  final LockerSite? lockerSite;
+  final LockerCompartment? compartment;
+  final User? user;
+
+  const PaymentFormScreen(
+      {super.key,
+      required this.order,
+      required this.lockerSite,
+      required this.compartment,
+      required this.user});
 
   @override
   _PaymentFormScreenState createState() => _PaymentFormScreenState();
@@ -33,11 +36,77 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
   String cvv = '';
   String cardHolderName = '';
 
+  Future<void> confirmOrder() async {
+    print(widget.user?.id);
+    print(widget.user?.phoneNumber);
+
+    Map<String, dynamic> newOrder = {
+      'orderNumber': widget.order?.orderNumber,
+      'user': {
+        'userId': widget.user?.id,
+        'phoneNumber': widget.user?.phoneNumber,
+      },
+      'locker': {
+        'lockerSiteId': widget.lockerSite?.id,
+        'compartmentId': widget.compartment?.id,
+        'compartmentNumber': widget.compartment?.compartmentNumber,
+      },
+      'service': widget.order?.serviceId,
+      'orderItems': [],
+      'estimatedPrice': widget.order?.estimatedPrice,
+    };
+
+    if (widget.order != null) {
+      for (var item in widget.order!.orderItems) {
+        newOrder['orderItems'].add({
+          'name': item.name,
+          'unit': item.unit,
+          'price': item.price,
+          'quantity': item.quantity,
+          'cumPrice': item.cumPrice,
+        });
+      }
+    }
+
+    final response = await http.post(
+      Uri.parse(url + 'orders/confirm-order'),
+      body: json.encode(newOrder),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data.containsKey('newOrder')) {
+        final dynamic orderData = data['newOrder'];
+        final Order order = Order.fromJson(orderData);
+
+        // Set GuestVisitedOrderSummary to false
+        // Provider.of<GuestVisitedOrderSummaryProvider>(context,
+        //         listen: false)
+        //     .setGuestVisitedOrderSummary(false);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrderPage(),
+          ),
+        );
+      } else {
+        print('Response data does not contain saved order.');
+      }
+    } else {
+      print('Failed to confirm order. Status code: ${response.statusCode}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Credit / Debit Card', style: Theme.of(context).textTheme.displaySmall,),
+        title: Text(
+          'Credit / Debit Card',
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -109,12 +178,15 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                   Expanded(
                     child: Text(
                       'Your card details will be saved securely.',
-                      style: TextStyle(fontSize: 14.0, color: AppColors.cPrimaryColor),
+                      style: TextStyle(
+                          fontSize: 14.0, color: AppColors.cPrimaryColor),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10.0,),
+              const SizedBox(
+                height: 10.0,
+              ),
               const Text(
                 'We ensure the security and privacy of your card information. Rest assured, i3wash does not have access to your card details.',
                 style: TextStyle(color: AppColors.cGreyColor2),
@@ -126,15 +198,16 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(cDefaultSize),
         child: ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              _formKey.currentState!.save();
-              // You can now use the card details for processing
-            }
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const OrderPage()),
-            );
+          onPressed: () async {
+            // if (_formKey.currentState!.validate()) {
+            //   _formKey.currentState!.save();
+            //   // You can now use the card details for processing
+            // }
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const OrderPage()),
+            // );
+            await confirmOrder();
           },
           child: Text(
             'Check Out',
