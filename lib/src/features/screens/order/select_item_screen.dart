@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
@@ -17,12 +19,13 @@ import 'package:device_run_test/src/features/models/order.dart';
 
 class SelectItems extends StatefulWidget {
   final LockerSite lockerSite;
-  //final LockerCompartment? compartment;
-  final String selectedCompartmentSize;
+  final LockerCompartment? compartment;
+  final String? selectedCompartmentSize;
   final Service service;
 
   SelectItems(
       {required this.lockerSite,
+      required this.compartment,
       required this.selectedCompartmentSize,
       required this.service});
 
@@ -97,7 +100,7 @@ class _SelectItemsState extends State<SelectItems> {
             MaterialPageRoute(
               builder: (context) => OrderSummary(
                   lockerSite: widget.lockerSite,
-                  // compartment: widget.compartment,
+                  compartment: widget.compartment,
                   selectedCompartmentSize: widget.selectedCompartmentSize,
                   service: widget.service,
                   order: order),

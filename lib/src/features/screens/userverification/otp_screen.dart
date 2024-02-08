@@ -1,6 +1,5 @@
-import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/features/screens/biometricSetup/biometric_setup_screen.dart';
-import 'package:device_run_test/src/features/screens/home/home_screen.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +8,18 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:http/http.dart' as http;
 import 'package:device_run_test/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+
+// SCREENS
+import 'package:device_run_test/src/features/screens/biometricSetup/biometric_setup_screen.dart';
+import 'package:device_run_test/src/features/screens/home/home_screen.dart';
+import 'package:device_run_test/src/features/screens/order/order_summary_screen.dart';
+
+// STYLES
+import 'package:device_run_test/src/constants/colors.dart';
+
+// UTILS
+import 'package:device_run_test/src/utilities/guest_mode.dart';
 
 class OTPVerifyPage extends StatefulWidget {
   const OTPVerifyPage({super.key});
@@ -44,12 +55,44 @@ class _OTPPageState extends State<OTPVerifyPage> {
     if (jsonResponse['status'] == 'existingUser') {
       var myToken = jsonResponse['token'];
       prefs.setString('token', myToken);
-      Navigator.of(context).pushAndRemoveUntil(
+
+      // Set Guest Mode to False
+      Provider.of<GuestModeProvider>(context, listen: false)
+          .setGuestMode(false);
+
+      // Check if Guest Has Made Order
+      if (Provider.of<GuestModeProvider>(context, listen: false)
+          .guestMadeOrder) {
+        Provider.of<GuestModeProvider>(context, listen: false)
+            .setGuestMadeOrder(false);
+        Navigator.pushReplacement(
+          context,
           MaterialPageRoute(
-            builder: (context) => HomePage(token: myToken),
+            builder: (context) => OrderSummary(
+              order: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestOrder,
+              service: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestService,
+              lockerSite: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestLockerSite,
+              selectedCompartmentSize:
+                  Provider.of<GuestModeProvider>(context, listen: false)
+                      .guestSelectedCompartmentSize,
+              compartment: null,
+            ),
           ),
-          (Route<dynamic> route) => false);
+        );
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => HomePage(token: myToken),
+            ),
+            (Route<dynamic> route) => false);
+      }
     } else if (jsonResponse['status'] == 'newUser') {
+      // Set Guest Mode to False
+      Provider.of<GuestModeProvider>(context, listen: false)
+          .setGuestMode(false);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const BiometricSetupPage(),

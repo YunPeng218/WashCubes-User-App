@@ -12,11 +12,13 @@ import 'package:device_run_test/src/features/models/service.dart';
 
 class LaundryServicePicker extends StatefulWidget {
   final LockerSite lockerSite;
-  //final LockerCompartment? compartment;
-  final String selectedCompartmentSize;
+  final LockerCompartment? compartment;
+  final String? selectedCompartmentSize;
 
   LaundryServicePicker(
-      {required this.lockerSite, required this.selectedCompartmentSize});
+      {required this.lockerSite,
+      required this.compartment,
+      this.selectedCompartmentSize});
 
   @override
   _LaundryServicePickerState createState() => _LaundryServicePickerState();
@@ -64,6 +66,7 @@ class _LaundryServicePickerState extends State<LaundryServicePicker> {
       MaterialPageRoute(
         builder: (context) => SelectItems(
             lockerSite: widget.lockerSite,
+            compartment: widget.compartment,
             selectedCompartmentSize: widget.selectedCompartmentSize,
             service: selectedService),
       ),
