@@ -51,6 +51,8 @@ dependencies:
   chat_gpt_sdk: ^3.0.1
   dash_chat_2: ^0.0.20
   get: ^4.3.8
+  image_picker: ^1.0.7
+  cloudinary: 
 
 dev_dependencies:
   flutter_test:

@@ -2,9 +2,9 @@ import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
-import 'package:device_run_test/src/features/screens/userverification/otp_screen.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,9 +12,41 @@ import 'edit_profile_screen.dart';
 import 'faq_screen.dart';
 import 'policy_screen.dart';
 import 'feedback_screen.dart';
+import 'package:device_run_test/src/utilities/user_helper.dart';
 
-class SettingMainPage extends StatelessWidget {
-  const SettingMainPage({super.key});
+class SettingMainPage extends StatefulWidget {
+  @override
+  _SettingMainPageState createState() => _SettingMainPageState();
+}
+
+class _SettingMainPageState extends State <SettingMainPage> {
+  UserProfile? user;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? 'No token';
+    if (token != 'No token') loadUserInfo();
+  }
+
+  Future<void> loadUserInfo() async {
+    try {
+      var userHelper = UserHelper();
+      UserProfile? foundUser = await userHelper.getUserDetails();
+      if (mounted) {
+        setState(() {
+          user = foundUser;
+        });
+      }
+    } catch (error) {
+      print('Failed to load user: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +68,8 @@ class SettingMainPage extends StatelessWidget {
         padding: const EdgeInsets.all(cDefaultSize - 10),
         child: ListView(
           children: <Widget>[
-            const UserHeader(),
+            if (user != null)
+              UserHeader(user: user),
             ProfileOption(
               title: 'Edit Profile',
               icon: Icons.person_outline_rounded,
@@ -44,7 +77,7 @@ class SettingMainPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const EditProfilePage()),
+                      builder: (context) => EditProfilePage()),
                 );
               },
             ),
@@ -131,7 +164,10 @@ class SettingMainPage extends StatelessWidget {
 }
 
 class UserHeader extends StatelessWidget {
-  const UserHeader({super.key});
+  UserProfile? user;
+
+  UserHeader({Key? key, required this.user})
+      : super(key: key); 
 
   @override
   Widget build(BuildContext context) {
@@ -140,14 +176,15 @@ class UserHeader extends StatelessWidget {
         backgroundImage: AssetImage(cAvatar),
         radius: 30,
       ),
-      title: Text(
-        'Trimity Wang',
-        style: Theme.of(context).textTheme.displaySmall,
-      ),
-      subtitle: const Text(
-        '#90601912023',
-        style: TextStyle(color: AppColors.cGreyColor2),
-      ),
+      title: user!.name.isNotEmpty
+        ? Text(
+          user!.name,
+          style: Theme.of(context).textTheme.displaySmall,
+        )
+        : Text(
+          'Trimi',
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
     );
   }
 }
