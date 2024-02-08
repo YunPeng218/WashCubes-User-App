@@ -1,5 +1,5 @@
-import 'package:device_run_test/src/constants/image_strings.dart';
-import 'package:device_run_test/src/constants/sizes.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -7,23 +7,36 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:device_run_test/config.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
+// SCREENS
 import '../payment/payment_method.dart';
 import '../home/home_screen.dart';
+import '../welcome/welcome_screen.dart';
 
+// ASSETS
+import 'package:device_run_test/src/constants/image_strings.dart';
+import 'package:device_run_test/src/constants/sizes.dart';
+
+// MODELS
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/user.dart';
 
+// UTILS
+import 'package:device_run_test/src/utilities/guest_mode.dart';
+
 class OrderSummary extends StatefulWidget {
   final LockerSite? lockerSite;
+  final LockerCompartment? compartment;
   final String? selectedCompartmentSize;
   final Service? service;
   final Order? order;
 
   OrderSummary({
     required this.lockerSite,
+    required this.compartment,
     required this.selectedCompartmentSize,
     required this.service,
     required this.order,
@@ -40,7 +53,6 @@ class _OrderSummaryState extends State<OrderSummary> {
 
   late String token;
   User? user;
-  LockerCompartment? compartment;
 
   Future<User?> getUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,44 +74,90 @@ class _OrderSummaryState extends State<OrderSummary> {
     print(user?.phoneNumber);
 
     if (user != null) {
-      compartment = await getAllocatedCompartment();
-      print(compartment?.id);
-      print(compartment?.size);
-
-      if (compartment != null) {
+      if (widget.compartment != null) {
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => PaymentScreen(
                     order: widget.order,
                     lockerSite: widget.lockerSite,
-                    compartment: compartment,
+                    compartment: widget.compartment,
                     user: user,
                   )),
         );
       } else {
-        // ignore: use_build_context_synchronously
+        LockerCompartment? compartment = await getAllocatedCompartment();
+        print(compartment?.id);
+        print(compartment?.size);
+
+        if (compartment != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PaymentScreen(
+                      order: widget.order,
+                      lockerSite: widget.lockerSite,
+                      compartment: compartment,
+                      user: user,
+                    )),
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Sorry, no compartments available.'),
+                content: const Text(
+                    'All compartments are occupied. Would you like to cancel your order or select another locker site.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => HomePage()));
+                    },
+                    child: const Text('Cancel Order'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => SelectLockerSite()));
+                    },
+                    child: const Text('Select'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }
+    } else {
+      if (Provider.of<GuestModeProvider>(context, listen: false).guestMode ==
+          true) {
+        // Ask guest to register
+        print('PLEASE SIGN IN');
+        // PROMPT GUEST SIGN UP
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Sorry, no compartments available.'),
-              content: const Text(
-                  'All compartments are occupied. Would you like to cancel your order or select another locker site.'),
+              content: const Column(
+                children: [
+                  Text('Don\'t have an account?'),
+                  Text('Sign up to check out.'),
+                ],
+              ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) => HomePage()));
+                    Navigator.pop(context);
                   },
-                  child: const Text('Cancel Order'),
+                  child: const Text('Cancel'),
                 ),
                 TextButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => SelectLockerSite()));
+                    handleGuestRedirection();
                   },
                   child: const Text('Select'),
                 ),
@@ -108,27 +166,27 @@ class _OrderSummaryState extends State<OrderSummary> {
           },
         );
       }
-    } else {
-      // Ask guest to register
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) {
-        //       Provider.of<GuestVisitedOrderSummaryProvider>(context,
-        //               listen: false)
-        //           .setGuestVisitedOrderSummary(true);
-        //       return Registration(
-        //         lockerSite: widget.lockerSite,
-        //         selectedCompartmentSize: widget.selectedCompartmentSize,
-        //         service: widget.service,
-        //         order: widget.order,
-        //       );
-        //     },
-        //   ),
-        // );
-      });
     }
+  }
+
+  void handleGuestRedirection() {
+    // STORE GUEST'S ORDER
+    Provider.of<GuestModeProvider>(context, listen: false)
+        .setGuestMadeOrder(true);
+    Provider.of<GuestModeProvider>(context, listen: false).setGuestOrderDetails(
+        widget.order,
+        widget.service,
+        widget.lockerSite,
+        widget.selectedCompartmentSize);
+    // REDIRECT TO SIGN IN PAGE
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const WelcomeScreen(),
+        ),
+      );
+    });
   }
 
   Future<LockerCompartment?> getAllocatedCompartment() async {

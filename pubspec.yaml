@@ -50,6 +50,7 @@ dependencies:
   flutter_svg: ^2.0.9
   chat_gpt_sdk: ^3.0.1
   dash_chat_2: ^0.0.20
+  get: ^4.3.8
 
 dev_dependencies:
   flutter_test:

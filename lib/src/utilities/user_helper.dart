@@ -32,11 +32,22 @@ class UserHelper {
   // GET USER ID AND PHONE NUM ONLY
   Future<User?> getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    User? user;
     token = (await prefs.getString('token')) ?? 'No token';
-    Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token);
-    User? user = User(
-        id: jwtDecodedToken['_id'],
-        phoneNumber: jwtDecodedToken['phoneNumber']);
+    if (token != 'No token') {
+      Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token);
+      user = User(
+          id: jwtDecodedToken['_id'],
+          phoneNumber: jwtDecodedToken['phoneNumber']);
+    } else {
+      user = null;
+    }
     return user;
+  }
+
+  // CHECK IF USER IS SIGNED IN
+  Future<bool> isSignedIn() async {
+    User? user = await getUser();
+    return (user != null);
   }
 }

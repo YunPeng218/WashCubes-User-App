@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/screens/order/locker_compartment_select.dart';
+import 'package:device_run_test/src/features/screens/order/order_screen.dart';
+
+import 'package:device_run_test/src/constants/colors.dart';
 
 class LockerSiteSelect extends StatefulWidget {
   @override
@@ -50,22 +53,34 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Center(child: Text('WashCubes')),
+        title: Text(
+          'Select Locker Site',
+          style: Theme.of(context).textTheme.displaySmall,
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Handle back button press
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const OrderPage(),
+              ),
+            );
+          },
+        ),
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         itemCount: lockerSites.length,
         itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () async {
-              await handleLockerSiteSelection(lockerSites[index]);
-            },
-            child: ListTile(
-              title: Text(lockerSites[index].name),
-              trailing: Icon(Icons.arrow_right_alt),
-            ),
-          );
+          return LockerSiteOption(
+              title: lockerSites[index].name,
+              icon: Icons.location_on,
+              onTap: () async {
+                await handleLockerSiteSelection(lockerSites[index]);
+              });
         },
       ),
     );
@@ -81,6 +96,35 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
         builder: (context) =>
             LockerCompartmentSelect(selectedLockerSite: selectedLockerSite),
       ),
+    );
+  }
+}
+
+class LockerSiteOption extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const LockerSiteOption(
+      {Key? key, required this.title, required this.onTap, required this.icon})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 8),
+        ListTile(
+          leading: Icon(icon, color: AppColors.cBlueColor4),
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+          onTap: onTap,
+        ),
+        const SizedBox(height: 8),
+      ],
     );
   }
 }
