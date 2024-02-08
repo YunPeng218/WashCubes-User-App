@@ -116,7 +116,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
                 },
                 child: Text(
                   'OK',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: CTextTheme.blackTextTheme.headlineMedium,
                 ),
               ),
             ],

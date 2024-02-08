@@ -119,7 +119,7 @@ class LockerSiteOption extends StatelessWidget {
           leading: Icon(icon, color: AppColors.cBlueColor4),
           title: Text(
             title,
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: CTextTheme.blackTextTheme.headlineMedium,
           ),
           trailing: const Icon(Icons.chevron_right, color: Colors.grey),
           onTap: onTap,

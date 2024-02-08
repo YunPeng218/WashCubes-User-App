@@ -211,7 +211,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
           },
           child: Text(
             'Check Out',
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: CTextTheme.blackTextTheme.headlineMedium,
           ),
         ),
       ),
