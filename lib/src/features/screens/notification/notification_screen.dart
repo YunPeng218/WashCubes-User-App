@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 // import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ class _NotifScreenState extends State<NotificationScreen> {
             Image.asset(cChatBotLogo),
             Text(
               'No Notification',
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: CTextTheme.greyTextTheme.headlineSmall,
             ),
           ],
         ),
@@ -43,7 +44,7 @@ class _NotifScreenState extends State<NotificationScreen> {
       appBar: AppBar(
         title: Text(
           'Notifications',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
         actions: [

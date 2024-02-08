@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class PolicyPage extends StatelessWidget {
@@ -8,7 +9,7 @@ class PolicyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Privacy Policy', style: Theme.of(context).textTheme.displaySmall,),
+        title: Text('Privacy Policy', style: CTextTheme.blackTextTheme.displaySmall,),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -18,7 +19,7 @@ class PolicyPage extends StatelessWidget {
           'Lorem ipsum dolor sit amet, quo aperiores inventore et eum maxime est necessitatibus voluptates molestias animi. Et ab voluptatem delicti et quos possimus non tosto. Nunc magnam, quos interdum molestiae non dolor assumenda non ipsa pariatur et consequatur vitae sed numquam eius!\n\n'
           // ... Continue with the rest of the privacy policy text
               'Lorem ipsum dolor sit amet, quo aperiores inventore et eum maxime est necessitatibus...',
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: CTextTheme.greyTextTheme.headlineSmall,
         ),
       ),
     );

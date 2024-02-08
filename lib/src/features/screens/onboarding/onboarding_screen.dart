@@ -1,6 +1,7 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/constants/text_strings.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/screens/home/home_screen.dart';
 import 'package:device_run_test/src/constants/colors.dart';
@@ -84,12 +85,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.labelLarge,
+                        textStyle: CTextTheme.blackTextTheme.labelLarge,
                         backgroundColor: AppColors.cButtonColor,
                       ),
                       child: Text(
                         'Start',
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: CTextTheme.blackTextTheme.headlineMedium,
                       ),
                     ),
             ),
@@ -128,14 +129,14 @@ class OnboardingPage extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: Theme.of(context).textTheme.displayMedium,
+                style: CTextTheme.blackTextTheme.displayMedium,
               ),
               const SizedBox(
                 height: 10.0,
               ),
               Text(
                 subtitle,
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: CTextTheme.blackTextTheme.headlineSmall,
               ),
             ],
           ),

@@ -5,25 +5,10 @@ import 'package:device_run_test/src/features/screens/nearbylocation/NearbyLocati
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/elevatedbutton_theme.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: HomePage(),
-//     );
-//   }
-// }
 
 class HomePage extends StatefulWidget {
   final token;
@@ -73,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const SettingMainPage()),
+                      builder: (context) => const AccountPage()),
                 );
               },
               child: null,
@@ -91,13 +76,13 @@ class _HomePageState extends State<HomePage> {
               // Good Morning Text
               Text(
                 'Good Morning, Trimity!',
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: CTextTheme.blackTextTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
               // Discover Text
               Text(
                 'Discover your closest\nlaundry lockers',
-                style: Theme.of(context).textTheme.displayLarge,
+                style: CTextTheme.blackTextTheme.displayLarge,
               ),
               const SizedBox(height: 16),
               // Location Button
@@ -126,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                       color: AppColors.cPrimaryColor,
                     ),
                     Text("Taylor's University",
-                        style: Theme.of(context).textTheme.labelLarge),
+                        style: CTextTheme.blackTextTheme.labelLarge),
                     const Icon(
                       Icons.keyboard_arrow_down_rounded,
                       color: AppColors.cBlackColor,
@@ -138,7 +123,7 @@ class _HomePageState extends State<HomePage> {
               // Special Event Title
               Text(
                 'Special Event',
-                style: Theme.of(context).textTheme.displaySmall,
+                style: CTextTheme.blackTextTheme.displaySmall,
               ),
               // RecyclerView for images
               SizedBox(
@@ -161,7 +146,7 @@ class _HomePageState extends State<HomePage> {
               // Ongoing Order Title
               Text(
                 'Ongoing Order',
-                style: Theme.of(context).textTheme.displaySmall,
+                style: CTextTheme.blackTextTheme.displaySmall,
               ),
 
               const SizedBox(height: 5), // ...
@@ -198,12 +183,12 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(height: 4),
                           Text(
                             'Laundry In Progress',
-                            style: Theme.of(context).textTheme.displaySmall,
+                            style: CTextTheme.blackTextTheme.displaySmall,
                           ),
                           const SizedBox(height: 4),
                           Text(
                             '“Leave it to Trimi - cleaning magic in progress!”',
-                            style: Theme.of(context).textTheme.headlineSmall,
+                            style: CTextTheme.blackTextTheme.headlineSmall,
                           ),
                           const SizedBox(height: 10),
                           //Order Progress Bar
@@ -233,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Text(
                                   '70%',
                                   style:
-                                      Theme.of(context).textTheme.labelMedium,
+                                      CTextTheme.blackTextTheme.labelMedium,
                                 ),
                               ),
                             ],
@@ -255,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Text(
                               'Check',
-                              style: Theme.of(context).textTheme.labelMedium,
+                              style: CTextTheme.blackTextTheme.labelMedium,
                             ),
                           ),
                         ],

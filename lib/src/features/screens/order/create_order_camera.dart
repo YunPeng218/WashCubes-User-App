@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -24,7 +25,7 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
       appBar: AppBar(
         title: Text(
           'Scan QR Code',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
       ),
@@ -32,7 +33,7 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
         children: <Widget>[
           Text(
             'Place the QR Code within the frame to scan',
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: CTextTheme.blackTextTheme.headlineMedium,
           ),
           //Camera Function w/ QR Code Scanner
           Expanded(
@@ -53,7 +54,7 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
             },
             child: Text(
               'Tap to turn light on',
-              style: Theme.of(context).textTheme.labelLarge,
+              style: CTextTheme.blackTextTheme.labelLarge,
             ),
           ),
         ],

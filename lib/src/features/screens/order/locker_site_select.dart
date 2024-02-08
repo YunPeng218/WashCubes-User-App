@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:device_run_test/config.dart';
@@ -51,10 +52,11 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Center(child: Text('WashCubes')),
+        title: Text('WashCubes', style: CTextTheme.blackTextTheme.displaySmall,),
+        centerTitle: true,
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         itemCount: lockerSites.length,
         itemBuilder: (context, index) {
           return GestureDetector(
@@ -62,8 +64,8 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
               await handleLockerSiteSelection(lockerSites[index]);
             },
             child: ListTile(
-              title: Text(lockerSites[index].name),
-              trailing: Icon(Icons.arrow_right_alt),
+              title: Text(lockerSites[index].name, style: CTextTheme.blackTextTheme.headlineMedium,),
+              trailing: const Icon(Icons.arrow_right_alt),
             ),
           );
         },

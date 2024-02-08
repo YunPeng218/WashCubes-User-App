@@ -1,6 +1,7 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/config.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -105,7 +106,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
       appBar: AppBar(
         title: Text(
           'Credit / Debit Card',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
       ),
@@ -171,15 +172,14 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                 },
               ),
               const SizedBox(height: 16.0),
-              const Row(
+              Row(
                 children: [
-                  Icon(Icons.check_circle, color: AppColors.cPrimaryColor),
-                  SizedBox(width: 8.0),
+                  const Icon(Icons.check_circle, color: AppColors.cPrimaryColor),
+                  const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
                       'Your card details will be saved securely.',
-                      style: TextStyle(
-                          fontSize: 14.0, color: AppColors.cPrimaryColor),
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ),
                 ],
@@ -187,9 +187,9 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
               const SizedBox(
                 height: 10.0,
               ),
-              const Text(
+              Text(
                 'We ensure the security and privacy of your card information. Rest assured, i3wash does not have access to your card details.',
-                style: TextStyle(color: AppColors.cGreyColor2),
+                style: CTextTheme.greyTextTheme.headlineMedium,
               ),
             ],
           ),

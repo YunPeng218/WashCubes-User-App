@@ -4,8 +4,9 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
-import 'package:device_run_test/src/features/screens/userverification/otp_screen.dart';
+import 'package:device_run_test/src/features/screens/setting/setting_screen.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile_screen.dart';
@@ -13,8 +14,8 @@ import 'faq_screen.dart';
 import 'policy_screen.dart';
 import 'feedback_screen.dart';
 
-class SettingMainPage extends StatelessWidget {
-  const SettingMainPage({super.key});
+class AccountPage extends StatelessWidget {
+  const AccountPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +62,17 @@ class SettingMainPage extends StatelessWidget {
             //     );
             //   },
             // ),
+            ProfileOption(
+              title: 'Settings',
+              icon: Icons.settings_outlined,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingPage()),
+                );
+              },
+            ),
+            const Divider(),
             ProfileOption(
               title: 'Feedback Ratings',
               icon: Icons.star_border_rounded,
@@ -142,11 +154,11 @@ class UserHeader extends StatelessWidget {
       ),
       title: Text(
         'Trimity Wang',
-        style: Theme.of(context).textTheme.displaySmall,
+        style: CTextTheme.blackTextTheme.displaySmall,
       ),
-      subtitle: const Text(
+      subtitle: Text(
         '#90601912023',
-        style: TextStyle(color: AppColors.cGreyColor2),
+        style: CTextTheme.greyTextTheme.labelLarge,
       ),
     );
   }
@@ -164,10 +176,10 @@ class ProfileOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.cBlueColor4),
+      leading: Icon(icon, color: AppColors.cBlueColor5),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.headlineMedium,
+        style: CTextTheme.blackTextTheme.headlineMedium,
       ),
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       onTap: onTap,

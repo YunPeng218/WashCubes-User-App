@@ -2,6 +2,7 @@ import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/screens/order/order_est_confirm_popup.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -129,14 +130,14 @@ class _SelectItemsState extends State<SelectItems> {
           children: [
             Text(
               'Select your item',
-              style: Theme.of(context).textTheme.displayLarge,
+              style: CTextTheme.blueTextTheme.displayLarge,
             ),
             const SizedBox(
               height: cDefaultSize * 0.5,
             ),
             Text(
               'Select your items and quantity for Total Est. Price.',
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: CTextTheme.greyTextTheme.headlineSmall,
             ),
             const SizedBox(
               height: cDefaultSize,
@@ -153,9 +154,9 @@ class _SelectItemsState extends State<SelectItems> {
                       width: 24, // Set the desired width
                       height: 24, // Set the desired height
                     ), // Replace with your own icons
-                    title: Text(item.name),
+                    title: Text(item.name, style: CTextTheme.blackTextTheme.headlineMedium,),
                     subtitle: Text(
-                        'RM ${item.price.toStringAsFixed(2)}/${item.unit}'),
+                        'RM ${item.price.toStringAsFixed(2)}/${item.unit}', style: CTextTheme.blackTextTheme.headlineMedium,),
                     trailing: QuantitySelector(
                         initialQuantity: selectedQuantity[item.id] ?? 0,
                         onChanged: (quantity) {
@@ -211,14 +212,14 @@ class _SelectItemsState extends State<SelectItems> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('OOPS! No items selected.'),
-                          content: Text('Please select some items to procced.'),
+                          title: Text('OOPS! No items selected.', style: CTextTheme.blackTextTheme.headlineMedium,),
+                          content: Text('Please select some items to procced.', style: CTextTheme.blackTextTheme.headlineMedium,),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text('OK'),
+                              child: Text('OK', style: CTextTheme.blackTextTheme.headlineMedium,),
                             ),
                           ],
                         );
@@ -234,7 +235,7 @@ class _SelectItemsState extends State<SelectItems> {
                       return AlertDialog(
                         content: Text(
                           "If your order exceeds the estimated price, we'll provide further instructions. Click 'Continue' to agree to our Terms and Conditions and Privacy Policy.",
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: CTextTheme.blackTextTheme.headlineSmall,
                         ),
                         actions: [
                           Row(
@@ -246,9 +247,7 @@ class _SelectItemsState extends State<SelectItems> {
                                   },
                                   child: Text(
                                     'Cancel',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall,
+                                    style: CTextTheme.blackTextTheme.headlineSmall,
                                   ),
                                 ),
                               ),
@@ -260,9 +259,7 @@ class _SelectItemsState extends State<SelectItems> {
                                   },
                                   child: Text(
                                     'Confirm',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall,
+                                    style: CTextTheme.blackTextTheme.headlineSmall,
                                   ),
                                 ),
                               ),
@@ -322,7 +319,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
             }
           },
         ),
-        Text('${quantity}'),
+        Text('${quantity}', style: CTextTheme.blackTextTheme.headlineSmall,),
         IconButton(
           icon: const Icon(Icons.add),
           onPressed: () {

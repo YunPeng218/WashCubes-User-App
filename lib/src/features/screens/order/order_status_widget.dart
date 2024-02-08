@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class OrderStatusWidget extends StatelessWidget {
@@ -26,11 +27,11 @@ class OrderStatusWidget extends StatelessWidget {
                   children: [
                     Text(
                       'NOV 23',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: CTextTheme.blackTextTheme.labelLarge,
                     ),
                     Text(
                       'Reserved',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ],
                 ),
@@ -51,11 +52,11 @@ class OrderStatusWidget extends StatelessWidget {
                   children: [
                     Text(
                       'NOV 23',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: CTextTheme.blackTextTheme.labelLarge,
                     ),
                     Text(
                       'Drop Off',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ],
                 ),
@@ -76,11 +77,11 @@ class OrderStatusWidget extends StatelessWidget {
                   children: [
                     Text(
                       'NOV 23',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: CTextTheme.blackTextTheme.labelLarge,
                     ),
                     Text(
                       'Collected By Operator',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ],
                 ),
@@ -101,11 +102,11 @@ class OrderStatusWidget extends StatelessWidget {
                   children: [
                     Text(
                       'NOV 24',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: CTextTheme.blackTextTheme.labelLarge,
                     ),
                     Text(
                       'In Progress',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ],
                 ),
@@ -126,11 +127,11 @@ class OrderStatusWidget extends StatelessWidget {
                   children: [
                     Text(
                       'NOV 25',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: CTextTheme.blackTextTheme.labelLarge,
                     ),
                     Text(
                       'Preparation Completed',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ],
                 ),
@@ -151,11 +152,11 @@ class OrderStatusWidget extends StatelessWidget {
                   children: [
                     Text(
                       'NOV 26',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: CTextTheme.blackTextTheme.labelLarge,
                     ),
                     Text(
                       'Out Of Delivery',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ],
                 ),
@@ -176,11 +177,11 @@ class OrderStatusWidget extends StatelessWidget {
                   children: [
                     Text(
                       'NOV 26',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: CTextTheme.blackTextTheme.labelLarge,
                     ),
                     Text(
                       'Ready For Collection',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ],
                 ),
@@ -201,11 +202,11 @@ class OrderStatusWidget extends StatelessWidget {
                   children: [
                     Text(
                       'NOV 26',
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: CTextTheme.blackTextTheme.labelLarge,
                     ),
                     Text(
                       'Completed',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
                   ],
                 ),

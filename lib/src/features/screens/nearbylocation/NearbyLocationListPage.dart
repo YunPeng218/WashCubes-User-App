@@ -1,3 +1,5 @@
+import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'NearbyLocationPage.dart';
@@ -104,7 +106,8 @@ class _NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Nearby Locations"),
+        title: Text("Nearby Locations", style: CTextTheme.blackTextTheme.displaySmall,),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -133,10 +136,10 @@ class _NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
         onPressed: () {
           _getCurrentLocation();
         },
-        backgroundColor: const Color(0xFFD7ECF7),
+        backgroundColor: AppColors.cButtonColor,
         child: const Icon(
           Icons.location_on,
-          color: Colors.black),
+          color: AppColors.cBlackColor),
       ),
     );
   }
@@ -179,12 +182,12 @@ class LocationCard extends StatelessWidget {
           isAvailable ? Icons.check_circle : Icons.cancel,
           color: isAvailable ? Colors.green : Colors.red,
         ),
-        title: Text(name),
+        title: Text(name, style: CTextTheme.blackTextTheme.headlineMedium,),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(distance, style: const TextStyle(color: Colors.grey)),
-            Text(address), // Display the address here
+            Text(distance, style: CTextTheme.blackTextTheme.labelMedium),
+            Text(address, style: CTextTheme.greyTextTheme.labelLarge,), // Display the address here
           ],
         ),
       ),

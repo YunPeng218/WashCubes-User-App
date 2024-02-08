@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:device_run_test/config.dart';
@@ -79,9 +80,11 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('No Available Compartments'),
+              title: Text('No Available Compartments', style: CTextTheme.blackTextTheme.headlineMedium,),
               content: Text(
-                  'Sorry, there are no available compartments for any size. Please select another locker site.'),
+                'Sorry, there are no available compartments for any size. Please select another locker site.',
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -93,7 +96,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
                       ),
                     );
                   },
-                  child: Text('Go Back'),
+                  child: Text('Go Back', style: CTextTheme.blackTextTheme.headlineSmall,),
                 ),
               ],
             );
@@ -104,7 +107,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Locker Size'),
+        title: Text('Select Locker Size', style: CTextTheme.blackTextTheme.displaySmall,),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -118,12 +121,12 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
 
             return ListTile(
               title: Text(compartmentSizes[index]),
-              subtitle: Text('Available Compartments: ${compartments}'),
+              subtitle: Text('Available Compartments: ${compartments}', style: CTextTheme.blackTextTheme.headlineMedium,),
               trailing: ElevatedButton(
                 onPressed: () async {
                   await handleSelection(compartmentSizes[index]);
                 },
-                child: Text('Select'), // Customize the button text
+                child: Text('Select', style: CTextTheme.blackTextTheme.headlineMedium,), // Customize the button text
               ),
             );
           },

@@ -1,5 +1,6 @@
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class OrderEstConfirmationAlertWidget extends StatelessWidget {
@@ -19,9 +20,9 @@ class OrderEstConfirmationAlertWidget extends StatelessWidget {
               children: [
                 //PopUp Title
                 Text(
-                  'Select an action',
+                  'Are you sure you want to cancel the order?',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: CTextTheme.blackTextTheme.headlineMedium,
                 ),
                 //Close Button
                 IconButton(
@@ -50,7 +51,7 @@ class OrderEstConfirmationAlertWidget extends StatelessWidget {
                           COutlinedButtonTheme.lightOutlinedButtonTheme.style,
                       child: Text(
                         'Cancel',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: CTextTheme.blackTextTheme.headlineSmall,
                       ),
                     )),
                   ],
@@ -65,7 +66,7 @@ class OrderEstConfirmationAlertWidget extends StatelessWidget {
                           COutlinedButtonTheme.lightOutlinedButtonTheme.style,
                       child: Text(
                         'Continue',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: CTextTheme.blackTextTheme.headlineSmall,
                       ),
                     )),
                   ],

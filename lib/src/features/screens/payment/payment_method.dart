@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'online_banking_option.dart';
@@ -71,7 +72,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               onPressed: () {},
               child: Text(
                 '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}',
-                style: Theme.of(context).textTheme.headlineSmall,
+                style: CTextTheme.blackTextTheme.headlineSmall,
               )),
           const SizedBox(width: 20),
         ],
@@ -89,14 +90,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             Text(
               'Order Number: ${widget.order?.orderNumber}',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: CTextTheme.blackTextTheme.headlineMedium,
             ),
             const SizedBox(
               height: 40.0,
             ),
             Text(
               'Please select your payment method',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: CTextTheme.blackTextTheme.headlineMedium,
             ),
             const SizedBox(
               height: 30.0,
@@ -106,7 +107,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               leading: const Icon(Icons.account_balance_outlined),
               title: Text(
                 'Online Banking',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
@@ -118,7 +119,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               leading: const Icon(Icons.account_balance_wallet),
               title: Text(
                 'E-Wallet',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {
@@ -130,7 +131,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               leading: const Icon(Icons.credit_card),
               title: Text(
                 'Credit / Debit Card',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               trailing: const Icon(Icons.navigate_next),
               onTap: () {

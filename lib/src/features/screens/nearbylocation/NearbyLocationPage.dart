@@ -1,3 +1,5 @@
+import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../home/home_screen.dart';
@@ -56,7 +58,8 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nearby Locations'),
+        title: Text('Nearby Locations', style: CTextTheme.blackTextTheme.displaySmall,),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -75,11 +78,11 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                 });
                 _showAlertDialog(context);
               },
-              backgroundColor: const Color(0xFFD7ECF7),
+              backgroundColor: AppColors.cBarColor,
               mini: true,
               child: const Icon(
                 Icons.map,
-                color: Colors.black,
+                color:  AppColors.cWhiteColor,
               ),
             ),
           ),
@@ -105,7 +108,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                   const SizedBox(height: 20),
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFD7ECF7),
+                      color: AppColors.cBarColor,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: TextButton(
@@ -120,7 +123,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                       child: const Text(
                         'List',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: AppColors.cWhiteColor,
                         ),
                       ),
                     ),
@@ -139,29 +142,29 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Select an action'),
+          title: Text('Select an action', style: CTextTheme.blackTextTheme.headlineMedium,),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                ElevatedButton(
+                OutlinedButton(
                   onPressed: () {
                     // TODO: Implement action for "Open in Maps" here.
                   },
-                  child: const Text('Open in Maps'),
+                  child: Text('Open in Maps', style: CTextTheme.blackTextTheme.headlineMedium,),
                 ),
                 const SizedBox(height: 8),
-                ElevatedButton(
+                OutlinedButton(
                   onPressed: () {
                     // TODO: Implement action for "Open in Waze" here.
                   },
-                  child: const Text('Open in Waze'),
+                  child: Text('Open in Waze', style: CTextTheme.blackTextTheme.headlineMedium,),
                 ),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Close'),
+              child: Text('Close', style: CTextTheme.blackTextTheme.headlineMedium,),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the AlertDialog.
               },

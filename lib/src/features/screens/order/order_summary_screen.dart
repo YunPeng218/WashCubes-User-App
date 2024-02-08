@@ -1,5 +1,6 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -83,16 +84,17 @@ class _OrderSummaryState extends State<OrderSummary> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Sorry, no compartments available.'),
-              content: const Text(
-                  'All compartments are occupied. Would you like to cancel your order or select another locker site.'),
+              title: Text('Sorry, no compartments available.', style: CTextTheme.blackTextTheme.headlineMedium,),
+              content: Text(
+                  'All compartments are occupied. Would you like to cancel your order or select another locker site.',
+                  style: CTextTheme.blackTextTheme.headlineMedium,),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     // Navigator.push(context,
                     //     MaterialPageRoute(builder: (context) => HomePage()));
                   },
-                  child: const Text('Cancel Order'),
+                  child: Text('Cancel Order', style: CTextTheme.blackTextTheme.headlineMedium,),
                 ),
                 TextButton(
                   onPressed: () {
@@ -101,7 +103,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                     //     MaterialPageRoute(
                     //         builder: (context) => SelectLockerSite()));
                   },
-                  child: const Text('Select'),
+                  child: Text('Select', style: CTextTheme.blackTextTheme.headlineMedium,),
                 ),
               ],
             );

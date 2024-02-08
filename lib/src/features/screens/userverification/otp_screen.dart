@@ -1,6 +1,7 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/features/screens/biometricSetup/biometric_setup_screen.dart';
 import 'package:device_run_test/src/features/screens/home/home_screen.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -62,7 +63,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
             title: const Text('Error'),
             content: Text(
               'The OTP entered is incorrect. Please try again.',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: CTextTheme.blackTextTheme.headlineMedium,
             ),
             actions: [
               TextButton(
@@ -88,7 +89,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
       appBar: AppBar(
         title: Text(
           'Verification',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
       ),
@@ -100,7 +101,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
             const SizedBox(height: 30.0),
             Text(
               'Enter the OTP sent to +60*********',
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: CTextTheme.blackTextTheme.headlineMedium,
             ),
             const SizedBox(height: 30.0),
             //Pin Code Field
@@ -137,7 +138,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
             const SizedBox(height: 30.0),
             Text(
               "Didn't receive OTP code?",
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: CTextTheme.blackTextTheme.headlineMedium,
             ),
             //OTP Resend Link
             TextButton(

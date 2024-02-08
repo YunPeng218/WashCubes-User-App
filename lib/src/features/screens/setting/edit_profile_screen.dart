@@ -1,6 +1,7 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class EditProfilePage extends StatelessWidget {
@@ -10,7 +11,7 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile', style: Theme.of(context).textTheme.displaySmall,),
+        title: Text('Edit Profile', style: CTextTheme.blackTextTheme.displaySmall,),
         centerTitle: true,
       ),
       body: Padding(
@@ -48,11 +49,11 @@ class ProfileHeader extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all<Color>(AppColors.cGreyColor1),
             ),
             onPressed: () {},
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('#90601912023', style: TextStyle(color: AppColors.cGreyColor3, fontSize: 15),),
-                Icon(Icons.copy, color: AppColors.cGreyColor3,),
+                Text('#90601912023', style: CTextTheme.greyTextTheme.labelLarge,),
+                const Icon(Icons.copy, color: AppColors.cGreyColor3,),
               ],
             ),
           ),
@@ -82,10 +83,7 @@ class EditableProfileItem extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
-            ),
+            style: CTextTheme.greyTextTheme.labelLarge,
           ),
           const SizedBox(height: 4),
           Row(
@@ -93,7 +91,7 @@ class EditableProfileItem extends StatelessWidget {
             children: [
               Text(
                 value,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: CTextTheme.blackTextTheme.headlineLarge,
               ),
               IconButton(
                 icon: const Icon(Icons.edit_outlined, color: AppColors.cGreyColor2),
