@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'card_input.dart';
@@ -38,7 +39,7 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
       appBar: AppBar(
         title: Text(
           'Select Your Option',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
       ),
@@ -51,7 +52,7 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
             ),
             title: Text(
               banks[index].name,
-              style: Theme.of(context).textTheme.headlineMedium,
+              style: CTextTheme.blackTextTheme.headlineMedium,
             ),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {

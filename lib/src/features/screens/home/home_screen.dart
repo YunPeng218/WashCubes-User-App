@@ -5,7 +5,7 @@ import 'package:device_run_test/src/features/screens/nearbylocation/NearbyLocati
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
 import 'package:device_run_test/src/utilities/guest_mode.dart';
-import 'package:device_run_test/src/utilities/theme/widget_themes/elevatedbutton_theme.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SettingMainPage()),
+                            builder: (context) => AccountPage()),
                       );
                     },
                     child: null,
@@ -81,13 +81,13 @@ class _HomePageState extends State<HomePage> {
                     // Good Morning Text
                     Text(
                       'Good Morning, Trimity!',
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: CTextTheme.blackTextTheme.headlineSmall,
                     ),
                     const SizedBox(height: 8),
                     // Discover Text
                     Text(
                       'Discover your closest\nlaundry lockers',
-                      style: Theme.of(context).textTheme.displayLarge,
+                      style: CTextTheme.blackTextTheme.displayLarge,
                     ),
                     const SizedBox(height: 16),
                     // Location Button
@@ -99,8 +99,8 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => const NearbyLocationPage()),
                         );
                       },
-                      style:
-                          CElevatedButtonTheme.lightElevatedButtonTheme.style,
+                      // style:
+                      //     CElevatedButtonTheme.lightElevatedButtonTheme.style,
                       // ElevatedButton.styleFrom(
                       //   primary: Colors.blue,
                       //   onPrimary: Colors.white,
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                             color: AppColors.cPrimaryColor,
                           ),
                           Text("Taylor's University",
-                              style: Theme.of(context).textTheme.labelLarge),
+                              style: CTextTheme.blackTextTheme.labelLarge),
                           const Icon(
                             Icons.keyboard_arrow_down_rounded,
                             color: AppColors.cBlackColor,
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                     // Special Event Title
                     Text(
                       'Special Event',
-                      style: Theme.of(context).textTheme.displaySmall,
+                      style: CTextTheme.blackTextTheme.displaySmall,
                     ),
                     // RecyclerView for images
                     SizedBox(
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                     // Ongoing Order Title
                     Text(
                       'Ongoing Orders',
-                      style: Theme.of(context).textTheme.displaySmall,
+                      style: CTextTheme.blackTextTheme.displaySmall,
                     ),
                     const SizedBox(height: 15),
                     // Ongoing Order Box
@@ -182,9 +182,7 @@ class _HomePageState extends State<HomePage> {
                                       const SizedBox(height: 10),
                                       Text(
                                         'Sign In to View Your Orders',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall,
+                                        style: CTextTheme.blackTextTheme.headlineSmall,
                                         textAlign: TextAlign.end,
                                       ),
                                       const SizedBox(height: 10),
@@ -199,9 +197,9 @@ class _HomePageState extends State<HomePage> {
                                         },
                                         style: ElevatedButton.styleFrom(
                                           foregroundColor:
-                                              Colors.black, // Text color
+                                              AppColors.cBlackColor, // Text color
                                           backgroundColor:
-                                              Colors.white, // Button Fill color
+                                              AppColors.cWhiteColor, // Button Fill color
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
@@ -211,9 +209,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         child: Text(
                                           'Sign In',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium,
+                                          style: CTextTheme.blackTextTheme.labelMedium,
                                         ),
                                       ),
                                     ],
@@ -232,16 +228,12 @@ class _HomePageState extends State<HomePage> {
                                       const SizedBox(height: 4),
                                       Text(
                                         'Laundry In Progress',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .displaySmall,
+                                        style: CTextTheme.blackTextTheme.displaySmall,
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
                                         '“Leave it to Trimi - cleaning magic in progress!”',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headlineSmall,
+                                        style: CTextTheme.blackTextTheme.headlineSmall,
                                       ),
                                       const SizedBox(height: 10),
                                       //Order Progress Bar
@@ -272,9 +264,7 @@ class _HomePageState extends State<HomePage> {
                                             top: -2,
                                             child: Text(
                                               '70%',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelMedium,
+                                              style: CTextTheme.blackTextTheme.labelMedium,
                                             ),
                                           ),
                                         ],
@@ -286,9 +276,9 @@ class _HomePageState extends State<HomePage> {
                                         },
                                         style: ElevatedButton.styleFrom(
                                           foregroundColor:
-                                              Colors.black, // Text color
+                                              AppColors.cBlackColor, // Text color
                                           backgroundColor:
-                                              Colors.white, // Button Fill color
+                                              AppColors.cWhiteColor, // Button Fill color
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10.0),
@@ -298,9 +288,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         child: Text(
                                           'Check',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium,
+                                          style: CTextTheme.blackTextTheme.labelMedium,
                                         ),
                                       ),
                                     ],

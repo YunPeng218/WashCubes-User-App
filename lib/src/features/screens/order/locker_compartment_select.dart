@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -135,9 +136,11 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('No Available Compartments'),
+              title: Text('No Available Compartments', style: CTextTheme.blackTextTheme.headlineMedium,),
               content: Text(
-                  'Sorry, there are no available compartments for any size. Please select another locker site.'),
+                'Sorry, there are no available compartments for any size. Please select another locker site.',
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -149,7 +152,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
                       ),
                     );
                   },
-                  child: Text('Go Back'),
+                  child: Text('Go Back', style: CTextTheme.blackTextTheme.headlineSmall,),
                 ),
               ],
             );
@@ -173,7 +176,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
           children: [
             Text(
               'Select Your Compartment Size',
-              style: Theme.of(context).textTheme.displayLarge,
+              style: CTextTheme.blackTextTheme.displayLarge,
             ),
             const SizedBox(
               height: cDefaultSize * 0.5,
@@ -181,7 +184,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
             Provider.of<GuestModeProvider>(context, listen: false).guestMode
                 ? Text(
                     'Note For Guests: Locker compartment will only be assigned to you after and sign in and is subject to availability.',
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: CTextTheme.blackTextTheme.headlineSmall,
                   )
                 : const SizedBox(
                     height: cDefaultSize,
@@ -248,22 +251,22 @@ class CompartmentCard extends StatelessWidget {
               children: [
                 Text(
                   compartmentSize,
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: CTextTheme.blackTextTheme.headlineLarge,
                 ),
                 const SizedBox(height: 4.0),
                 Text(
                   'Dimension: $dimensions',
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: CTextTheme.blackTextTheme.labelMedium,
                 ),
                 const SizedBox(height: 6.0),
                 isFull
                     ? Text(
                         'FULL',
-                        style: Theme.of(context).textTheme.labelLarge,
+                        style: CTextTheme.blackTextTheme.labelLarge,
                       )
                     : Text(
                         '$compartmentsAvailable COMPARTMENTS',
-                        style: Theme.of(context).textTheme.labelLarge,
+                        style: CTextTheme.blackTextTheme.labelLarge,
                       ),
                 const SizedBox(height: 4.0),
               ],

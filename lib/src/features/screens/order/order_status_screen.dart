@@ -2,6 +2,7 @@ import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_detail_widget.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_widget.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class OrderStatusScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
         //Order Number
         title: Text(
           'Order #000001',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
         //Customer Support Icon Button
@@ -60,7 +61,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
           onPressed: () {},
           child: Text(
             'Write a Review',
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: CTextTheme.blackTextTheme.headlineMedium,
           ),
         ),
       ),

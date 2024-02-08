@@ -6,8 +6,8 @@ import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/models/user.dart';
-import 'package:device_run_test/src/utilities/image_utils.dart';
 import 'package:device_run_test/src/utilities/user_helper.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,7 +52,7 @@ class _EditProfilePageState extends State <EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile', style: Theme.of(context).textTheme.displaySmall,),
+        title: Text('Edit Profile', style: CTextTheme.blackTextTheme.displaySmall,),
         centerTitle: true,
       ),
       body: Padding(
@@ -107,7 +107,7 @@ Widget build(BuildContext context) {
     children: [
       GestureDetector(
         onTap: () {
-          selectImage();
+          // selectImage();
         },
         child: CircleAvatar(
           backgroundImage: AssetImage(cAvatar),
@@ -186,11 +186,8 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
         children: [
           Text(
             widget.title,
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
+            style: CTextTheme.greyTextTheme.labelLarge
             ),
-          ),
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

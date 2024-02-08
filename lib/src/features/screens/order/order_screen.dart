@@ -3,6 +3,7 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import '../../../common_widgets/bottom_nav_bar_widget.dart';
 import 'create_order_camera.dart';
@@ -92,12 +93,12 @@ class _OrderPageState extends State<OrderPage> {
                         title: Text(
                           "i3wash Would Like to Access the Camera",
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: CTextTheme.blackTextTheme.headlineSmall,
                         ),
                         content: Text(
                           "Allow access to your camera?",
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          style: CTextTheme.blackTextTheme.headlineSmall,
                         ),
                         actions: <Widget>[
                           //Row & Expanded Widget For Button Centering
@@ -107,9 +108,7 @@ class _OrderPageState extends State<OrderPage> {
                                 child: TextButton(
                                   child: Text(
                                     "Don't Allow",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall,
+                                    style: CTextTheme.blackTextTheme.headlineSmall,
                                   ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
@@ -120,9 +119,7 @@ class _OrderPageState extends State<OrderPage> {
                                 child: TextButton(
                                   child: Text(
                                     "OK",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall,
+                                    style: CTextTheme.blackTextTheme.headlineSmall,
                                   ),
                                   onPressed: () {
                                     Navigator.of(context).pop();
@@ -145,7 +142,7 @@ class _OrderPageState extends State<OrderPage> {
                 icon: const Icon(Icons.add, color: AppColors.cBlackColor),
                 label: Text(
                   'Create',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: CTextTheme.blackTextTheme.headlineMedium,
                 ),
               ),
             )
@@ -156,7 +153,7 @@ class _OrderPageState extends State<OrderPage> {
           children: [
             const SizedBox(height: 20.0),
             Text('Your Orders',
-                style: Theme.of(context).textTheme.headlineLarge),
+                style: CTextTheme.blackTextTheme.displayMedium),
             const SizedBox(height: 20.0),
             Expanded(
                 child: ListView.builder(
@@ -212,21 +209,21 @@ class OrderCard extends StatelessWidget {
       color:
           status == 'Order Error' ? Colors.red.shade100 : Colors.blue.shade100,
       child: ListTile(
-        title: Text(date, style: Theme.of(context).textTheme.labelLarge),
+        title: Text(date, style: CTextTheme.greyTextTheme.labelLarge),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
               'Order No: $orderNumber',
-              style: Theme.of(context).textTheme.headlineLarge,
+              style: CTextTheme.blackTextTheme.headlineLarge,
             ),
             Text(
               'Location: $location',
-              style: Theme.of(context).textTheme.labelLarge,
+              style: CTextTheme.greyTextTheme.labelLarge,
             ),
             Text(
               'Status: $status',
-              style: Theme.of(context).textTheme.labelLarge,
+              style: CTextTheme.greyTextTheme.labelLarge,
             ),
           ],
         ),

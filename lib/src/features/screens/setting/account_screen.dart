@@ -5,7 +5,9 @@ import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
+import 'package:device_run_test/src/features/screens/setting/setting_screen.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile_screen.dart';
@@ -14,12 +16,12 @@ import 'policy_screen.dart';
 import 'feedback_screen.dart';
 import 'package:device_run_test/src/utilities/user_helper.dart';
 
-class SettingMainPage extends StatefulWidget {
+class AccountPage extends StatefulWidget {
   @override
-  _SettingMainPageState createState() => _SettingMainPageState();
+  _AccountPageState createState() => _AccountPageState();
 }
 
-class _SettingMainPageState extends State <SettingMainPage> {
+class _AccountPageState extends State <AccountPage> {
   UserProfile? user;
 
   @override
@@ -94,6 +96,17 @@ class _SettingMainPageState extends State <SettingMainPage> {
             //     );
             //   },
             // ),
+            ProfileOption(
+              title: 'Settings',
+              icon: Icons.settings_outlined,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingPage()),
+                );
+              },
+            ),
+            const Divider(),
             ProfileOption(
               title: 'Feedback Ratings',
               icon: Icons.star_border_rounded,
@@ -179,11 +192,11 @@ class UserHeader extends StatelessWidget {
       title: user!.name.isNotEmpty
         ? Text(
           user!.name,
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         )
         : Text(
           'Trimi',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
     );
   }
@@ -201,10 +214,10 @@ class ProfileOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.cBlueColor4),
+      leading: Icon(icon, color: AppColors.cBlueColor5),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.headlineMedium,
+        style: CTextTheme.blackTextTheme.headlineMedium,
       ),
       trailing: const Icon(Icons.chevron_right, color: Colors.grey),
       onTap: onTap,

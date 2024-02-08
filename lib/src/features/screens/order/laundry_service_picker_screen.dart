@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -90,14 +91,14 @@ class _LaundryServicePickerState extends State<LaundryServicePicker> {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             'Pick your Laundry Service',
-            style: Theme.of(context).textTheme.displayLarge,
+            style: CTextTheme.blueTextTheme.displayLarge,
           ),
           const SizedBox(
             height: cDefaultSize * 0.5,
           ),
           Text(
             'Note: Only one service is available for a single order.',
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: CTextTheme.blackTextTheme.headlineSmall,
           ),
           const SizedBox(
             height: cDefaultSize,
@@ -154,7 +155,7 @@ class ServiceCard extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(
                 serviceName,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: CTextTheme.blackTextTheme.headlineLarge,
               ),
             ),
           ],

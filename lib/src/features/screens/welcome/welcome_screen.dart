@@ -1,5 +1,6 @@
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/textfield_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/screens/userverification/otp_screen.dart';
@@ -130,7 +131,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Center(
                       child: Text(
                         'Continue',
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: CTextTheme.blackTextTheme.headlineMedium,
                       ),
                     ),
                   ),

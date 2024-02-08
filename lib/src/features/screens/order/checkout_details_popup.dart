@@ -1,3 +1,4 @@
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutDetailPopUp extends StatelessWidget {
@@ -13,8 +14,8 @@ class CheckoutDetailPopUp extends StatelessWidget {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text('Self Pick Up Information'),
-                subtitle: Text('Time\n25 NOV, 14:00 - 16:00'),
+                title: Text('Self Pick Up Information', style: CTextTheme.blackTextTheme.headlineMedium,),
+                subtitle: Text('Time\n25 NOV, 14:00 - 16:00', style: CTextTheme.blackTextTheme.headlineMedium,),
               ),
               Divider(),
               Expanded(
@@ -23,7 +24,7 @@ class CheckoutDetailPopUp extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
-                          '25 NOV, ${14 + index * 2}:00 - ${16 + index * 2}:00'),
+                          '25 NOV, ${14 + index * 2}:00 - ${16 + index * 2}:00', style: CTextTheme.blackTextTheme.headlineMedium,),
                       onTap: () {
                         // Handle the time slot selection
                         Navigator.pop(context); // Close the modal on selection

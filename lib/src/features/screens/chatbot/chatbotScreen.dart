@@ -1,5 +1,7 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/screens/chatbot/predefinedScripts.dart';
@@ -67,15 +69,15 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           children: [
             Image.asset(cChatBotLogo),
             const SizedBox(width: 8.0,),
-            Text('Trimi', style: Theme.of(context).textTheme.displaySmall,),
+            Text('Trimi', style: CTextTheme.blackTextTheme.displaySmall,),
           ],
         ),
         actions: [
           //End Button
           ElevatedButton(
             onPressed: (){},
-            style: CElevatedButtonTheme.lightElevatedButtonTheme.style,
-            child: Text("End", style: Theme.of(context).textTheme.headlineMedium,),
+            // style: CElevatedButtonTheme.lightElevatedButtonTheme.style,
+            child: Text("End", style: CTextTheme.blackTextTheme.headlineMedium,),
             ),
         ],
       ),
@@ -83,10 +85,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         currentUser: _currentUser,
         typingUsers: _typingUsers,
         messageOptions: const MessageOptions(
-          currentUserContainerColor: Color.fromRGBO(215,236,255,1),
-          currentUserTextColor: Color.fromARGB(255, 0, 0, 0),
-          containerColor: Color.fromRGBO(237, 237, 237, 1),
-          textColor: Color.fromARGB(255, 0, 0, 0),
+          currentUserContainerColor: AppColors.cButtonColor,
+          currentUserTextColor: AppColors.cBlackColor,
+          containerColor: AppColors.cWhiteColor,
+          textColor: AppColors.cBlackColor,
           showOtherUsersAvatar: false
         ),
         onSend: (ChatMessage m) {
@@ -105,21 +107,21 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           },
           quickReplyStyle: BoxDecoration(
             border: Border.all(
-              color: const Color.fromRGBO(190, 190, 190, 1),
+              color: AppColors.cGreyColor2,
               width: 3.0
             ),
             borderRadius: BorderRadius.circular(10.0)
           ),
           quickReplyTextStyle: const TextStyle(
-            color: Color.fromRGBO(128, 128, 128, 1)
+            color: AppColors.cGreyColor3,
           )
         ),
         messages: _quickAccessName + _messages,
         inputOptions: InputOptions (
           alwaysShowSend: true,
-          cursorStyle: const CursorStyle(color: Color.fromRGBO(67, 143, 247, 1)),
+          cursorStyle: const CursorStyle(color: AppColors.cBlueColor3),
           sendButtonBuilder: defaultSendButton(
-            color: const Color.fromRGBO(67, 143, 247, 1),
+            color: AppColors.cBlueColor3,
           ),
           inputDecoration: defaultInputDecoration(
             hintText: "Write your message here...",

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -106,16 +107,17 @@ class _OrderSummaryState extends State<OrderSummary> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: const Text('Sorry, no compartments available.'),
-                content: const Text(
-                    'All compartments are occupied. Would you like to cancel your order or select another locker site.'),
+                title: Text('Sorry, no compartments available.', style: CTextTheme.blackTextTheme.headlineMedium,),
+                content: Text(
+                    'All compartments are occupied. Would you like to cancel your order or select another locker site.',
+                  style: CTextTheme.blackTextTheme.headlineMedium,),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       // Navigator.push(context,
                       //     MaterialPageRoute(builder: (context) => HomePage()));
                     },
-                    child: const Text('Cancel Order'),
+                    child: Text('Cancel Order', style: CTextTheme.blackTextTheme.headlineMedium,),
                   ),
                   TextButton(
                     onPressed: () {
@@ -124,7 +126,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                       //     MaterialPageRoute(
                       //         builder: (context) => SelectLockerSite()));
                     },
-                    child: const Text('Select'),
+                    child: Text('Select', style: CTextTheme.blackTextTheme.headlineMedium,),
                   ),
                 ],
               );
@@ -142,10 +144,10 @@ class _OrderSummaryState extends State<OrderSummary> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              content: const Column(
+              content: Column(
                 children: [
-                  Text('Don\'t have an account?'),
-                  Text('Sign up to check out.'),
+                  Text('Don\'t have an account?', style: CTextTheme.blackTextTheme.headlineSmall,),
+                  Text('Sign up to check out.', style: CTextTheme.blackTextTheme.headlineSmall,),
                 ],
               ),
               actions: <Widget>[
@@ -153,13 +155,13 @@ class _OrderSummaryState extends State<OrderSummary> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('Cancel'),
+                  child: Text('Cancel', style: CTextTheme.blackTextTheme.headlineSmall,),
                 ),
                 TextButton(
                   onPressed: () {
                     handleGuestRedirection();
                   },
-                  child: const Text('Select'),
+                  child: Text('Select', style: CTextTheme.blackTextTheme.headlineSmall,),
                 ),
               ],
             );
@@ -234,7 +236,7 @@ class _OrderSummaryState extends State<OrderSummary> {
       appBar: AppBar(
         title: Text(
           'Summary',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
         leading: IconButton(
@@ -248,7 +250,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                 return AlertDialog(
                   content: Text(
                     "Are you sure you want to cancel the order?",
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: CTextTheme.blackTextTheme.headlineSmall,
                   ),
                   actions: [
                     Row(
@@ -261,7 +263,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                             },
                             child: Text(
                               'Confirm',
-                              style: Theme.of(context).textTheme.headlineSmall,
+                              style: CTextTheme.blackTextTheme.headlineSmall,
                             ),
                           ),
                         ),
@@ -274,7 +276,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                             },
                             child: Text(
                               'Back',
-                              style: Theme.of(context).textTheme.headlineSmall,
+                              style: CTextTheme.blackTextTheme.headlineSmall,
                             ),
                           ),
                         ),
@@ -298,11 +300,11 @@ class _OrderSummaryState extends State<OrderSummary> {
               children: [
                 Text(
                   '${widget.service?.name.toUpperCase()}',
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: CTextTheme.blackTextTheme.headlineMedium,
                 ),
                 Text(
                   'ORDER ID : ${widget.order?.orderNumber}',
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: CTextTheme.blackTextTheme.headlineSmall,
                 ),
               ],
             ),
@@ -327,11 +329,11 @@ class _OrderSummaryState extends State<OrderSummary> {
                           children: [
                             Text(
                               '${orderItems![index].name}',
-                              style: Theme.of(context).textTheme.headlineLarge,
+                              style: CTextTheme.blackTextTheme.headlineLarge,
                             ),
                             Text(
                               'RM${orderItems[index].price.toStringAsFixed(2)}/${orderItems[index].unit}',
-                              style: Theme.of(context).textTheme.labelLarge,
+                              style: CTextTheme.blackTextTheme.labelLarge,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -348,9 +350,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                                     // ),
                                     Text(
                                       'Quantity: ${orderItems[index].quantity}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineMedium,
+                                      style: CTextTheme.blackTextTheme.headlineMedium,
                                     ),
                                     // IconButton(
                                     //   icon: const Icon(Icons.add),
@@ -365,7 +365,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                             ),
                             Text(
                               'RM${orderItems[index].cumPrice.toStringAsFixed(2)}',
-                              style: Theme.of(context).textTheme.headlineMedium,
+                              style: CTextTheme.blackTextTheme.headlineMedium,
                             ),
                           ],
                         ),
@@ -390,7 +390,7 @@ class _OrderSummaryState extends State<OrderSummary> {
             //   leading: const Icon(Icons.access_time),
             //   title: Text(
             //     'Time',
-            //     style: Theme.of(context).textTheme.labelLarge,
+            //     style: CTextTheme.blackTextTheme.labelLarge,
             //   ),
             //   trailing: TextButton(
             //     onPressed: () {
@@ -406,7 +406,7 @@ class _OrderSummaryState extends State<OrderSummary> {
             //       children: [
             //         Text(
             //           '25 NOV, 14:00 - 16:00',
-            //           style: Theme.of(context).textTheme.labelLarge,
+            //           style: CTextTheme.blackTextTheme.labelLarge,
             //         ),
             //         const Icon(
             //           Icons.navigate_next,
@@ -420,7 +420,7 @@ class _OrderSummaryState extends State<OrderSummary> {
             //   leading: const Icon(Icons.location_on),
             //   title: Text(
             //     'Location',
-            //     style: Theme.of(context).textTheme.labelLarge,
+            //     style: CTextTheme.blackTextTheme.labelLarge,
             //   ),
             //   trailing: TextButton(
             //     onPressed: () {},
@@ -429,7 +429,7 @@ class _OrderSummaryState extends State<OrderSummary> {
             //       children: [
             //         Text(
             //           'TAYLOR’S UNIVERSITY',
-            //           style: Theme.of(context).textTheme.labelLarge,
+            //           style: CTextTheme.blackTextTheme.labelLarge,
             //         ),
             //         const Icon(
             //           Icons.navigate_next,
@@ -448,11 +448,11 @@ class _OrderSummaryState extends State<OrderSummary> {
                 children: [
                   Text(
                     'Total Est. Price',
-                    style: Theme.of(context).textTheme.displaySmall,
+                    style: CTextTheme.blackTextTheme.displaySmall,
                   ),
                   Text(
                     'RM ${widget.order?.estimatedPrice.toStringAsFixed(2)}',
-                    style: Theme.of(context).textTheme.displaySmall,
+                    style: CTextTheme.blackTextTheme.displaySmall,
                   ),
                 ],
               ),
@@ -470,7 +470,7 @@ class _OrderSummaryState extends State<OrderSummary> {
           },
           child: Text(
             'Continue',
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: CTextTheme.blackTextTheme.headlineMedium,
           ),
         ),
       ),

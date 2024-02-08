@@ -11,7 +11,7 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: AppColors.cBlueColor3,
+      backgroundColor: AppColors.cBarColor,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: IconButton(
@@ -45,7 +45,7 @@ class BottomNavBar extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SettingMainPage()),
+                    builder: (context) => AccountPage()),
               );
             },
             icon: const Icon(Icons.person_outlined),

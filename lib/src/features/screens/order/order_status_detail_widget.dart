@@ -1,5 +1,6 @@
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_summary.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class OrderStatusDetailWidget extends StatelessWidget {
@@ -18,7 +19,7 @@ class OrderStatusDetailWidget extends StatelessWidget {
             children: [
               Text(
                 '#000001',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               TextButton(
                 onPressed: () {
@@ -28,13 +29,13 @@ class OrderStatusDetailWidget extends StatelessWidget {
                         builder: (context) => const OrderStatusSummaryScreen()),
                   );
                 },
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
                       'ORDER SUMMARY',
-                      style: TextStyle(color: AppColors.cBlueColor2),
+                      style: CTextTheme.blueTextTheme.headlineMedium,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.arrow_forward_ios_rounded,
                       color: AppColors.cBlueColor2,
                     ),
@@ -52,11 +53,11 @@ class OrderStatusDetailWidget extends StatelessWidget {
             children: [
               Text(
                 'Order Created',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               Text(
                 '23 NOV 2023, 14:29',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineMedium,
               )
             ],
           ),
@@ -69,7 +70,7 @@ class OrderStatusDetailWidget extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Self-Pick Up Information',
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: CTextTheme.blackTextTheme.headlineLarge,
           ),
         ),
         //Time Detail Row
@@ -80,11 +81,11 @@ class OrderStatusDetailWidget extends StatelessWidget {
             children: [
               Text(
                 'Time',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               Text(
                 '25 NOV 2023, 14:00 - 16:00',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineMedium,
               )
             ],
           ),
@@ -103,7 +104,7 @@ class OrderStatusDetailWidget extends StatelessWidget {
         //         children: [
         //           Text(
         //             "TAYLOR'S UNIVERSITY",
-        //             style: TextStyle(color: AppColors.cGreyColor3),
+        //             style: CTextTheme.greyTextTheme.headlineMedium,
         //           ),
         //           Icon(
         //             Icons.edit_outlined,

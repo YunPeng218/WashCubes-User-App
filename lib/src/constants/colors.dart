@@ -8,10 +8,12 @@ class AppColors {
   static const cPrimaryColor = Color(0xFF2A61D2);
   static const cBlueColor1 = Color(0xFFA1CCE5);
   static const cBlueColor2 = Color(0xFF88B6F7);
-  static const cBlueColor3 = Color(0xFF2A61D2);
-  static const cBlueColor4 = Color(0xFF45799F);
+  static const cBlueColor3 = Color(0xFF438FF7);
+  static const cBlueColor4 = Color(0xFF2A61D2);
+  static const cBlueColor5 = Color(0xFF45799F);
   static const cButtonColor = Color(0xFFD7ECF7);
   static const cBarColor = Color(0xFF182738);
+  static const cSwitchColor = Color(0xFF34C759);
   static const cGreyColor1 = Color(0xFFEFEFEF);
   static const cGreyColor2 = Color(0xFFBEBEBE);
   static const cGreyColor3 = Color(0xFF8B8B8B);

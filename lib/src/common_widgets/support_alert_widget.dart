@@ -1,5 +1,6 @@
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
-import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
+// import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class SupportAlertWidget extends StatelessWidget {
@@ -20,7 +21,7 @@ class SupportAlertWidget extends StatelessWidget {
                 Text(
                   'Select an action',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: CTextTheme.blackTextTheme.headlineMedium,
                 ),
                 //Close Button
                 IconButton(
@@ -45,11 +46,11 @@ class SupportAlertWidget extends StatelessWidget {
                               builder: (context) => const ChatbotScreen()),
                         );
                       },
-                      style:
-                          COutlinedButtonTheme.lightOutlinedButtonTheme.style,
+                      // style:
+                      //     COutlinedButtonTheme.lightOutlinedButtonTheme.style,
                       child: Text(
                         'Chat with Trimi',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: CTextTheme.blackTextTheme.headlineSmall,
                       ),
                     )),
                   ],
@@ -60,11 +61,11 @@ class SupportAlertWidget extends StatelessWidget {
                     Expanded(
                         child: OutlinedButton(
                       onPressed: () {},
-                      style:
-                          COutlinedButtonTheme.lightOutlinedButtonTheme.style,
+                      // style:
+                      //     COutlinedButtonTheme.lightOutlinedButtonTheme.style,
                       child: Text(
                         'Contact Customer Hotline',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: CTextTheme.blackTextTheme.headlineSmall,
                       ),
                     )),
                   ],

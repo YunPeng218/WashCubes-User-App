@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:device_run_test/config.dart';
-import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -39,7 +39,7 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedback Ratings', style: Theme.of(context).textTheme.displaySmall,),
+        title: Text('Feedback Ratings', style: CTextTheme.blackTextTheme.displaySmall,),
         centerTitle: true,
       ),
       body: ListView(
@@ -47,9 +47,9 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
         children: [
           Text(
             'Rate Our Service',
-            style: Theme.of(context).textTheme.displayMedium,
+            style: CTextTheme.blackTextTheme.displayMedium,
           ),
-          const Text('Are you satisfied with our service?', style: TextStyle(color: AppColors.cGreyColor2),),
+          Text('Are you satisfied with our service?', style: CTextTheme.greyTextTheme.labelLarge,),
           const SizedBox(height: 10.0,),
           RatingBar.builder(
             initialRating: _rating,
@@ -71,13 +71,13 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
           const SizedBox(height: 10.0,),
           Text(
             'Tell us what can be improved?',
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: CTextTheme.blackTextTheme.headlineMedium,
           ),
           Wrap(
             spacing: 8,
             children: _improvementOptions.map((option) {
               return ChoiceChip(
-                label: Text(option),
+                label: Text(option, style: CTextTheme.greyTextTheme.labelLarge),
                 selected: _selectedImprovements.contains(option),
                 onSelected: (selected) {
                   setState(() {
@@ -95,13 +95,15 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
           TextField(
             controller: _feedbackController,
             maxLines: 5,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Tell us how we can improve...',
+              hintStyle: CTextTheme.greyTextTheme.headlineMedium,
+              labelStyle: CTextTheme.blackTextTheme.headlineMedium,
             ),
           ),
           const SizedBox(height: cDefaultSize),
           ElevatedButton(
-            child: Text('Submit', style: Theme.of(context).textTheme.headlineMedium,),
+            child: Text('Submit', style: CTextTheme.blackTextTheme.headlineMedium,),
             onPressed: () {
               _handleSubmitFeedback();
             },

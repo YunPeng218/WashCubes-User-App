@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:device_run_test/config.dart';
@@ -55,7 +56,7 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
       appBar: AppBar(
         title: Text(
           'Select Locker Site',
-          style: Theme.of(context).textTheme.displaySmall,
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
         leading: IconButton(
