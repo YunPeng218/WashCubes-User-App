@@ -52,7 +52,7 @@ dependencies:
   dash_chat_2: ^0.0.20
   get: ^4.3.8
   image_picker: ^1.0.7
-  cloudinary: 
+  cloudinary:
 
 dev_dependencies:
   flutter_test:
@@ -95,7 +95,6 @@ flutter:
     - assets/images/biometric_image/
     - assets/images/order_status_image/
     - assets/images/bank_image/
-    - assets/images/laundry_service/Handwash.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

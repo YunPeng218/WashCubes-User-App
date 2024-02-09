@@ -3,9 +3,6 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dar
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import 'laundry_service_picker_screen.dart';
-import 'package:device_run_test/src/features/screens/order/locker_compartment_select.dart';
-
 class CreateOrderCameraPage extends StatefulWidget {
   const CreateOrderCameraPage({super.key});
 
@@ -35,7 +32,7 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
             'Place the QR Code within the frame to scan',
             style: CTextTheme.blackTextTheme.headlineMedium,
           ),
-          //Camera Function w/ QR Code Scanner
+          const SizedBox(height: 10.0),
           Expanded(
             flex: 5,
             child: QRView(
@@ -43,7 +40,7 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
               onQRViewCreated: _onQRViewCreated,
             ),
           ),
-          //Light Button
+          const SizedBox(height: 10.0),
           ElevatedButton(
             //onPressed: _turnOnLight,
             onPressed: () {
@@ -57,6 +54,7 @@ class _CreateOrderCameraPageState extends State<CreateOrderCameraPage> {
               style: CTextTheme.blackTextTheme.labelLarge,
             ),
           ),
+          const SizedBox(height: 10.0),
         ],
       ),
     );

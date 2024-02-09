@@ -4,18 +4,33 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
-import 'package:device_run_test/src/features/screens/order/locker_compartment_select.dart';
-import 'package:device_run_test/src/features/screens/order/order_screen.dart';
-import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
+import 'package:device_run_test/src/features/models/service.dart';
+import 'package:device_run_test/src/features/models/order.dart';
+import 'package:device_run_test/src/features/screens/order/order_summary_screen.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 
-class LockerSiteSelect extends StatefulWidget {
+class CollectionSiteSelect extends StatefulWidget {
+  final LockerSite? lockerSite;
+  final LockerCompartment? compartment;
+  final String? selectedCompartmentSize;
+  final Service? service;
+  final Order? order;
+
+  const CollectionSiteSelect({
+    super.key,
+    required this.lockerSite,
+    required this.compartment,
+    required this.selectedCompartmentSize,
+    required this.service,
+    required this.order,
+  });
+
   @override
-  _LockerSiteSelectState createState() => _LockerSiteSelectState();
+  CollectionSiteSelectState createState() => CollectionSiteSelectState();
 }
 
-class _LockerSiteSelectState extends State<LockerSiteSelect> {
+class CollectionSiteSelectState extends State<CollectionSiteSelect> {
   List<LockerSite> lockerSites = [];
 
   @override
@@ -51,23 +66,19 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
     }
   }
 
-  void handleBackButtonPress() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CancelConfirmAlert(
-            title: 'Warning',
-            content:
-                'You will be redirected to the Order Page. Do you want to proceed?',
-            onPressedConfirm: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const OrderPage()),
-              );
-            },
-            cancelButtonText: 'Cancel',
-            confirmButtonText: 'Confirm');
-      },
+  // HANDLE LOCKER SITE SELECTION
+  Future<void> handleCollectionSiteSelection(
+      LockerSite selectedLockerSite) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => OrderSummary(
+              lockerSite: widget.lockerSite,
+              compartment: widget.compartment,
+              selectedCompartmentSize: widget.selectedCompartmentSize,
+              service: widget.service,
+              order: widget.order,
+              collectionSite: selectedLockerSite)),
     );
   }
 
@@ -76,26 +87,21 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: handleBackButtonPress,
-          ),
-        ),
+        appBar: AppBar(),
         body: Container(
           padding: const EdgeInsets.all(cDefaultSize),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Select Drop Off Site',
+                'Select Order Collection Site',
                 style: CTextTheme.blueTextTheme.displayLarge,
               ),
               const SizedBox(
                 height: cDefaultSize * 0.5,
               ),
               Text(
-                'Select the locker site where you will drop off your laundry.',
+                'Select the locker site where your laundry will be returned.',
                 style: CTextTheme.blackTextTheme.headlineSmall,
               ),
               const SizedBox(height: 20.0),
@@ -110,7 +116,7 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
                             title: lockerSites[index].name,
                             icon: Icons.location_on,
                             onTap: () async {
-                              await handleLockerSiteSelection(
+                              await handleCollectionSiteSelection(
                                   lockerSites[index]);
                             }),
                       ),
@@ -121,19 +127,6 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  // HANDLE LOCKER SITE SELECTION
-  Future<void> handleLockerSiteSelection(LockerSite selectedLockerSite) async {
-    // Store the selected locker site in the app's state or perform other actions
-    print('Selected Locker Site: ${selectedLockerSite.name}');
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            LockerCompartmentSelect(selectedLockerSite: selectedLockerSite),
       ),
     );
   }

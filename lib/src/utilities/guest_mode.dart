@@ -10,6 +10,7 @@ class GuestModeProvider extends ChangeNotifier {
   String? selectedCompartmentSize;
   Service? service;
   Order? order;
+  LockerSite? collectionSite;
 
   bool get guestMode => _guestMode;
   bool get guestMadeOrder => _guestMadeOrder;
@@ -17,6 +18,7 @@ class GuestModeProvider extends ChangeNotifier {
   LockerSite? get guestLockerSite => lockerSite;
   String? get guestSelectedCompartmentSize => selectedCompartmentSize;
   Service? get guestService => service;
+  LockerSite? get guestCollectionSite => collectionSite;
 
   void setGuestMode(bool visited) {
     _guestMode = visited;
@@ -29,11 +31,12 @@ class GuestModeProvider extends ChangeNotifier {
   }
 
   void setGuestOrderDetails(Order? order, Service? service, LockerSite? site,
-      String? selectedCompartmentSize) {
+      String? selectedCompartmentSize, LockerSite? collectionSite) {
     this.order = order;
     this.service = service;
     this.lockerSite = site;
     this.selectedCompartmentSize = selectedCompartmentSize;
+    this.collectionSite = collectionSite;
     //notifyListeners();
   }
 }

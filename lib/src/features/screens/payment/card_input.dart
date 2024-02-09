@@ -17,13 +17,16 @@ class PaymentFormScreen extends StatefulWidget {
   final LockerSite? lockerSite;
   final LockerCompartment? compartment;
   final User? user;
+  final LockerSite? collectionSite;
 
-  const PaymentFormScreen(
-      {super.key,
-      required this.order,
-      required this.lockerSite,
-      required this.compartment,
-      required this.user});
+  const PaymentFormScreen({
+    super.key,
+    required this.order,
+    required this.lockerSite,
+    required this.compartment,
+    required this.user,
+    required this.collectionSite,
+  });
 
   @override
   _PaymentFormScreenState createState() => _PaymentFormScreenState();
@@ -38,9 +41,6 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
   String cardHolderName = '';
 
   Future<void> confirmOrder() async {
-    print(widget.user?.id);
-    print(widget.user?.phoneNumber);
-
     Map<String, dynamic> newOrder = {
       'orderNumber': widget.order?.orderNumber,
       'user': {
@@ -51,6 +51,9 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
         'lockerSiteId': widget.lockerSite?.id,
         'compartmentId': widget.compartment?.id,
         'compartmentNumber': widget.compartment?.compartmentNumber,
+      },
+      'collectionSite': {
+        'lockerSiteId': widget.collectionSite?.id,
       },
       'service': widget.order?.serviceId,
       'orderItems': [],
@@ -174,7 +177,8 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
               const SizedBox(height: 16.0),
               Row(
                 children: [
-                  const Icon(Icons.check_circle, color: AppColors.cPrimaryColor),
+                  const Icon(Icons.check_circle,
+                      color: AppColors.cPrimaryColor),
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(

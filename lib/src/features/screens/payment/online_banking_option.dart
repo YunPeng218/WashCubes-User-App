@@ -13,13 +13,16 @@ class BankSelectionScreen extends StatefulWidget {
   final LockerSite? lockerSite;
   final LockerCompartment? compartment;
   final User? user;
+  final LockerSite? collectionSite;
 
-  const BankSelectionScreen(
-      {super.key,
-      required this.order,
-      required this.lockerSite,
-      required this.compartment,
-      required this.user});
+  const BankSelectionScreen({
+    super.key,
+    required this.order,
+    required this.lockerSite,
+    required this.compartment,
+    required this.user,
+    required this.collectionSite,
+  });
 
   @override
   _BankSelectionScreenState createState() => _BankSelectionScreenState();
@@ -64,6 +67,7 @@ class _BankSelectionScreenState extends State<BankSelectionScreen> {
                           lockerSite: widget.lockerSite,
                           compartment: widget.compartment,
                           user: widget.user,
+                          collectionSite: widget.collectionSite,
                         )),
               );
             },

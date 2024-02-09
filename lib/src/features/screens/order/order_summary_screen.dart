@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,10 +15,13 @@ import 'package:provider/provider.dart';
 import '../payment/payment_method.dart';
 import '../home/home_screen.dart';
 import '../welcome/welcome_screen.dart';
+import '../order/select_item_screen.dart';
+import '../order/collection_site_select.dart';
 
 // ASSETS
-import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/constants/colors.dart';
+import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
 
 // MODELS
 import 'package:device_run_test/src/features/models/locker.dart';
@@ -34,13 +38,16 @@ class OrderSummary extends StatefulWidget {
   final String? selectedCompartmentSize;
   final Service? service;
   final Order? order;
+  final LockerSite? collectionSite;
 
-  OrderSummary({
+  const OrderSummary({
+    super.key,
     required this.lockerSite,
     required this.compartment,
     required this.selectedCompartmentSize,
     required this.service,
     required this.order,
+    required this.collectionSite,
   });
 
   @override
@@ -48,10 +55,6 @@ class OrderSummary extends StatefulWidget {
 }
 
 class _OrderSummaryState extends State<OrderSummary> {
-  final double pricePerKg = 6.00;
-  final int quantity = 5;
-  final double totalPrice = 30.00;
-
   late String token;
   User? user;
 
@@ -69,64 +72,93 @@ class _OrderSummaryState extends State<OrderSummary> {
     }
   }
 
-  Future<void> handlePaymentNavigation() async {
+  void navigateToPayment() {
+    if (widget.collectionSite != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PaymentScreen(
+                  order: widget.order,
+                  lockerSite: widget.lockerSite,
+                  compartment: widget.compartment,
+                  user: user,
+                  collectionSite: widget.collectionSite,
+                )),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          //Alert Dialog PopUp of Order Price Estimation Confirmation
+          return CancelConfirmAlert(
+              title: 'No Collection Site Selected',
+              content: 'Please select a locker site for order collection.',
+              onPressedConfirm: () {
+                handleSelectCollectionSite();
+              },
+              cancelButtonText: 'Cancel',
+              confirmButtonText: 'Confirm');
+        },
+      );
+    }
+  }
+
+  void handleSelectCollectionSite() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CollectionSiteSelect(
+                lockerSite: widget.lockerSite,
+                compartment: widget.compartment,
+                selectedCompartmentSize: widget.selectedCompartmentSize,
+                service: widget.service,
+                order: widget.order,
+              )),
+    );
+  }
+
+  Future<void> handleCheckout() async {
     user = await getUserInfo();
-    print(user?.id);
-    print(user?.phoneNumber);
 
     if (user != null) {
       if (widget.compartment != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PaymentScreen(
-                    order: widget.order,
-                    lockerSite: widget.lockerSite,
-                    compartment: widget.compartment,
-                    user: user,
-                  )),
-        );
+        navigateToPayment();
       } else {
         LockerCompartment? compartment = await getAllocatedCompartment();
-        print(compartment?.id);
-        print(compartment?.size);
-
         if (compartment != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PaymentScreen(
-                      order: widget.order,
-                      lockerSite: widget.lockerSite,
-                      compartment: compartment,
-                      user: user,
-                    )),
-          );
+          navigateToPayment();
         } else {
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('Sorry, no compartments available.', style: CTextTheme.blackTextTheme.headlineMedium,),
+                title: Text(
+                  'Sorry, no compartments available.',
+                  style: CTextTheme.blackTextTheme.headlineLarge,
+                ),
                 content: Text(
-                    'All compartments are occupied. Would you like to cancel your order or select another locker site.',
-                  style: CTextTheme.blackTextTheme.headlineMedium,),
+                  'All compartments are occupied. Would you like to cancel your order or select another locker site.',
+                  style: CTextTheme.blackTextTheme.headlineMedium,
+                ),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () {
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) => HomePage()));
-                    },
-                    child: Text('Cancel Order', style: CTextTheme.blackTextTheme.headlineMedium,),
+                    onPressed: cancelOrder,
+                    child: Text(
+                      'Cancel Order',
+                      style: CTextTheme.blackTextTheme.headlineMedium,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => SelectLockerSite()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LockerSiteSelect()));
                     },
-                    child: Text('Select', style: CTextTheme.blackTextTheme.headlineMedium,),
+                    child: Text(
+                      'Yes',
+                      style: CTextTheme.blackTextTheme.headlineMedium,
+                    ),
                   ),
                 ],
               );
@@ -137,34 +169,16 @@ class _OrderSummaryState extends State<OrderSummary> {
     } else {
       if (Provider.of<GuestModeProvider>(context, listen: false).guestMode ==
           true) {
-        // Ask guest to register
-        print('PLEASE SIGN IN');
         // PROMPT GUEST SIGN UP
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return AlertDialog(
-              content: Column(
-                children: [
-                  Text('Don\'t have an account?', style: CTextTheme.blackTextTheme.headlineSmall,),
-                  Text('Sign up to check out.', style: CTextTheme.blackTextTheme.headlineSmall,),
-                ],
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancel', style: CTextTheme.blackTextTheme.headlineSmall,),
-                ),
-                TextButton(
-                  onPressed: () {
-                    handleGuestRedirection();
-                  },
-                  child: Text('Select', style: CTextTheme.blackTextTheme.headlineSmall,),
-                ),
-              ],
-            );
+            return CancelConfirmAlert(
+                title: 'Don\'t Have An Account?',
+                content: 'Sign Up to Check Out.',
+                onPressedConfirm: handleGuestRedirection,
+                cancelButtonText: 'Cancel',
+                confirmButtonText: 'Sign Up');
           },
         );
       }
@@ -179,7 +193,8 @@ class _OrderSummaryState extends State<OrderSummary> {
         widget.order,
         widget.service,
         widget.lockerSite,
-        widget.selectedCompartmentSize);
+        widget.selectedCompartmentSize,
+        widget.collectionSite);
     // REDIRECT TO SIGN IN PAGE
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Navigator.pushReplacement(
@@ -228,249 +243,212 @@ class _OrderSummaryState extends State<OrderSummary> {
             builder: (context) => HomePage(token: prefs.getString('token'))));
   }
 
+  void handleBackButtonPress() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        //Alert Dialog PopUp of Backtrack Confirmation
+        return CancelConfirmAlert(
+            title: 'Modify Order',
+            content:
+                'You will be redirected to re-select order items. Do you want to proceed?',
+            onPressedConfirm: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SelectItems(
+                          lockerSite: widget.lockerSite,
+                          compartment: widget.compartment,
+                          selectedCompartmentSize:
+                              widget.selectedCompartmentSize,
+                          service: widget.service,
+                        )),
+              );
+            },
+            cancelButtonText: 'Cancel',
+            confirmButtonText: 'Confirm');
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final orderItems = widget.order?.orderItems;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Summary',
-          style: CTextTheme.blackTextTheme.displaySmall,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Order Summary',
+            style: CTextTheme.blackTextTheme.displaySmall,
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              handleBackButtonPress();
+            },
+          ),
         ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Handle back button press
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                //Alert Dialog PopUp of Backtrack Confirmation
-                return AlertDialog(
-                  content: Text(
-                    "Are you sure you want to cancel the order?",
+        body: Container(
+          padding: const EdgeInsets.all(cDefaultSize),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Service Type & Order ID
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${widget.service?.name.toUpperCase()}',
+                    style: CTextTheme.blackTextTheme.headlineMedium,
+                  ),
+                  Text(
+                    'ORDER ID : ${widget.order?.orderNumber}',
                     style: CTextTheme.blackTextTheme.headlineSmall,
                   ),
-                  actions: [
-                    Row(
-                      children: [
-                        //Confirm Button
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () async {
-                              await cancelOrder();
-                            },
-                            child: Text(
-                              'Confirm',
-                              style: CTextTheme.blackTextTheme.headlineSmall,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        //Back Button
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Back',
-                              style: CTextTheme.blackTextTheme.headlineSmall,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(cDefaultSize),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Service Type & Order ID
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${widget.service?.name.toUpperCase()}',
-                  style: CTextTheme.blackTextTheme.headlineMedium,
-                ),
-                Text(
-                  'ORDER ID : ${widget.order?.orderNumber}',
-                  style: CTextTheme.blackTextTheme.headlineSmall,
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 40.0,
-            ),
-            // Order Items
-            Expanded(
-                child: ListView.builder(
-              itemCount: orderItems?.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(cAllGarments),
-                        const SizedBox(
-                          width: 20.0,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${orderItems![index].name}',
-                              style: CTextTheme.blackTextTheme.headlineLarge,
-                            ),
-                            Text(
-                              'RM${orderItems[index].price.toStringAsFixed(2)}/${orderItems[index].unit}',
-                              style: CTextTheme.blackTextTheme.labelLarge,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  children: [
-                                    // IconButton(
-                                    //   icon: const Icon(Icons.remove),
-                                    //   onPressed: () {
-                                    //     // Handle decrement
-                                    //     quantity - 1;
-                                    //   },
-                                    // ),
-                                    Text(
-                                      'Quantity: ${orderItems[index].quantity}',
-                                      style: CTextTheme.blackTextTheme.headlineMedium,
-                                    ),
-                                    // IconButton(
-                                    //   icon: const Icon(Icons.add),
-                                    //   onPressed: () {
-                                    //     // Handle increment
-                                    //     quantity + 1;
-                                    //   },
-                                    // ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Text(
-                              'RM${orderItems[index].cumPrice.toStringAsFixed(2)}',
-                              style: CTextTheme.blackTextTheme.headlineMedium,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    )
-                  ],
-                );
-              },
-            )),
+                ],
+              ),
+              const Divider(),
 
-            // const Divider(),
-            // ListTile(
-            //   title: Text(
-            //     'Self Pick Up Information',
-            //     style: Theme.of(context).textTheme.headlineMedium,
-            //   ),
-            // ),
-            // ListTile(
-            //   leading: const Icon(Icons.access_time),
-            //   title: Text(
-            //     'Time',
-            //     style: CTextTheme.blackTextTheme.labelLarge,
-            //   ),
-            //   trailing: TextButton(
-            //     onPressed: () {
-            //       showDialog(
-            //         context: context,
-            //         builder: (BuildContext context) {
-            //           return const CheckoutDetailPopUp();
-            //         },
-            //       );
-            //     },
-            //     child: Row(
-            //       mainAxisSize: MainAxisSize.min,
-            //       children: [
-            //         Text(
-            //           '25 NOV, 14:00 - 16:00',
-            //           style: CTextTheme.blackTextTheme.labelLarge,
-            //         ),
-            //         const Icon(
-            //           Icons.navigate_next,
-            //           color: AppColors.cBlackColor,
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            // ListTile(
-            //   leading: const Icon(Icons.location_on),
-            //   title: Text(
-            //     'Location',
-            //     style: CTextTheme.blackTextTheme.labelLarge,
-            //   ),
-            //   trailing: TextButton(
-            //     onPressed: () {},
-            //     child: Row(
-            //       mainAxisSize: MainAxisSize.min,
-            //       children: [
-            //         Text(
-            //           'TAYLOR’S UNIVERSITY',
-            //           style: CTextTheme.blackTextTheme.labelLarge,
-            //         ),
-            //         const Icon(
-            //           Icons.navigate_next,
-            //           color: AppColors.cBlackColor,
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            const Divider(),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
+              const SizedBox(
+                height: 10.0,
+              ),
+              // Order Items
+              Expanded(
+                child: ListView.builder(
+                  itemCount: orderItems?.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Colors.blue[50],
+                            ),
+                            child: Image.asset(
+                              'assets/images/select_item/${orderItems![index].name.replaceAll(RegExp(r'[ /]'), '')}.png',
+                              width: 80, // Set a fixed width for the image
+                              height: 80, // Set a fixed height for the image
+                            ),
+                          ),
+                          const SizedBox(width: 20.0),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${orderItems![index].name}',
+                                style: CTextTheme.blackTextTheme.headlineLarge,
+                              ),
+                              Text(
+                                'RM${orderItems[index].price.toStringAsFixed(2)}/${orderItems[index].unit}',
+                                style: CTextTheme.blackTextTheme.headlineSmall,
+                              ),
+                              Text(
+                                'Quantity: ${orderItems[index].quantity}',
+                                style: CTextTheme.blackTextTheme.headlineMedium,
+                              ),
+                              Text(
+                                'RM${orderItems[index].cumPrice.toStringAsFixed(2)}',
+                                style: CTextTheme.blackTextTheme.headlineMedium,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Text(
+                'Note: Make sure to select a collection site.',
+                style: CTextTheme.greyTextTheme.headlineSmall,
+              ),
+              const SizedBox(height: 5.0),
+              const Divider(),
+              const SizedBox(height: 10.0),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Total Est. Price',
-                    style: CTextTheme.blackTextTheme.displaySmall,
+                    style: CTextTheme.blackTextTheme.headlineLarge,
                   ),
                   Text(
                     'RM ${widget.order?.estimatedPrice.toStringAsFixed(2)}',
-                    style: CTextTheme.blackTextTheme.displaySmall,
+                    style: CTextTheme.blackTextTheme.headlineLarge,
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-      ),
-
-      //Continue Button
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(cDefaultSize),
-        child: ElevatedButton(
-          onPressed: () async {
-            await handlePaymentNavigation();
-          },
-          child: Text(
-            'Continue',
-            style: CTextTheme.blackTextTheme.headlineMedium,
+              const SizedBox(height: 10.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Collection Site:',
+                    style: CTextTheme.blackTextTheme.headlineMedium,
+                  ),
+                  Text(
+                    widget.collectionSite?.name ?? 'None Selected',
+                    style: CTextTheme.blackTextTheme.headlineMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 25.0),
+              (widget.collectionSite == null)
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: handleSelectCollectionSite,
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.green[50]!)),
+                            child: Text(
+                              'Select Collection Site',
+                              style: CTextTheme.blackTextTheme.headlineMedium,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: handleSelectCollectionSite,
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.yellow[50]!)),
+                            child: Text(
+                              'Change Collection Site',
+                              style: CTextTheme.blackTextTheme.headlineMedium,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: handleCheckout,
+                      child: Text(
+                        'Continue',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

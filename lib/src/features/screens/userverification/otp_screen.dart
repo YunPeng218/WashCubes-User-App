@@ -79,6 +79,9 @@ class _OTPPageState extends State<OTPVerifyPage> {
                   Provider.of<GuestModeProvider>(context, listen: false)
                       .guestSelectedCompartmentSize,
               compartment: null,
+              collectionSite:
+                  Provider.of<GuestModeProvider>(context, listen: false)
+                      .guestCollectionSite,
             ),
           ),
         );

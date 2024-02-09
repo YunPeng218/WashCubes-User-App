@@ -9,6 +9,7 @@ import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/screens/order/laundry_service_picker_screen.dart';
 import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
+import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
 
 // UTILS
 import 'package:device_run_test/src/utilities/guest_mode.dart';
@@ -16,9 +17,10 @@ import 'package:device_run_test/src/utilities/user_helper.dart';
 
 // CONSTANTS
 import 'package:device_run_test/src/constants/sizes.dart';
+import 'package:device_run_test/src/constants/colors.dart';
 
 class LockerCompartmentSelect extends StatefulWidget {
-  final LockerSite selectedLockerSite;
+  final LockerSite? selectedLockerSite;
   LockerCompartmentSelect({required this.selectedLockerSite});
   @override
   _LockerCompartmentSelectState createState() =>
@@ -28,7 +30,6 @@ class LockerCompartmentSelect extends StatefulWidget {
 class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
   LockerAvailabilityResponse? availableCompartments;
   LockerCompartment? assignedCompartment;
-  // bool isLockerSiteFull = false;
 
   void initState() {
     super.initState();
@@ -38,7 +39,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
   Future<void> fetchAvailableCompartments() async {
     try {
       final response = await http.get(Uri.parse(
-          url + 'compartments?lockerSiteId=${widget.selectedLockerSite.id}'));
+          url + 'compartments?lockerSiteId=${widget.selectedLockerSite?.id}'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 
@@ -100,7 +101,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
       final response = await http.post(
         Uri.parse(url + 'orders/select-locker-site'),
         body: json.encode({
-          'selectedLockerSiteId': widget.selectedLockerSite.id,
+          'selectedLockerSiteId': widget.selectedLockerSite?.id,
           'selectedSize': selectedSize,
         }),
         headers: {'Content-Type': 'application/json'},
@@ -124,94 +125,139 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
     return null;
   }
 
+  void handleBackButtonPress() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LockerSiteSelect()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> compartmentSizes = ['Small', 'Medium', 'Large', 'Extra Large'];
     List<String> compartmentDimensions = ['315mm', '472.5mm', '630mm', '945mm'];
 
     // SHOW DIALOG IF LOCKER SITE IS FULL
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (availableCompartments?.availableCompartmentsBySize.isEmpty ?? false) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('No Available Compartments', style: CTextTheme.blackTextTheme.headlineMedium,),
-              content: Text(
-                'Sorry, there are no available compartments for any size. Please select another locker site.',
-                style: CTextTheme.blackTextTheme.headlineMedium,
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LockerSiteSelect(),
-                      ),
-                    );
-                  },
-                  child: Text('Go Back', style: CTextTheme.blackTextTheme.headlineSmall,),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (availableCompartments?.availableCompartmentsBySize.isEmpty ?? false) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (BuildContext context) {
+    //         return AlertDialog(
+    //           title: Text(
+    //             'No Available Compartments',
+    //             style: CTextTheme.blackTextTheme.headlineMedium,
+    //           ),
+    //           content: Text(
+    //             'Sorry, there are no available compartments for any size. Please select another locker site.',
+    //             style: CTextTheme.blackTextTheme.headlineMedium,
+    //           ),
+    //           actions: <Widget>[
+    //             TextButton(
+    //               onPressed: () {
+    //                 Navigator.of(context).pop();
+    //                 Navigator.push(
+    //                   context,
+    //                   MaterialPageRoute(
+    //                     builder: (context) => LockerSiteSelect(),
+    //                   ),
+    //                 );
+    //               },
+    //               child: Text(
+    //                 'Go Back',
+    //                 style: CTextTheme.blackTextTheme.headlineSmall,
+    //               ),
+    //             ),
+    //           ],
+    //         );
+    //       },
+    //     );
+    //   }
+    // });
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              handleBackButtonPress();
+            },
+          ),
         ),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(cDefaultSize),
-        child: Column(
-          children: [
-            Text(
-              'Select Your Compartment Size',
-              style: CTextTheme.blackTextTheme.displayLarge,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(cDefaultSize),
+            child: Column(
+              children: [
+                Text(
+                  'Select Compartment Size',
+                  style: CTextTheme.blueTextTheme.displayLarge,
+                ),
+                const SizedBox(
+                  height: cDefaultSize * 0.5,
+                ),
+                Provider.of<GuestModeProvider>(context, listen: false).guestMode
+                    ? Text(
+                        'Note For Guests: Locker compartment will only be assigned to you after and sign in and is subject to availability.',
+                        style: CTextTheme.blackTextTheme.headlineSmall,
+                      )
+                    : const SizedBox(
+                        height: cDefaultSize,
+                      ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.blue[50],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Locker Site Selected:",
+                                style: CTextTheme.blackTextTheme.labelLarge),
+                            Text(widget.selectedLockerSite?.name ?? 'Default',
+                                style:
+                                    CTextTheme.blackTextTheme.headlineMedium),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30.0),
+                GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16.0,
+                    mainAxisSpacing: 16.0,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: List.generate(compartmentSizes.length, (index) {
+                      final compartmentSize = compartmentSizes[index];
+                      final compartments = availableCompartments
+                              ?.availableCompartmentsBySize[compartmentSize] ??
+                          0;
+                      return CompartmentCard(
+                        compartmentSize: compartmentSize,
+                        dimensions: compartmentDimensions[index],
+                        compartmentsAvailable: compartments,
+                        isFull: compartments == 0 ? true : false,
+                        iconName: 'assets/logos/i3Cubes_logo.png',
+                        onTap: () {
+                          handleSelection(compartmentSizes[index]);
+                        },
+                      );
+                    })),
+              ],
             ),
-            const SizedBox(
-              height: cDefaultSize * 0.5,
-            ),
-            Provider.of<GuestModeProvider>(context, listen: false).guestMode
-                ? Text(
-                    'Note For Guests: Locker compartment will only be assigned to you after and sign in and is subject to availability.',
-                    style: CTextTheme.blackTextTheme.headlineSmall,
-                  )
-                : const SizedBox(
-                    height: cDefaultSize,
-                  ),
-            const SizedBox(height: cDefaultSize),
-            GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                shrinkWrap: true,
-                children: List.generate(compartmentSizes.length, (index) {
-                  final compartmentSize = compartmentSizes[index];
-                  final compartments = availableCompartments
-                          ?.availableCompartmentsBySize[compartmentSize] ??
-                      0;
-                  return CompartmentCard(
-                    compartmentSize: compartmentSize,
-                    dimensions: compartmentDimensions[index],
-                    compartmentsAvailable: compartments,
-                    isFull: compartments == 0 ? true : false,
-                    iconName: 'assets/images/laundry_service/Handwash.png',
-                    onTap: () {
-                      handleSelection(compartmentSizes[index]);
-                    },
-                  );
-                })),
-          ],
+          ),
         ),
       ),
     );
@@ -246,14 +292,16 @@ class CompartmentCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(iconName, height: size.height * 0.1),
+            const SizedBox(height: 5.0),
+            Image.asset(iconName, height: size.height * 0.07),
             Column(
               children: [
+                const SizedBox(height: 8.0),
                 Text(
                   compartmentSize,
                   style: CTextTheme.blackTextTheme.headlineLarge,
                 ),
-                const SizedBox(height: 4.0),
+                const SizedBox(height: 5.0),
                 Text(
                   'Dimension: $dimensions',
                   style: CTextTheme.blackTextTheme.labelMedium,
