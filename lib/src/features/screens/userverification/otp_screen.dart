@@ -88,7 +88,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
       } else {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => HomePage(token: myToken),
+              builder: (context) => const HomePage(),
             ),
             (Route<dynamic> route) => false);
       }
@@ -96,6 +96,8 @@ class _OTPPageState extends State<OTPVerifyPage> {
       // Set Guest Mode to False
       Provider.of<GuestModeProvider>(context, listen: false)
           .setGuestMode(false);
+      var myToken = jsonResponse['token'];
+      prefs.setString('token', myToken);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const BiometricSetupPage(),

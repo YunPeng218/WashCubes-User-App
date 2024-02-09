@@ -78,24 +78,11 @@ class _AccountPageState extends State <AccountPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => EditProfilePage()),
-                );
+                  MaterialPageRoute(builder: (context) => EditProfilePage()),
+                ).whenComplete(() => loadUserInfo());
               },
             ),
             const Divider(),
-            //ProfileOption(title: 'Referral', icon: Icons.card_giftcard),
-            //ProfileOption(title: 'Rewards', icon: Icons.star),
-            // ProfileOption(
-            //   title: 'Settings',
-            //   icon: Icons.settings,
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) => EditProfilePage()),
-            //     );
-            //   },
-            // ),
             ProfileOption(
               title: 'Settings',
               icon: Icons.settings_outlined,
@@ -185,8 +172,8 @@ class UserHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const CircleAvatar(
-        backgroundImage: AssetImage(cAvatar),
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(user!.profilePicURL),
         radius: 30,
       ),
       title: user!.name.isNotEmpty

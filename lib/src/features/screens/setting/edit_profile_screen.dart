@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/utilities/user_helper.dart';
@@ -12,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:cloudinary/cloudinary.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -58,9 +55,9 @@ class _EditProfilePageState extends State <EditProfilePage> {
       body: Padding(
         padding: const EdgeInsets.all(cDefaultSize),
         child: ListView(
-          // padding: const EdgeInsets.all(16),
           children: <Widget>[
-            ProfileHeader(),
+            if (user!=null)
+            ProfileHeader(user: user),
             if (user!=null)
               EditableProfileItem(title: 'PREFERRED NAME', value: user!.name, user: user),
             if (user!=null)
@@ -75,6 +72,9 @@ class _EditProfilePageState extends State <EditProfilePage> {
 }
 
 class ProfileHeader extends StatefulWidget {
+  UserProfile? user;
+  ProfileHeader({Key? key, required this.user}) : super(key: key);
+
   @override
   _ProfileHeaderState createState() => _ProfileHeaderState();
 }
@@ -83,41 +83,120 @@ class _ProfileHeaderState extends State <ProfileHeader> {
   File? imageFile;
   String? imageUrl;
 
+  @override
+  void initState() {
+    super.initState();
+    imageUrl = widget.user!.profilePicURL;
+  }
+
   Future<void> pickImage (ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     XFile? pickedFile = await picker.pickImage(source: source);
     setState((){
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
+        uploadImage();
       }
     });
   }
 
-  final cloudinary = Cloudinary.unsignedConfig(
-    cloudName: 'ddweldfmx',
-  );
-
   Future<void> uploadImage() async {
     final url = Uri.parse('https://api.cloudinary.com/v1_1/ddweldfmx/upload');
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = 'xcbbr3ok'
+      ..files.add(await http.MultipartFile.fromPath('file', imageFile!.path));
+    final response = await request.send();
+    print('Upload response status code: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.toBytes();
+      final responseString = utf8.decode(responseData);
+      final jsonMap = jsonDecode(responseString);
+      setState(() {
+        final url = jsonMap['url'];
+        imageUrl = url;
+      });
+      updateProfilePicURL(imageUrl);
+    }
+  }
+
+  Future<void> updateProfilePicURL(imageUrl) async {
+    Map<String, dynamic> newDetails = {
+      'userId': widget.user!.id,
+      'profilePicURL': imageUrl,
+    };
+
+    final response = await http.patch(
+      Uri.parse('${url}userProfilePic'),
+      body: json.encode(newDetails),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      if (data.containsKey('user')) {
+        final dynamic userData = data['user'];
+        setState(() {
+          widget.user = UserProfile.fromJson(userData);
+        });
+      }
+    }
   }
 
   @override
-Widget build(BuildContext context) {
-  return Column(
-    children: [
-      GestureDetector(
-        onTap: () {
-          // selectImage();
-        },
-        child: CircleAvatar(
-          backgroundImage: AssetImage(cAvatar),
-          radius: 50,
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            GestureDetector(
+              child: CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage(
+                  imageUrl!,
+                ),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.camera_enhance, 
+                color: Colors.grey,
+              ),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: const Icon(Icons.camera),
+                          title: const Text('Take a photo'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            pickImage(ImageSource.camera);
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(Icons.image),
+                          title: Text('Choose from gallery'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            pickImage(ImageSource.gallery);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
-      ),
-      const SizedBox(height: 20),
-    ],
-  );
-}
+        const SizedBox(height: 20),
+      ],
+    );
+  }
 }
 
 class EditableProfileItem extends StatefulWidget {
@@ -132,31 +211,37 @@ class EditableProfileItem extends StatefulWidget {
 }
 
 class _EditableProfileItemState extends State<EditableProfileItem> {
-  final FocusNode _focusNode = FocusNode();
-  late TextEditingController _editingController;
-  bool _isEditing = false;
+  _EditProfilePageState? pageState;
 
   @override
   void initState() {
     super.initState();
-    _editingController = TextEditingController(text: widget.value);
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
-        setState(() {
-          _isEditing = false;
-        });
-      }
-    });
+    pageState = context.findAncestorStateOfType<_EditProfilePageState>();
   }
 
   Future<void> updateUserDetails(String title, String value) async {
     try {
       Map<String, dynamic> newDetails = {
         'userId': widget.user!.id,
-        'name': title == 'PREFERRED NAME' ? value : widget.user!.name,
-        'phoneNumber': title == 'MOBILE NUMBER' ? value : widget.user!.phoneNumber,
-        'email': title == 'EMAIL ADDRESS' ? value : widget.user!.email,
       };
+
+      switch (title) {
+        case 'PREFERRED NAME':
+          newDetails['name'] = value;
+          newDetails['email'] = widget.user!.email;
+          newDetails['phoneNumber'] = widget.user!.phoneNumber;
+          break;
+        case 'MOBILE NUMBER':
+          newDetails['phoneNumber'] = value;
+          newDetails['name'] = widget.user!.name;
+          newDetails['email'] = widget.user!.email;
+          break;
+        case 'EMAIL ADDRESS':
+          newDetails['email'] = value;
+          newDetails['name'] = widget.user!.name;
+          newDetails['phoneNumber'] = widget.user!.phoneNumber;
+          break;
+      }
 
       final response = await http.patch(
         Uri.parse('${url}user'),
@@ -177,6 +262,22 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
     }
   }
 
+  void _showEditDialog(BuildContext context, String title, String currentValue) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EditProfileDialog(
+          title: title,
+          currentValue: currentValue,
+          onEdit: (newValue) {
+            updateUserDetails(title, newValue);
+            pageState?.loadUserInfo();
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -186,45 +287,23 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
         children: [
           Text(
             widget.title,
-            style: CTextTheme.greyTextTheme.labelLarge
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
             ),
+          ),
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _isEditing 
-                  ? Expanded(
-                      child: TextFormField(
-                        controller: _editingController,
-                        focusNode: _focusNode,
-                        style: Theme.of(context).textTheme.headlineLarge,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        onChanged: (newValue) {
-                          widget.value = newValue;
-                          updateUserDetails(widget.title, widget.value);
-                        },
-                        onEditingComplete: () {
-                          setState(() {
-                            _isEditing = false;
-                          });
-                        },
-                      ),
-                    )
-                  : Expanded(
-                      child: Text(
-                        widget.value,
-                        style: Theme.of(context).textTheme.headlineLarge,
-                      ),
-                    ),
+              Text(
+                widget.value,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
               IconButton(
                 icon: const Icon(Icons.edit_outlined, color: AppColors.cGreyColor2),
                 onPressed: () {
-                  setState(() {
-                    _isEditing = true;
-                  });
-                  _focusNode.requestFocus();
+                  _showEditDialog(context, widget.title, widget.value);
                 },
               ),
             ],
@@ -232,6 +311,74 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
           const Divider(),
         ],
       ),
+    );
+  }
+}
+
+class EditProfileDialog extends StatefulWidget {
+  final String title;
+  final String currentValue;
+  final Function(String) onEdit;
+
+  const EditProfileDialog({
+    Key? key,
+    required this.title,
+    required this.currentValue,
+    required this.onEdit,
+  }) : super(key: key);
+
+  @override
+  _EditProfileDialogState createState() => _EditProfileDialogState();
+}
+
+class _EditProfileDialogState extends State<EditProfileDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.currentValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Edit ${widget.title}'),
+      content: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: _controller,
+          decoration: InputDecoration(
+            labelText: widget.title,
+          ),
+          validator: (value) {
+            if (widget.title == 'EMAIL ADDRESS' && !RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(value ?? '')) {
+              return 'Enter a valid email address';
+            } else if (widget.title == 'MOBILE NUMBER' && !RegExp(r'^601[0-46-9][0-9]{7,8}$').hasMatch(value ?? '')) {
+              return 'Enter a valid phone number starting with 601';
+            } else if (value == '') {
+              return 'Enter a value';
+            }
+            return null;
+          },
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            if (_formKey.currentState?.validate() == true) {
+              widget.onEdit(_controller.text);
+              Navigator.pop(context);
+            }
+          },
+          child: Text('Save'),
+        ),
+      ],
     );
   }
 }

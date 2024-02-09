@@ -1,16 +1,19 @@
 import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
+import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/nearbylocation/NearbyLocationPage.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
 import 'package:device_run_test/src/utilities/guest_mode.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
+import 'package:device_run_test/src/utilities/user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:provider/provider.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final token;
@@ -22,16 +25,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late String userID;
+  UserProfile? user;
+  String profilePic = 'https://res.cloudinary.com/ddweldfmx/image/upload/v1707480915/profilePic/zxltbifbulr4m45lbsqq.png';
 
   @override
   void initState() {
     super.initState();
+    init();
+  }
 
-    if (widget.token != null) {
-      Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
-      userID = jwtDecodedToken['_id'];
-    } else {
-      userID = 'Guest';
+  void init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? 'No token';
+    if (token != 'No token') loadUserInfo();
+  }
+
+  Future<void> loadUserInfo() async {
+    try {
+      var userHelper = UserHelper();
+      UserProfile? foundUser = await userHelper.getUserDetails();
+      if (mounted) {
+        setState(() {
+          user = foundUser;
+          profilePic = user!.profilePicURL;
+        });
+      }
+    } catch (error) {
+      print('Failed to load user: $error');
     }
   }
 
@@ -57,7 +77,7 @@ class _HomePageState extends State<HomePage> {
               //Avatar Icon
               actions: <Widget>[
                 CircleAvatar(
-                  backgroundImage: const AssetImage(cAvatar),
+                  backgroundImage: NetworkImage(profilePic),
                   child: GestureDetector(
                     onTap: () {
                       Navigator.push(

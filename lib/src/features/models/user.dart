@@ -3,6 +3,7 @@ class UserProfile {
   final int phoneNumber;
   final String name;
   final String email;
+  final String profilePicURL;
   final int v;
 
   UserProfile({
@@ -10,6 +11,7 @@ class UserProfile {
     required this.phoneNumber,
     required this.name,
     required this.email,
+    required this.profilePicURL,
     required this.v,
   });
 
@@ -19,6 +21,7 @@ class UserProfile {
       phoneNumber: json['phoneNumber'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
+      profilePicURL: json['profilePicURL'] ?? '',
       v: json['__v'] ?? 0,
     ));
   }
