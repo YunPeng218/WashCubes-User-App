@@ -10,7 +10,6 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dar
 import 'package:device_run_test/src/utilities/user_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:provider/provider.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';

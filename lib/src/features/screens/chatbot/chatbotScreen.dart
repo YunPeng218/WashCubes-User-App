@@ -5,7 +5,6 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dar
 import 'package:flutter/material.dart';
 import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/screens/chatbot/predefinedScripts.dart';
-import '../../../utilities/theme/widget_themes/elevatedbutton_theme.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 
 class ChatbotScreen extends StatefulWidget {
