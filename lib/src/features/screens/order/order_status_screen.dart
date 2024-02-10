@@ -4,24 +4,98 @@ import 'package:device_run_test/src/features/screens/order/order_status_detail_w
 import 'package:device_run_test/src/features/screens/order/order_status_widget.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:device_run_test/src/features/models/order.dart';
+import 'package:device_run_test/src/features/models/locker.dart';
+import 'package:device_run_test/src/features/models/service.dart';
+import 'package:device_run_test/config.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class OrderStatusScreen extends StatefulWidget {
-  const OrderStatusScreen({super.key});
+  final Order order;
+  const OrderStatusScreen({Key? key, required this.order}) : super(key: key);
 
   @override
   State<OrderStatusScreen> createState() => _OrderStatusState();
 }
 
 class _OrderStatusState extends State<OrderStatusScreen> {
+  LockerSite? lockerSite;
+  LockerSite? collectionSite;
+  Service? service;
+
+  void initState() {
+    super.initState();
+    fetchOrderLockerInfo();
+    //fetchOrderServiceInfo();
+  }
+
+  Future<void> fetchOrderLockerInfo() async {
+    try {
+      var reqUrl = url +
+          'locker/order-locker-sites?dropOffSiteId=${widget.order.lockerDetails?.lockerSiteId}&collectionSiteId=${widget.order.collectionSite?.lockerSiteId}';
+      final response = await http.get(Uri.parse(reqUrl));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data.containsKey('dropOffLocker') &&
+            data.containsKey('collectionLocker')) {
+          final dynamic dropOffLockerData = data['dropOffLocker'];
+          final dynamic collectionLockerData = data['collectionLocker'];
+          LockerSite dropOffLocker = LockerSite.fromJson(dropOffLockerData);
+          LockerSite collectionLocker =
+              LockerSite.fromJson(collectionLockerData);
+          setState(() {
+            lockerSite = dropOffLocker;
+            collectionSite = collectionLocker;
+          });
+        } else {
+          print('No lockers found.');
+        }
+      } else {
+        // If the server did not return a 200 OK response, throw an exception.
+        throw Exception('Failed to load locker sites');
+      }
+    } catch (error) {
+      print('Error fetching locker sites: $error');
+    }
+  }
+
+  Future<void> fetchOrderServiceInfo() async {
+    try {
+      final response =
+          await http.get(Uri.parse(url + 'services/${widget.order.serviceId}'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data.containsKey('service')) {
+          final dynamic serviceData = data['service'];
+          final Service fetchedService = Service.fromJson(serviceData);
+          setState(() {
+            service = fetchedService;
+          });
+        } else {
+          print('Response data does not contain services.');
+        }
+      } else {
+        throw Exception('Failed to load services');
+      }
+    } catch (error) {
+      print('Error fetching services: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    //final size = MediaQuery.of(context).size;
     return Scaffold(
       //Top Page Bar
       appBar: AppBar(
         //Order Number
         title: Text(
-          'Order #000001',
+          'Order: ${widget.order.orderNumber}',
           style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
@@ -41,27 +115,20 @@ class _OrderStatusState extends State<OrderStatusScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(cDefaultSize), //Padding Around Screen
+          padding: const EdgeInsets.all(20.0), //Padding Around Screen
           child: Column(
             children: [
-              //Order Status Progress Icon Column
-              OrderStatusWidget(size: size),
-              const SizedBox(
-                height: 50,
+              OrderStatusWidget(
+                order: widget.order,
               ),
-              //Order Summary & Details
-              const OrderStatusDetailWidget(),
+              Divider(),
+              OrderStatusDetailWidget(
+                order: widget.order,
+                lockerSite: lockerSite,
+                collectionSite: collectionSite,
+                service: service,
+              ),
             ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(cDefaultSize),
-        child: ElevatedButton(
-          onPressed: () {},
-          child: Text(
-            'Write a Review',
-            style: CTextTheme.blackTextTheme.headlineMedium,
           ),
         ),
       ),

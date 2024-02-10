@@ -232,10 +232,12 @@ class OrderPageState extends State<OrderPage> {
                         itemBuilder: (context, index) {
                           Order order = userOrders[index];
                           return OrderCard(
-                              orderNumber: order.orderNumber,
-                              date: order.createdAt,
-                              location: order.lockerDetails?.lockerSiteId,
-                              status: order.orderStatus);
+                            orderNumber: order.orderNumber,
+                            date: order.createdAt,
+                            location: order.lockerDetails?.lockerSiteId,
+                            status: order.orderStage!.getMostRecentStatus(),
+                            order: order,
+                          );
                         }))
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -290,6 +292,7 @@ class OrderCard extends StatelessWidget {
   final String date;
   final String? location;
   final String status;
+  final Order order;
 
   const OrderCard({
     Key? key,
@@ -297,6 +300,7 @@ class OrderCard extends StatelessWidget {
     required this.date,
     required this.location,
     required this.status,
+    required this.order,
   }) : super(key: key);
 
   @override
@@ -328,7 +332,10 @@ class OrderCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const OrderStatusScreen()),
+            MaterialPageRoute(
+                builder: (context) => OrderStatusScreen(
+                      order: order,
+                    )),
           );
           // Handle the tap if necessary
         },

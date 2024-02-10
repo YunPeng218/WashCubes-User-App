@@ -45,36 +45,36 @@ class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
           child: Column(
             children: [
               //Order Status Progress Icon Column
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    Image.asset(cAllGarments, scale: 1.2),
-                    const SizedBox(width: 20),
-                    SizedBox(
-                      width: size.width * 0.6,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'All Garments',
-                            style: CTextTheme.blackTextTheme.headlineMedium,
-                          ),
-                          Text(
-                            '5 KG',
-                            style: CTextTheme.greyTextTheme.labelLarge,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+              //   child: Row(
+              //     children: [
+              //       Image.asset(cAllGarments, scale: 1.2),
+              //       const SizedBox(width: 20),
+              //       SizedBox(
+              //         width: size.width * 0.6,
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             Text(
+              //               'All Garments',
+              //               style: CTextTheme.blackTextTheme.headlineMedium,
+              //             ),
+              //             Text(
+              //               '5 KG',
+              //               style: CTextTheme.greyTextTheme.labelLarge,
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               const SizedBox(
                 height: 50,
               ),
               //Order Summary & Details
-              const OrderStatusDetailWidget(),
+              // const OrderStatusDetailWidget(),
             ],
           ),
         ),

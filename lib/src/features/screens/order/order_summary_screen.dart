@@ -34,13 +34,13 @@ import 'package:device_run_test/src/utilities/guest_mode.dart';
 
 class OrderSummary extends StatefulWidget {
   final LockerSite? lockerSite;
-  final LockerCompartment? compartment;
+  LockerCompartment? compartment;
   final String? selectedCompartmentSize;
   final Service? service;
   final Order? order;
   final LockerSite? collectionSite;
 
-  const OrderSummary({
+  OrderSummary({
     super.key,
     required this.lockerSite,
     required this.compartment,
@@ -73,14 +73,15 @@ class _OrderSummaryState extends State<OrderSummary> {
   }
 
   void navigateToPayment() {
-    if (widget.collectionSite != null) {
+    print('PAYMENT NAVIGATION: ${widget.compartment?.id}');
+    if (widget.collectionSite != null && widget.compartment != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => PaymentScreen(
                   order: widget.order,
                   lockerSite: widget.lockerSite,
-                  compartment: widget.compartment,
+                  compartment: widget.compartment!,
                   user: user,
                   collectionSite: widget.collectionSite,
                 )),
@@ -122,9 +123,13 @@ class _OrderSummaryState extends State<OrderSummary> {
 
     if (user != null) {
       if (widget.compartment != null) {
+        print(widget.compartment?.id);
         navigateToPayment();
       } else {
         LockerCompartment? compartment = await getAllocatedCompartment();
+        widget.compartment = compartment;
+        print('GET COMPARTMENT');
+        print(compartment?.id);
         if (compartment != null) {
           navigateToPayment();
         } else {

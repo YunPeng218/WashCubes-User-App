@@ -20,7 +20,7 @@ import 'package:device_run_test/src/features/models/user.dart';
 class PaymentScreen extends StatefulWidget {
   final Order? order;
   final LockerSite? lockerSite;
-  final LockerCompartment? compartment;
+  final LockerCompartment compartment;
   final User? user;
   final LockerSite? collectionSite;
 
@@ -56,6 +56,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initState() {
     super.initState();
     startTimer();
+    print(widget.compartment?.id);
   }
 
   void handlePaymentMethodSelection() {
@@ -100,16 +101,29 @@ class _PaymentScreenState extends State<PaymentScreen> {
       headers: {'Content-Type': 'application/json'},
     );
 
-    if (response.statusCode == 200) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OrderPage(),
-        ),
-      );
-    } else {
-      print('Response data does not contain saved order.');
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderPage(),
+      ),
+    );
+
+    // if (response.statusCode == 200) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => OrderPage(),
+    //     ),
+    //   );
+    // } else {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => OrderPage(),
+    //     ),
+    //   );
+    //   print('Response data does not contain saved order.');
+    // }
   }
 
   @override

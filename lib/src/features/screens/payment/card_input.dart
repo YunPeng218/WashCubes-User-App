@@ -41,6 +41,8 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
   String cardHolderName = '';
 
   Future<void> confirmOrder() async {
+    print('CONFIRM ORDER COMPARTMENT: ${widget.compartment?.id}');
+
     Map<String, dynamic> newOrder = {
       'orderNumber': widget.order?.orderNumber,
       'user': {

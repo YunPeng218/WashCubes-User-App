@@ -2,6 +2,7 @@
 
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
+import 'package:device_run_test/src/constants/image_strings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -30,6 +31,14 @@ class LaundryServicePicker extends StatefulWidget {
 
 class _LaundryServicePickerState extends State<LaundryServicePicker> {
   List<Service> services = [];
+
+  Map<String, String> serviceImages = {
+    'Wash & Fold': cWashAndFold,
+    'Dry Cleaning': cDryCleaning,
+    'Laundry & Iron': cLaundryAndIron,
+    'Ironing': cIroning,
+    'Handwash': cHandwash,
+  };
 
   @override
   void initState() {
@@ -172,8 +181,7 @@ class _LaundryServicePickerState extends State<LaundryServicePicker> {
                       final service = services[index];
                       return ServiceCard(
                         serviceName: service.name,
-                        iconName:
-                            'assets/images/laundry_service/${service.name.replaceAll(' ', '')}.png',
+                        iconName: serviceImages[service.name]!,
                         onTap: () {
                           handleServiceSelection(service);
                         },

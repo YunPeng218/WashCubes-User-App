@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/features/models/user.dart';
+import 'package:intl/intl.dart';
 
 // DEFINE ORDER CLASS
 class Order {
@@ -6,10 +7,11 @@ class Order {
   final String orderNumber;
   final User? user;
   final OrderLockerDetails? lockerDetails;
+  final CollectionLockerDetails? collectionSite;
   final String serviceId;
   final List<OrderItem> orderItems;
   final double estimatedPrice;
-  final String orderStatus;
+  final OrderStage? orderStage;
   final String createdAt;
   final int v;
 
@@ -18,10 +20,11 @@ class Order {
     required this.orderNumber,
     required this.user,
     required this.lockerDetails,
+    required this.collectionSite,
     required this.serviceId,
     required this.orderItems,
     required this.estimatedPrice,
-    required this.orderStatus,
+    required this.orderStage,
     required this.createdAt,
     required this.v,
   });
@@ -34,15 +37,27 @@ class Order {
       lockerDetails: json['locker'] != null
           ? OrderLockerDetails.fromJson(json['locker'])
           : null,
+      collectionSite: json['collectionSite'] != null
+          ? CollectionLockerDetails.fromJson(json['collectionSite'])
+          : null,
       serviceId: json['service'] ?? '',
       orderItems: (json['orderItems'] as List<dynamic>)
           .map((item) => OrderItem.fromJson(item))
           .toList(),
       estimatedPrice: json['estimatedPrice'].toDouble() ?? 0.0,
-      orderStatus: json['orderStatus'] ?? '',
+      orderStage: json['orderStage'] != null
+          ? OrderStage.fromJson(json['orderStage'])
+          : null, //
       createdAt: json['createdAt'] ?? '',
       v: json['__v'] ?? 0,
     ));
+  }
+
+  String getFormattedDateTime(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    String formattedDate = DateFormat.yMMMd().format(dateTime);
+    String formattedTime = DateFormat.jm().format(dateTime);
+    return '${formattedDate} / ${formattedTime}';
   }
 }
 
@@ -63,6 +78,16 @@ class OrderLockerDetails {
       compartmentId: json['compartmentId'] ?? '',
       compartmentNumber: json['compartmentNumber'] ?? '',
     ));
+  }
+}
+
+class CollectionLockerDetails {
+  final String lockerSiteId;
+
+  CollectionLockerDetails({required this.lockerSiteId});
+
+  factory CollectionLockerDetails.fromJson(Map<String, dynamic> json) {
+    return (CollectionLockerDetails(lockerSiteId: json['lockerSiteId'] ?? ''));
   }
 }
 
@@ -91,5 +116,124 @@ class OrderItem {
       quantity: json['quantity'] ?? 0,
       cumPrice: json['cumPrice'].toDouble() ?? 0.0,
     ));
+  }
+}
+
+class OrderStage {
+  OrderStatus pendingDropOff;
+  OrderStatus collectedByRider;
+  OrderStatus inProgress;
+  OrderStatus processingComplete;
+  OrderStatus outForDelivery;
+  OrderStatus readyForCollection;
+  OrderStatus completed;
+
+  OrderStage({
+    required this.pendingDropOff,
+    required this.collectedByRider,
+    required this.inProgress,
+    required this.processingComplete,
+    required this.outForDelivery,
+    required this.readyForCollection,
+    required this.completed,
+  });
+
+  factory OrderStage.fromJson(Map<String, dynamic> json) {
+    return OrderStage(
+      pendingDropOff: OrderStatus.fromJson(json['pendingDropOff']),
+      collectedByRider: OrderStatus.fromJson(json['collectedByRider']),
+      inProgress: OrderStatus.fromJson(json['inProgress']),
+      processingComplete: OrderStatus.fromJson(json['processingComplete']),
+      outForDelivery: OrderStatus.fromJson(json['outForDelivery']),
+      readyForCollection: OrderStatus.fromJson(json['readyForCollection']),
+      completed: OrderStatus.fromJson(json['completed']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'pendingDropOff': pendingDropOff.toJson(),
+      'collectedByRider': collectedByRider.toJson(),
+      'inProgress': inProgress.toJson(),
+      'processingComplete': processingComplete.toJson(),
+      'outForDelivery': outForDelivery.toJson(),
+      'readyForCollection': readyForCollection.toJson(),
+      'completed': completed.toJson(),
+    };
+  }
+
+  OrderStatus operator [](String key) {
+    switch (key) {
+      case 'pendingDropOff':
+        return pendingDropOff;
+      case 'collectedByRider':
+        return collectedByRider;
+      case 'inProgress':
+        return inProgress;
+      case 'processingComplete':
+        return processingComplete;
+      case 'outForDelivery':
+        return outForDelivery;
+      case 'readyForCollection':
+        return readyForCollection;
+      case 'completed':
+        return completed;
+
+      default:
+        throw ArgumentError('Invalid status key: $key');
+    }
+  }
+
+  String getMostRecentStatus() {
+    if (completed.status) {
+      return 'Completed';
+    }
+    if (readyForCollection.status) {
+      return 'Ready for Collection';
+    }
+    if (outForDelivery.status) {
+      return 'Out for Delivery';
+    }
+    if (processingComplete.status) {
+      return 'Processing Complete';
+    }
+    if (inProgress.status) {
+      return 'In Progress';
+    }
+    if (collectedByRider.status) {
+      return 'Collected by Rider';
+    }
+    if (pendingDropOff.status) {
+      return 'Pending Drop Off';
+    }
+
+    // Default status if none are true
+    return 'Unknown';
+  }
+}
+
+class OrderStatus {
+  bool status;
+  DateTime? dateUpdated;
+
+  OrderStatus({
+    required this.status,
+    this.dateUpdated,
+  });
+
+  factory OrderStatus.fromJson(Map<String, dynamic> json) {
+    return OrderStatus(
+      status: json['status'] ?? false,
+      dateUpdated: json['dateUpdated'] != null
+          ? DateTime.parse(json['dateUpdated'])
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status,
+      'dateUpdated': dateUpdated?.toIso8601String(),
+    };
   }
 }

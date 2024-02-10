@@ -29,6 +29,12 @@ class BankSelectionScreen extends StatefulWidget {
 }
 
 class _BankSelectionScreenState extends State<BankSelectionScreen> {
+  @override
+  void initState() {
+    super.initState();
+    print(widget.compartment?.id);
+  }
+
   final List<Bank> banks = [
     Bank(name: 'Maybank', logoPath: cMaybank),
     Bank(name: 'CIMB', logoPath: cCIMB),
