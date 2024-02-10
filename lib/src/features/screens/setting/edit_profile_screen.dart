@@ -138,6 +138,12 @@ class _ProfileHeaderState extends State <ProfileHeader> {
         setState(() {
           widget.user = UserProfile.fromJson(userData);
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Profile picture updated successfully!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
       }
     }
   }
@@ -272,6 +278,12 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
           onEdit: (newValue) {
             updateUserDetails(title, newValue);
             pageState?.loadUserInfo();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Profile updated successfully!'),
+                duration: Duration(seconds: 2),
+              ),
+            );
           },
         );
       },
