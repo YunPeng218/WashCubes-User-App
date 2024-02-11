@@ -9,7 +9,6 @@ import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/screens/order/laundry_service_picker_screen.dart';
 import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
-import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
 
 // UTILS
 import 'package:device_run_test/src/utilities/guest_mode.dart';
@@ -17,7 +16,6 @@ import 'package:device_run_test/src/utilities/user_helper.dart';
 
 // CONSTANTS
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/constants/colors.dart';
 
 class LockerCompartmentSelect extends StatefulWidget {
   final LockerSite? selectedLockerSite;

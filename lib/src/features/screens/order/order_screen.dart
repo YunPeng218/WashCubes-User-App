@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'create_order_camera.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,16 +34,19 @@ class OrderPage extends StatefulWidget {
   OrderPageState createState() => OrderPageState();
 }
 
-class OrderPageState extends State<OrderPage> {
+class OrderPageState extends State<OrderPage>
+    with SingleTickerProviderStateMixin {
   var userHelper = UserHelper();
   bool isSignedIn = false;
   User? user;
   List<Order> userOrders = [];
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     init();
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   void init() async {
@@ -61,10 +66,6 @@ class OrderPageState extends State<OrderPage> {
 
       var orderHelper = OrderHelper();
       List<Order>? orders = await orderHelper.getUserOrders(user!.id);
-
-      setState(() {
-        userOrders = orders ?? [];
-      });
 
       if (orders != null) {
         setState(() {
@@ -224,21 +225,25 @@ class OrderPageState extends State<OrderPage> {
             const SizedBox(height: 30.0),
             Text('Your Orders', style: CTextTheme.blackTextTheme.displayMedium),
             const SizedBox(height: 20.0),
+            TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(text: 'Active Orders'),
+                Tab(text: 'Order Error'),
+                Tab(text: 'Completed'),
+              ],
+              indicatorColor:
+                  AppColors.cBlueColor3, // Set the indicator color to blue
+            ),
+            const SizedBox(height: 15.0),
             isSignedIn
                 ? Expanded(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: userOrders.length,
-                        itemBuilder: (context, index) {
-                          Order order = userOrders[index];
-                          return OrderCard(
-                            orderNumber: order.orderNumber,
-                            date: order.createdAt,
-                            location: order.lockerDetails?.lockerSiteId,
-                            status: order.orderStage!.getMostRecentStatus(),
-                            order: order,
-                          );
-                        }))
+                    child: TabBarView(controller: _tabController, children: [
+                      buildActiveOrderList(),
+                      buildOrderErrorList(),
+                      buildCompletedOrderList(),
+                    ]),
+                  )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -284,47 +289,161 @@ class OrderPageState extends State<OrderPage> {
       ),
     );
   }
+
+  Widget buildActiveOrderList() {
+    // Filter the orders based on the selected orderStage
+    List<Order> filteredOrders = userOrders
+        .where((order) =>
+            order.orderStage?.completed.status == false &&
+            order.orderStage?.orderError.status == false)
+        .toList();
+
+    print('YO');
+    print(filteredOrders);
+
+    if (filteredOrders.isEmpty) {
+      return Column(
+        children: [
+          const SizedBox(height: 50.0),
+          Text(
+            'No Active Orders',
+            style: CTextTheme.greyTextTheme.headlineLarge,
+          ),
+        ],
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: filteredOrders.length,
+      itemBuilder: (context, index) {
+        Order order = filteredOrders[index];
+        return OrderCard(order: order);
+      },
+    );
+  }
+
+  Widget buildOrderErrorList() {
+    // Filter the orders based on the selected orderStage
+    List<Order> filteredOrders = userOrders
+        .where((order) =>
+            order.orderStage?.completed.status == false &&
+            order.orderStage?.orderError.status == true)
+        .toList();
+
+    if (filteredOrders.isEmpty) {
+      return Column(
+        children: [
+          const SizedBox(height: 50.0),
+          Text(
+            'No Order Errors',
+            style: CTextTheme.greyTextTheme.headlineLarge,
+          ),
+        ],
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: filteredOrders.length,
+      itemBuilder: (context, index) {
+        Order order = filteredOrders[index];
+        return OrderCard(order: order);
+      },
+    );
+  }
+
+  Widget buildCompletedOrderList() {
+    // Filter the orders based on the selected orderStage
+    List<Order> filteredOrders = userOrders
+        .where(
+            (order) => order.orderStage?.getMostRecentStatus() == 'Completed')
+        .toList();
+
+    if (filteredOrders.isEmpty) {
+      return Column(
+        children: [
+          const SizedBox(height: 50.0),
+          Text(
+            'No Completed Orders',
+            style: CTextTheme.greyTextTheme.headlineLarge,
+          ),
+        ],
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: filteredOrders.length,
+      itemBuilder: (context, index) {
+        Order order = filteredOrders[index];
+        return OrderCard(order: order);
+      },
+    );
+  }
 }
 
 //Order ListView Class
 class OrderCard extends StatelessWidget {
-  final String orderNumber;
-  final String date;
-  final String? location;
-  final String status;
   final Order order;
 
-  const OrderCard({
+  OrderCard({
     Key? key,
-    required this.orderNumber,
-    required this.date,
-    required this.location,
-    required this.status,
     required this.order,
   }) : super(key: key);
 
+  Map<String, String> statusIcons = {
+    'Pending Drop Off': cDropOffIcon,
+    'Collected By Rider': cCollectedOperatorIcon,
+    'In Progress': cInProgressIcon,
+    'Processing Complete': cPrepCompletionIcon,
+    'Out For Delivery': cDeliveryIcon,
+    'Ready For Collection': cCollectionIcon,
+    'Completed': cCompleteIcon,
+    'Order Error': cOrderErrorIcon,
+  };
+
   @override
   Widget build(BuildContext context) {
+    bool isOrderError = order.orderStage?.orderError.status ?? false;
+    bool isOrderComplete = order.orderStage?.completed.status ?? false;
+
+    Color cardColor = isOrderError
+        ? Colors.red[50]!
+        : isOrderComplete
+            ? Colors.green[50]!
+            : Colors.blue[50]!;
+
     return Card(
-      margin: const EdgeInsets.all(8.0),
-      color:
-          status == 'Order Error' ? Colors.red.shade100 : Colors.blue.shade100,
+      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+      color: cardColor,
       child: ListTile(
-        title: Text(date, style: CTextTheme.greyTextTheme.labelLarge),
+        leading: isOrderError
+            ? Image.asset(
+                statusIcons['Order Error'] ?? cAppLogo,
+                width: 70,
+                height: 70,
+              )
+            : Image.asset(
+                statusIcons[order.orderStage?.getMostRecentStatus()] ??
+                    cAppLogo,
+                width: 70,
+                height: 70,
+              ),
+        title: Text(order.getFormattedDateTime(order.createdAt),
+            style: CTextTheme.greyTextTheme.labelLarge),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
+            const SizedBox(height: 5.0),
             Text(
-              'Order No: $orderNumber',
-              style: CTextTheme.blackTextTheme.headlineLarge,
+              'Order No: ${order.orderNumber}',
+              style: CTextTheme.blackTextTheme.headlineMedium,
             ),
+            const SizedBox(height: 5.0),
             Text(
-              'Location: $location',
-              style: CTextTheme.greyTextTheme.labelLarge,
-            ),
-            Text(
-              'Status: $status',
-              style: CTextTheme.greyTextTheme.labelLarge,
+              'Status: ${order.orderStage?.getMostRecentStatus() ?? 'Loading...'}',
+              style: CTextTheme.blackTextTheme.headlineSmall,
             ),
           ],
         ),

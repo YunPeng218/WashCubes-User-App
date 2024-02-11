@@ -121,7 +121,7 @@ class _LaundryServicePickerState extends State<LaundryServicePicker> {
             context,
             MaterialPageRoute(
                 builder: (context) => LockerCompartmentSelect(
-                      selectedLockerSite: widget?.lockerSite,
+                      selectedLockerSite: widget.lockerSite,
                     )),
           );
         } else {
@@ -136,7 +136,7 @@ class _LaundryServicePickerState extends State<LaundryServicePicker> {
         context,
         MaterialPageRoute(
             builder: (context) => LockerCompartmentSelect(
-                  selectedLockerSite: widget?.lockerSite,
+                  selectedLockerSite: widget.lockerSite,
                 )),
       );
     }

@@ -1,5 +1,3 @@
-import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_summary.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +24,20 @@ class OrderStatusDetailWidget extends StatefulWidget {
 }
 
 class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
+  void viewOrderSummary() {
+    print(widget.service);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => OrderStatusSummaryScreen(
+                order: widget.order,
+                service: widget.service,
+                dropOffSite: widget.lockerSite,
+                collectionSite: widget.collectionSite,
+              )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return //Order Summary & Details
@@ -36,7 +48,7 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Order Information',
-            style: CTextTheme.blackTextTheme.headlineLarge,
+            style: CTextTheme.blueTextTheme.headlineLarge,
           ),
         ),
         //Order Creation Detail Row
@@ -67,7 +79,7 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               Text(
-                widget.collectionSite?.name ?? 'Default',
+                widget.collectionSite?.name ?? 'Loading...',
                 style: CTextTheme.blackTextTheme.headlineMedium,
               )
             ],
@@ -80,7 +92,7 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: viewOrderSummary,
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue[50]!)),

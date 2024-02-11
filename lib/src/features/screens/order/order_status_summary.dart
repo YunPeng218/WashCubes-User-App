@@ -1,27 +1,53 @@
 import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
-import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/features/screens/order/order_status_detail_widget.dart';
+import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:device_run_test/src/features/models/order.dart';
+import 'package:device_run_test/src/features/models/locker.dart';
+import 'package:device_run_test/src/features/models/service.dart';
 
 class OrderStatusSummaryScreen extends StatefulWidget {
-  const OrderStatusSummaryScreen({super.key});
+  final Order order;
+  final Service? service;
+  final LockerSite? dropOffSite;
+  final LockerSite? collectionSite;
+  const OrderStatusSummaryScreen({
+    super.key,
+    required this.order,
+    required this.service,
+    required this.dropOffSite,
+    required this.collectionSite,
+  });
 
   @override
   State<OrderStatusSummaryScreen> createState() => _OrderSummaryState();
 }
 
 class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
+  void handleBackButtonPress() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+          builder: (context) => OrderStatusScreen(
+                order: widget.order,
+              )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
     return Scaffold(
-      //Top Page Bar
       appBar: AppBar(
-        //Order Number
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            handleBackButtonPress();
+          },
+        ),
         title: Text(
-          'Order #000001',
+          'Order #${widget.order.orderNumber}',
           style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,
@@ -45,36 +71,171 @@ class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
           child: Column(
             children: [
               //Order Status Progress Icon Column
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-              //   child: Row(
-              //     children: [
-              //       Image.asset(cAllGarments, scale: 1.2),
-              //       const SizedBox(width: 20),
-              //       SizedBox(
-              //         width: size.width * 0.6,
-              //         child: Column(
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           children: [
-              //             Text(
-              //               'All Garments',
-              //               style: CTextTheme.blackTextTheme.headlineMedium,
-              //             ),
-              //             Text(
-              //               '5 KG',
-              //               style: CTextTheme.greyTextTheme.labelLarge,
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              const SizedBox(
-                height: 50,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.service?.name.toUpperCase() ?? 'Loading...',
+                    style: CTextTheme.blueTextTheme.headlineLarge,
+                  ),
+                ],
               ),
-              //Order Summary & Details
-              // const OrderStatusDetailWidget(),
+              const SizedBox(height: 30.0),
+              Container(
+                height: 300,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount:
+                      widget.order.orderItems.length, // Use null-aware operator
+                  itemBuilder: ((context, index) {
+                    OrderItem? item = widget.order.orderItems[index];
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: Colors.blue[50],
+                              ),
+                              child: Image.asset(
+                                'assets/images/select_item/${item.name.replaceAll(RegExp(r'[ /]'), '')}.png', // Use the image asset path from the map
+                                width: 80, // Set the desired width
+                                height: 80, // Set the desired height
+                              ),
+                            ),
+                            const SizedBox(width: 25.0),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.name,
+                                    style:
+                                        CTextTheme.blackTextTheme.headlineLarge,
+                                  ),
+                                  Text(
+                                    '${item.quantity} ${item.unit.toUpperCase()}',
+                                    style:
+                                        CTextTheme.greyTextTheme.headlineMedium,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'RM ${item.cumPrice.toStringAsFixed(2)}',
+                                        style: CTextTheme
+                                            .blackTextTheme.headlineMedium,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15.0),
+                      ],
+                    );
+                  }),
+                ),
+              ),
+              const Divider(),
+              Column(
+                children: [
+                  const SizedBox(height: 10.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'LOCKER INFORMATION',
+                        style: CTextTheme.blueTextTheme.headlineLarge,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Drop Off:',
+                            style: CTextTheme.blackTextTheme.headlineMedium,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        widget.dropOffSite?.name ?? 'Loading...',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Compartment:',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      ),
+                      Text(
+                        widget.order.lockerDetails?.compartmentNumber ?? 'N/A',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Collection:',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      ),
+                      Text(
+                        widget.collectionSite?.name ?? 'Loading...',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15.0),
+                ],
+              ),
+              const Divider(),
+              const SizedBox(height: 15.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total Est. Price:',
+                    style: CTextTheme.blueTextTheme.displayMedium,
+                  ),
+                  Text(
+                    'RM ${widget.order.estimatedPrice.toStringAsFixed(2)}',
+                    style: CTextTheme.blueTextTheme.displayMedium,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: handleBackButtonPress,
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.blue[50]!)),
+                      child: Text(
+                        'Back',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15.0),
             ],
           ),
         ),

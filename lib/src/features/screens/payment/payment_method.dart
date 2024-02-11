@@ -56,7 +56,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   void initState() {
     super.initState();
     startTimer();
-    print(widget.compartment?.id);
+    print(widget.compartment.id);
   }
 
   void handlePaymentMethodSelection() {
@@ -92,10 +92,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> releaseAssignedCompartment() async {
     Map<String, dynamic> releaseComaprtment = {
       'lockerSiteId': widget.lockerSite?.id,
-      'compartmentId': widget.compartment?.id,
+      'compartmentId': widget.compartment.id,
     };
 
-    final response = await http.post(
+    await http.post(
       Uri.parse(url + 'locker/release-compartment'),
       body: json.encode(releaseComaprtment),
       headers: {'Content-Type': 'application/json'},
@@ -107,23 +107,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         builder: (context) => OrderPage(),
       ),
     );
-
-    // if (response.statusCode == 200) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => OrderPage(),
-    //     ),
-    //   );
-    // } else {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => OrderPage(),
-    //     ),
-    //   );
-    //   print('Response data does not contain saved order.');
-    // }
   }
 
   @override

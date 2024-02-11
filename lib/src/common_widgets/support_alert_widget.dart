@@ -14,12 +14,13 @@ class SupportAlertWidget extends StatelessWidget {
         //Keep size to necessary height
         child: Column(
           children: [
+            const SizedBox(height: 5.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 //PopUp Title
                 Text(
-                  'Select an action',
+                  'Select An Action',
                   textAlign: TextAlign.center,
                   style: CTextTheme.blackTextTheme.headlineMedium,
                 ),
@@ -32,6 +33,7 @@ class SupportAlertWidget extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 5.0),
             Column(
               children: [
                 //Trimi ChatBot Redirect Button
@@ -55,6 +57,7 @@ class SupportAlertWidget extends StatelessWidget {
                     )),
                   ],
                 ),
+                const SizedBox(height: 5.0),
                 //Customer Hotline Redirect Button
                 Row(
                   children: [
@@ -72,6 +75,7 @@ class SupportAlertWidget extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 10.0),
           ],
         ),
       ),

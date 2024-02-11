@@ -4,15 +4,18 @@ import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/nearbylocation/NearbyLocationPage.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
+import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
 import 'package:device_run_test/src/utilities/guest_mode.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:device_run_test/src/utilities/user_helper.dart';
+import 'package:device_run_test/src/utilities/order_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:device_run_test/src/features/models/order.dart';
 
 class HomePage extends StatefulWidget {
   final token;
@@ -25,23 +28,42 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late String userID;
   UserProfile? user;
-  String profilePic = 'https://res.cloudinary.com/ddweldfmx/image/upload/v1707480915/profilePic/zxltbifbulr4m45lbsqq.png';
+  String profilePic =
+      'https://res.cloudinary.com/ddweldfmx/image/upload/v1707480915/profilePic/zxltbifbulr4m45lbsqq.png';
+  var userHelper = UserHelper();
+  List<Order> userOrders = [];
+  int activeOrdersCount = 0;
+  int orderErrorsCount = 0;
+  int completedOrdersCount = 0;
+
+  Map<String, String> statusIcons = {
+    'Pending Drop Off': cDropOffIcon,
+    'Collected By Rider': cCollectedOperatorIcon,
+    'In Progress': cInProgressIcon,
+    'Processing Complete': cPrepCompletionIcon,
+    'Out For Delivery': cDeliveryIcon,
+    'Ready For Collection': cCollectionIcon,
+    'Completed': cCompleteIcon,
+    'Order Error': cOrderErrorIcon,
+  };
 
   @override
   void initState() {
     super.initState();
     init();
+    loadUserOrders();
   }
 
   void init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? 'No token';
-    if (token != 'No token') loadUserInfo();
+    if (token != 'No token') {
+      loadUserInfo();
+    }
   }
 
   Future<void> loadUserInfo() async {
     try {
-      var userHelper = UserHelper();
       UserProfile? foundUser = await userHelper.getUserDetails();
       if (mounted) {
         setState(() {
@@ -51,6 +73,49 @@ class _HomePageState extends State<HomePage> {
       }
     } catch (error) {
       print('Failed to load user: $error');
+    }
+  }
+
+  Future<void> loadUserOrders() async {
+    User? user = await userHelper.getUser();
+
+    if (user != null) {
+      var orderHelper = OrderHelper();
+      List<Order>? orders = await orderHelper.getUserOrders(user.id);
+
+      setState(() {
+        userOrders = orders ?? [];
+      });
+
+      if (orders != null) {
+        setState(() {
+          userOrders = orders;
+
+          print(userOrders);
+
+          activeOrdersCount = userOrders
+              .where((order) =>
+                  order.orderStage?.completed.status != true &&
+                  order.orderStage?.orderError.status != true)
+              .length;
+
+          orderErrorsCount = userOrders
+              .where((order) =>
+                  order.orderStage?.completed.status != true &&
+                  order.orderStage?.orderError.status == true)
+              .length;
+
+          completedOrdersCount = userOrders
+              .where((order) =>
+                  order.orderStage?.completed.status == true &&
+                  order.orderStage?.orderError.status != true)
+              .length;
+        });
+      } else {
+        print('Failed to load orders.');
+      }
+    } else {
+      print('User is null. Unable to load orders.');
     }
   }
 
@@ -81,8 +146,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => AccountPage()),
+                        MaterialPageRoute(builder: (context) => AccountPage()),
                       );
                     },
                     child: null,
@@ -176,160 +240,152 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 15),
                     // Ongoing Order Box
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.cGreyColor2.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          // Left side (6 flex)
-                          Expanded(
-                            flex: 6,
-                            child: guestProvider.guestMode
-                                ? Column(
-                                    children: <Widget>[
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'Sign In to View Your Orders',
-                                        style: CTextTheme.blackTextTheme.headlineSmall,
-                                        textAlign: TextAlign.end,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const WelcomeScreen()),
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          foregroundColor:
-                                              AppColors.cBlackColor, // Text color
-                                          backgroundColor:
-                                              AppColors.cWhiteColor, // Button Fill color
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            side: const BorderSide(
-                                                color: AppColors.cGreyColor1),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          'Sign In',
-                                          style: CTextTheme.blackTextTheme.labelMedium,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        '#906912',
-                                        style: TextStyle(
-                                          color: Colors.grey.shade600,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        'Laundry In Progress',
-                                        style: CTextTheme.blackTextTheme.displaySmall,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '“Leave it to Trimi - cleaning magic in progress!”',
-                                        style: CTextTheme.blackTextTheme.headlineSmall,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      //Order Progress Bar
-                                      Stack(
-                                        children: <Widget>[
-                                          //Entire Order Progress Bar
-                                          Container(
-                                            height: 10,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.cWhiteColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                          //Current Order Progress Bar
-                                          Container(
-                                            height: 10,
-                                            width: 200 *
-                                                0.7, // Assuming the container is 200 wide, 70% filled
-                                            decoration: BoxDecoration(
-                                              color: AppColors.cPrimaryColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            right: 10,
-                                            top: -2,
-                                            child: Text(
-                                              '70%',
-                                              style: CTextTheme.blackTextTheme.labelMedium,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          // Implement the button action
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          foregroundColor:
-                                              AppColors.cBlackColor, // Text color
-                                          backgroundColor:
-                                              AppColors.cWhiteColor, // Button Fill color
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            side: const BorderSide(
-                                                color: AppColors.cGreyColor1),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          'Check',
-                                          style: CTextTheme.blackTextTheme.labelMedium,
-                                        ),
-                                      ),
-                                    ],
+                    // Container(
+                    // padding: const EdgeInsets.all(2),
+                    // decoration: BoxDecoration(
+                    //   color: Colors.white,
+                    //   borderRadius: BorderRadius.circular(20),
+                    //   boxShadow: [
+                    //     BoxShadow(
+                    //       color: AppColors.cGreyColor2.withOpacity(0.3),
+                    //       spreadRadius: 1,
+                    //       blurRadius: 6,
+                    //       offset: const Offset(0, 3),
+                    //     ),
+                    //   ],
+                    // ),
+                    // child:
+                    // Row(
+                    //   children: <Widget>[
+                    //     Expanded(
+                    //       flex: 6,
+                    //       child:
+                    guestProvider.guestMode
+                        ? Column(
+                            children: <Widget>[
+                              const SizedBox(height: 10),
+                              Text(
+                                'Sign In to View Your Orders',
+                                style: CTextTheme.blackTextTheme.headlineSmall,
+                                textAlign: TextAlign.end,
+                              ),
+                              const SizedBox(height: 10),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const WelcomeScreen()),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor:
+                                      AppColors.cBlackColor, // Text color
+                                  backgroundColor: AppColors
+                                      .cWhiteColor, // Button Fill color
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    side: const BorderSide(
+                                        color: AppColors.cGreyColor1),
                                   ),
+                                ),
+                                child: Text(
+                                  'Sign In',
+                                  style: CTextTheme.blackTextTheme.labelMedium,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              Card(
+                                // margin: const EdgeInsets.symmetric(
+                                //     vertical: 5.0, horizontal: 15.0),
+                                color: Colors.blue[50],
+                                child: ListTile(
+                                  leading: Image.asset(
+                                    cAppLogo,
+                                    width: 60,
+                                    height: 60,
+                                  ),
+                                  title: Text(activeOrdersCount.toString(),
+                                      style: CTextTheme
+                                          .blackTextTheme.headlineLarge),
+                                  subtitle: Text('Active Orders',
+                                      style: CTextTheme
+                                          .greyTextTheme.headlineMedium),
+                                  trailing: const Icon(
+                                      Icons.arrow_forward_ios_rounded),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => OrderPage()),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Card(
+                                // margin: const EdgeInsets.symmetric(
+                                //     vertical: 5.0, horizontal: 15.0),
+                                color: Colors.green[50],
+                                child: ListTile(
+                                  leading: Image.asset(
+                                    cCompleteIcon,
+                                    width: 60,
+                                    height: 60,
+                                  ),
+                                  title: Text(completedOrdersCount.toString(),
+                                      style: CTextTheme
+                                          .blackTextTheme.headlineLarge),
+                                  subtitle: Text('Completed Orders',
+                                      style: CTextTheme
+                                          .greyTextTheme.headlineMedium),
+                                  trailing: const Icon(
+                                      Icons.arrow_forward_ios_rounded),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => OrderPage()),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Card(
+                                // margin: const EdgeInsets.symmetric(
+                                //     vertical: 5.0, horizontal: 15.0),
+                                color: Colors.red[50],
+                                child: ListTile(
+                                  leading: Image.asset(
+                                    cOrderErrorIcon,
+                                    width: 60,
+                                    height: 60,
+                                  ),
+                                  title: Text(orderErrorsCount.toString(),
+                                      style: CTextTheme
+                                          .blackTextTheme.headlineLarge),
+                                  subtitle: Text('Order Errors',
+                                      style: CTextTheme
+                                          .greyTextTheme.headlineMedium),
+                                  trailing: const Icon(
+                                      Icons.arrow_forward_ios_rounded),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => OrderPage()),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                          // Right side (4 flex)
-                          // Expanded(
-                          //   flex: 4,
-                          //   child: Container(
-                          //     // Placeholder for the image
-                          //     decoration: BoxDecoration(
-                          //       borderRadius: BorderRadius.circular(12),
-                          //       image: const DecorationImage(
-                          //         image: AssetImage('assets/images/hp_order_1.png'),
-                          //         fit: BoxFit.cover,
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-                    )
+                    //   ),
+                    // ],
+                    //),
+                    // )
                   ],
                 ),
               ),

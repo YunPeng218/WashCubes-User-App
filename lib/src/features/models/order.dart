@@ -127,6 +127,7 @@ class OrderStage {
   OrderStatus outForDelivery;
   OrderStatus readyForCollection;
   OrderStatus completed;
+  OrderStatus orderError;
 
   OrderStage({
     required this.pendingDropOff,
@@ -136,6 +137,7 @@ class OrderStage {
     required this.outForDelivery,
     required this.readyForCollection,
     required this.completed,
+    required this.orderError,
   });
 
   factory OrderStage.fromJson(Map<String, dynamic> json) {
@@ -147,6 +149,7 @@ class OrderStage {
       outForDelivery: OrderStatus.fromJson(json['outForDelivery']),
       readyForCollection: OrderStatus.fromJson(json['readyForCollection']),
       completed: OrderStatus.fromJson(json['completed']),
+      orderError: OrderStatus.fromJson(json['orderError']),
     );
   }
 
@@ -159,6 +162,7 @@ class OrderStage {
       'outForDelivery': outForDelivery.toJson(),
       'readyForCollection': readyForCollection.toJson(),
       'completed': completed.toJson(),
+      'orderError': orderError.toJson(),
     };
   }
 
@@ -178,6 +182,8 @@ class OrderStage {
         return readyForCollection;
       case 'completed':
         return completed;
+      case 'orderError':
+        return orderError;
 
       default:
         throw ArgumentError('Invalid status key: $key');

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, must_be_immutable
 
 import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
@@ -20,7 +20,6 @@ import '../order/collection_site_select.dart';
 
 // ASSETS
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
 
 // MODELS
@@ -346,7 +345,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${orderItems![index].name}',
+                                '${orderItems[index].name}',
                                 style: CTextTheme.blackTextTheme.headlineLarge,
                               ),
                               Text(

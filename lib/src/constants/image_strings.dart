@@ -45,6 +45,8 @@ const String cCollectionIcon =
     "assets/images/order_status_image/collection_ready_icon.png";
 const String cCompleteIcon =
     "assets/images/order_status_image/completed_icon.png";
+const String cOrderErrorIcon =
+    "assets/images/order_status_image/order_error_icon.png";
 
 // Order Status Greyed Out Images
 const String cReservedIconGrey =

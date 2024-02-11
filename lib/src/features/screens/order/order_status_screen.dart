@@ -1,5 +1,4 @@
 import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
-import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_detail_widget.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_widget.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
@@ -27,7 +26,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
   void initState() {
     super.initState();
     fetchOrderLockerInfo();
-    //fetchOrderServiceInfo();
+    fetchOrderServiceInfo();
   }
 
   Future<void> fetchOrderLockerInfo() async {
@@ -95,7 +94,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
       appBar: AppBar(
         //Order Number
         title: Text(
-          'Order: ${widget.order.orderNumber}',
+          'Order #${widget.order.orderNumber}',
           style: CTextTheme.blackTextTheme.displaySmall,
         ),
         centerTitle: true,

@@ -125,20 +125,22 @@ class OrderStatusWidgetState extends State<OrderStatusWidget> {
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Text(
-                                  //   // Use the dateUpdated from the OrderStage model
-                                  //   widget.order.orderStage![statusKey]
-                                  //               .dateUpdated !=
-                                  //           null
-                                  //       ? widget.order.getFormattedDateTime(
-                                  //           widget.order.orderStage![statusKey]
-                                  //               .dateUpdated
-                                  //               .toString())
-                                  //       : 'N/A',
-                                  //   style: isStatusTrue
-                                  //       ? CTextTheme.blackTextTheme.labelLarge
-                                  //       : CTextTheme.greyTextTheme.labelLarge,
-                                  // ),
+                                  Text(
+                                    // Use the dateUpdated from the OrderStage model
+                                    widget.order.orderStage![statusKey]
+                                                .dateUpdated !=
+                                            null
+                                        ? widget.order.getFormattedDateTime(
+                                            widget.order.orderStage![statusKey]
+                                                .dateUpdated
+                                                .toString())
+                                        : 'N/A',
+                                    style: isStatusTrue
+                                        ? CTextTheme
+                                            .blackTextTheme.headlineSmall
+                                        : CTextTheme
+                                            .greyTextTheme.headlineSmall,
+                                  ),
                                   Text(
                                     statusIcons[index].title,
                                     style:
@@ -160,8 +162,10 @@ class OrderStatusWidgetState extends State<OrderStatusWidget> {
                                   Text(
                                     'N/A',
                                     style: isStatusTrue
-                                        ? CTextTheme.blackTextTheme.labelLarge
-                                        : CTextTheme.greyTextTheme.labelLarge,
+                                        ? CTextTheme
+                                            .blackTextTheme.headlineSmall
+                                        : CTextTheme
+                                            .greyTextTheme.headlineSmall,
                                   ),
                                   Text(
                                     statusIcons[index].title,
