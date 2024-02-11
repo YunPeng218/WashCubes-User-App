@@ -268,7 +268,7 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
     }
   }
 
-  void _showEditDialog(BuildContext context, String title, String currentValue) {
+  void showEditDialog(BuildContext context, String title, String currentValue) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -315,7 +315,7 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
               IconButton(
                 icon: const Icon(Icons.edit_outlined, color: AppColors.cGreyColor2),
                 onPressed: () {
-                  _showEditDialog(context, widget.title, widget.value);
+                  showEditDialog(context, widget.title, widget.value);
                 },
               ),
             ],

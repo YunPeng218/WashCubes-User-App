@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:device_run_test/src/features/screens/onboarding/onboarding_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:device_run_test/config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:local_auth/local_auth.dart';
 
 // SCREENS
 import 'package:device_run_test/src/features/screens/biometricSetup/biometric_setup_screen.dart';
@@ -46,6 +48,39 @@ class _OTPPageState extends State<OTPVerifyPage> {
 
   void resendOTP() async {
     await http.post(Uri.parse(otpverification));
+  }
+
+  Future<void> checkBiometrics(BuildContext context) async {
+    final LocalAuthentication auth = LocalAuthentication();
+    try {
+      final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+      if (canAuthenticateWithBiometrics) {
+        if (canAuthenticateWithBiometrics && await auth.isDeviceSupported()) {
+          // Biometric authentication is available
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const BiometricSetupPage(),
+            ),
+            (Route<dynamic> route) => false);
+        } else {
+          // No biometrics available on the device
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const OnboardingScreen(),
+            ),
+            (Route<dynamic> route) => false);
+        }
+      } else {
+        // Biometrics cannot be checked on the device
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const OnboardingScreen(),
+          ),
+          (Route<dynamic> route) => false);
+      }
+    } on PlatformException catch (e) {
+      print('Error: ${e.message}');
+    }
   }
 
   void otpValidation() async {
@@ -98,11 +133,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
           .setGuestMode(false);
       var myToken = jsonResponse['token'];
       prefs.setString('token', myToken);
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const BiometricSetupPage(),
-          ),
-          (Route<dynamic> route) => false);
+      checkBiometrics(context);
     } else if (jsonResponse['status'] == 'wrongOTP') {
       showDialog(
         context: context,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/models/user.dart';
@@ -12,14 +14,15 @@ import 'package:device_run_test/src/utilities/user_helper.dart';
 import 'package:device_run_test/src/utilities/order_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/constants/colors.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 
 class HomePage extends StatefulWidget {
-  final token;
-  const HomePage({Key? key, this.token}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -59,6 +62,29 @@ class _HomePageState extends State<HomePage> {
     String token = prefs.getString('token') ?? 'No token';
     if (token != 'No token') {
       loadUserInfo();
+    }
+    String isBiometricsEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
+    String isAuthenticated = prefs.getString('isAuthenticated') ?? 'false';
+    if (isBiometricsEnabled == 'true' && isAuthenticated == 'false') {
+      showBiometricPrompt(context);
+    }
+  }
+
+  // Function to show biometric prompt
+  Future<void> showBiometricPrompt(BuildContext context) async {
+    final localAuth = LocalAuthentication();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      bool isAuthenticated = await localAuth.authenticate(
+        localizedReason: 'Authenticate to access i3Cubes.',
+      );
+      if (isAuthenticated) {
+        prefs.setString('isAuthenticated', 'true');
+      } else {
+        SystemNavigator.pop();
+      }
+    } on PlatformException catch (e) {
+      print('Error: ${e.message}');
     }
   }
 

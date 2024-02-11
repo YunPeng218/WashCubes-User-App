@@ -54,6 +54,7 @@ dependencies:
   image_picker: ^1.0.7
   cloudinary:
   intl:
+  local_auth:
 
 dev_dependencies:
   flutter_test:

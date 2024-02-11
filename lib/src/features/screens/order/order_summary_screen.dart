@@ -240,11 +240,10 @@ class _OrderSummaryState extends State<OrderSummary> {
   }
 
   Future<void> cancelOrder() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => HomePage(token: prefs.getString('token'))));
+            builder: (context) => HomePage()));
   }
 
   void handleBackButtonPress() {

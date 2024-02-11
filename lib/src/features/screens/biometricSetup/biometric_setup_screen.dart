@@ -4,12 +4,40 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/elevatedbutton
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/image_strings.dart';
 import '../../../constants/sizes.dart';
 
 class BiometricSetupPage extends StatelessWidget {
   const BiometricSetupPage({super.key});
+
+  // Function to show biometric prompt
+  Future<void> showBiometricPrompt(BuildContext context) async {
+    final localAuth = LocalAuthentication();
+    var prefs = await SharedPreferences.getInstance();
+
+    try {
+      bool isAuthenticated = await localAuth.authenticate(
+        localizedReason: 'Authenticate to enable biometric access',
+      );
+      if (isAuthenticated) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const OnboardingScreen(),
+          ),
+          (Route<dynamic> route) => false);
+        prefs.setString('isBiometricsEnabled', 'true');
+        prefs.setString('isAuthenticated', 'true');
+      } else {
+        print('Biometric authentication failed');
+      }
+    } on PlatformException catch (e) {
+      print('Error: ${e.message}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +76,7 @@ class BiometricSetupPage extends StatelessWidget {
           children: [
             const SizedBox(height: 60.0),
             Text(
-              'Enabling Touch ID or Face ID will give you faster access.',
+              'Enabling Touch ID or Face ID will give you a secure access.',
               style: CTextTheme.blackTextTheme.headlineMedium,
               textAlign: TextAlign.center,
             ),
@@ -68,7 +96,9 @@ class BiometricSetupPage extends StatelessWidget {
             ),
             //Enable Button
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                showBiometricPrompt(context);
+              },
               style: CElevatedButtonTheme.lightElevatedButtonTheme.style,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

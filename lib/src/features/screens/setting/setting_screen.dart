@@ -1,24 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
-import 'package:flutter/material.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+  const SettingPage({Key? key}) : super(key: key);
 
   @override
   SettingPageState createState() => SettingPageState();
 }
+
 class SettingPageState extends State<SettingPage> {
   bool orderstatuslight = true;
   bool emaillight = true;
-  bool biometriclight = true;
+  late bool biometriclight;
+
+  Future<bool> isBiometricsEnabled() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String isEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
+    return isEnabled == 'true';
+  }
+
+  Future<void> showBiometricPrompt(BuildContext context) async {
+    final localAuth = LocalAuthentication();
+    try {
+      bool isAuthenticated = await localAuth.authenticate(
+        localizedReason: 'Authenticate to enable biometric access',
+        options: const AuthenticationOptions(biometricOnly: true)
+      );
+      if (isAuthenticated) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('isBiometricsEnabled', 'true');
+        setState(() {
+          biometriclight = true;
+        });
+      } else {
+        print('Biometric authentication failed');
+      }
+    } on PlatformException catch (e) {
+      print('Error: ${e.message}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings', style: CTextTheme.blackTextTheme.displaySmall,),
+        title: Text('Settings', style: CTextTheme.blackTextTheme.displaySmall),
         centerTitle: true,
       ),
       body: Padding(
@@ -26,48 +57,44 @@ class SettingPageState extends State<SettingPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //Notification Category
-            Text('NOTIFICATION', style: CTextTheme.greyTextTheme.labelLarge,),
-            //Order Status Switch Row
+            // Notification Category
+            Text('NOTIFICATION', style: CTextTheme.greyTextTheme.labelLarge),
+            // Order Status Switch Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('When your order status changed ', style: CTextTheme.blackTextTheme.headlineMedium,),
+                Text('When your order status changed ', style: CTextTheme.blackTextTheme.headlineMedium),
                 Switch(
-                  // This bool value toggles the switch.
                   value: orderstatuslight,
                   activeColor: AppColors.cSwitchColor,
                   onChanged: (bool value) {
-                    // This is called when the user toggles the switch.
                     setState(() {
                       orderstatuslight = value;
-                    },);
+                    });
                   },
                 ),
               ],
             ),
-            //Email Newsletter Switch Row
+            // Email Newsletter Switch Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Receive email newsletter', style: CTextTheme.blackTextTheme.headlineMedium,),
+                Text('Receive email newsletter', style: CTextTheme.blackTextTheme.headlineMedium),
                 Switch(
-                  // This bool value toggles the switch.
                   value: emaillight,
                   activeColor: AppColors.cSwitchColor,
                   onChanged: (bool value) {
-                    // This is called when the user toggles the switch.
                     setState(() {
                       emaillight = value;
-                    },);
+                    });
                   },
                 ),
               ],
             ),
-            const SizedBox(height: cDefaultSize,),
-            //Security Category
-            Text('SECURITY', style: CTextTheme.greyTextTheme.labelLarge,),
-            //Biometric Switch Row
+            const SizedBox(height: cDefaultSize),
+            // Security Category
+            Text('SECURITY', style: CTextTheme.greyTextTheme.labelLarge),
+            // Biometric Switch Row using FutureBuilder
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -75,33 +102,50 @@ class SettingPageState extends State<SettingPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Use biometric to login', style: CTextTheme.blackTextTheme.headlineMedium,),
-                      Text('All biometrics stored on this device can be used to log into your account', style: CTextTheme.greyTextTheme.labelLarge,),
+                      Text('Use biometric to login', style: CTextTheme.blackTextTheme.headlineMedium),
+                      Text('All biometrics stored on this device can be used to log into your account',
+                          style: CTextTheme.greyTextTheme.labelLarge),
                     ],
                   ),
                 ),
-                Switch(
-                  // This bool value toggles the switch.
-                  value: biometriclight,
-                  activeColor: AppColors.cSwitchColor,
-                  onChanged: (bool value) {
-                    // This is called when the user toggles the switch.
-                    setState(() {
-                      biometriclight = value;
-                    },);
+                FutureBuilder<bool>(
+                  future: isBiometricsEnabled(),
+                  builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error loading biometric status');
+                    } else {
+                      return Switch(
+                        value: snapshot.data ?? false,
+                        activeColor: AppColors.cSwitchColor,
+                        onChanged: (bool value) async {
+                          if (value==true)
+                            showBiometricPrompt(context);
+                          else {
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('isBiometricsEnabled', 'false');
+                          }
+                          setState(() {
+                            biometriclight = value;
+                          });
+                        },
+                      );
+                    }
                   },
                 ),
               ],
             ),
-            const SizedBox(height: cDefaultSize,),
-            //Delete Account Button
+            const SizedBox(height: cDefaultSize),
+            // Delete Account Button
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: (){}, 
-                    child: Text('Delete Account', 
-                    style: CTextTheme.blackTextTheme.headlineMedium,
+                    onPressed: () {},
+                    child: Text(
+                      'Delete Account',
+                      style: CTextTheme.blackTextTheme.headlineMedium,
                     ),
                   ),
                 ),
@@ -112,10 +156,4 @@ class SettingPageState extends State<SettingPage> {
       ),
     );
   }
-  
-  // @override
-  // State<StatefulWidget> createState() {
-  //   // TODO: implement createState
-  //   throw UnimplementedError();
-  // }
 }
