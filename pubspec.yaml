@@ -77,10 +77,14 @@ flutter_launcher_icons:
 flutter_native_splash: #Create initial splash screen of the app logo
   color: '#182738'
   image: assets/logos/i3Cubes_logo&name_SVG.svg
+  width: 50
+  height: 50
 
   android_12:
     image: assets/logos/i3Cubes_logo&name_SVG.svg
     icon_background_color: '#182738'
+    width: 50
+    height: 50
 
 # The following section is specific to Flutter packages.
 flutter:

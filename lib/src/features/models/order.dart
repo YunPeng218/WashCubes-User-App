@@ -212,9 +212,29 @@ class OrderStage {
     if (dropOff.status) {
       return 'Drop Off';
     }
-
-    // Default status if none are true
     return 'Drop Off Pending';
+  }
+
+  DateTime? getMostRecentDateUpdated() {
+    List<DateTime?> dateUpdatedList = [
+      dropOff.dateUpdated,
+      collectedByRider.dateUpdated,
+      inProgress.dateUpdated,
+      processingComplete.dateUpdated,
+      outForDelivery.dateUpdated,
+      readyForCollection.dateUpdated,
+      completed.dateUpdated,
+      orderError.dateUpdated,
+    ];
+
+    dateUpdatedList.removeWhere((date) => date == null);
+
+    if (dateUpdatedList.isEmpty) {
+      return null;
+    }
+
+    return dateUpdatedList
+        .reduce((maxDate, date) => date!.isAfter(maxDate!) ? date : maxDate);
   }
 }
 

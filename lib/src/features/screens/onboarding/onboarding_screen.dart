@@ -119,8 +119,10 @@ class OnboardingPage extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Image(
-          image: AssetImage(imagePath),
+        Expanded(
+          child: Image(
+            image: AssetImage(imagePath),
+          ),
         ),
         DotsIndicator(itemCount: 3, currentIndex: currentIndex),
         Container(

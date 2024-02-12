@@ -314,10 +314,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                Text(
-                                  'Sign In to View Your Orders',
-                                  style: 
-                                      CTextTheme.blackTextTheme.headlineSmall,
+                                  Text(
+                                    'Sign In to View Your Orders',
+                                    style:
+                                        CTextTheme.blackTextTheme.headlineSmall,
                                     textAlign: TextAlign.end,
                                   ),
                                 ],

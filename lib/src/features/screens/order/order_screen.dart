@@ -248,11 +248,20 @@ class OrderPageState extends State<OrderPage>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Column(
-                        children: [
-                          const SizedBox(height: 50.0),
-                          Text('Sign In To View Your Orders',
-                              style: CTextTheme.greyTextTheme.displayMedium),
-                          const SizedBox(height: 10.0),
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          const SizedBox(height: 40),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Sign In to View Your Orders',
+                                style: CTextTheme.blackTextTheme.headlineSmall,
+                                textAlign: TextAlign.end,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () {
                               Navigator.pushReplacement(
@@ -262,13 +271,24 @@ class OrderPageState extends State<OrderPage>
                                         const WelcomeScreen()),
                               );
                             },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor:
+                                  AppColors.cBlackColor, // Text color
+                              backgroundColor:
+                                  AppColors.cWhiteColor, // Button Fill color
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: const BorderSide(
+                                    color: AppColors.cGreyColor1),
+                              ),
+                            ),
                             child: Text(
                               'Sign In',
-                              style: CTextTheme.blackTextTheme.labelLarge,
+                              style: CTextTheme.blackTextTheme.labelMedium,
                             ),
                           ),
                         ],
-                      ),
+                      )
                     ],
                   ),
           ],
@@ -283,6 +303,7 @@ class OrderPageState extends State<OrderPage>
           },
           tooltip: 'Increment',
           child: Image.asset(cChatBotLogo),
+          backgroundColor: Colors.blue[50],
         ),
         //Bottom Navigation Bar
         bottomNavigationBar: const BottomNavBar(),
@@ -309,6 +330,31 @@ class OrderPageState extends State<OrderPage>
         ],
       );
     }
+
+    filteredOrders.sort((a, b) {
+      if (a.orderStage?.getMostRecentStatus() == 'Drop Off Pending') {
+        return -1;
+      } else if (b.orderStage?.getMostRecentStatus() == 'Drop Off Pending') {
+        return 1;
+      }
+
+      DateTime? dateUpdatedA = a.orderStage?.getMostRecentDateUpdated();
+      DateTime? dateUpdatedB = b.orderStage?.getMostRecentDateUpdated();
+
+      if (dateUpdatedA == null && dateUpdatedB == null) {
+        return 0;
+      } else if (dateUpdatedA == null) {
+        return 1;
+      } else if (dateUpdatedB == null) {
+        return -1;
+      }
+      return dateUpdatedB.compareTo(dateUpdatedA);
+      // int dateComparison = dateUpdatedB.compareTo(dateUpdatedA);
+      // print('Comparing order ${a.orderNumber} and ${b.orderNumber}');
+      // print('Date comparison result: $dateComparison');
+
+      // return dateComparison;
+    });
 
     return ListView.builder(
       shrinkWrap: true,
@@ -351,7 +397,6 @@ class OrderPageState extends State<OrderPage>
   }
 
   Widget buildCompletedOrderList() {
-    // Filter the orders based on the selected orderStage
     List<Order> filteredOrders = userOrders
         .where(
             (order) => order.orderStage?.getMostRecentStatus() == 'Completed')
@@ -390,7 +435,7 @@ class OrderCard extends StatelessWidget {
   }) : super(key: key);
 
   Map<String, String> statusIcons = {
-    'Pending Drop Off': cDropOffIcon,
+    'Drop Off': cDropOffIcon,
     'Collected By Rider': cCollectedOperatorIcon,
     'In Progress': cInProgressIcon,
     'Processing Complete': cPrepCompletionIcon,

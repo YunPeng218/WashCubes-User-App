@@ -58,25 +58,25 @@ class _OTPPageState extends State<OTPVerifyPage> {
         if (canAuthenticateWithBiometrics && await auth.isDeviceSupported()) {
           // Biometric authentication is available
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const BiometricSetupPage(),
-            ),
-            (Route<dynamic> route) => false);
+              MaterialPageRoute(
+                builder: (context) => const BiometricSetupPage(),
+              ),
+              (Route<dynamic> route) => false);
         } else {
           // No biometrics available on the device
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const OnboardingScreen(),
-            ),
-            (Route<dynamic> route) => false);
+              MaterialPageRoute(
+                builder: (context) => const OnboardingScreen(),
+              ),
+              (Route<dynamic> route) => false);
         }
       } else {
         // Biometrics cannot be checked on the device
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const OnboardingScreen(),
-          ),
-          (Route<dynamic> route) => false);
+            MaterialPageRoute(
+              builder: (context) => const OnboardingScreen(),
+            ),
+            (Route<dynamic> route) => false);
       }
     } on PlatformException catch (e) {
       print('Error: ${e.message}');
@@ -177,42 +177,46 @@ class _OTPPageState extends State<OTPVerifyPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 30.0),
+            const SizedBox(height: 40.0),
             Text(
               'Enter the OTP sent to +60*********',
               style: CTextTheme.blackTextTheme.headlineMedium,
             ),
             const SizedBox(height: 30.0),
             //Pin Code Field
-            PinCodeTextField(
-              appContext: context,
-              controller: phoneNumberController,
-              length: 6,
-              enableActiveFill: true,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              pastedTextStyle: Theme.of(context).textTheme.headlineMedium,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(8),
-                fieldWidth: 50,
-                inactiveColor: AppColors.cPrimaryColor,
-                selectedColor: AppColors.cPrimaryColor,
-                activeFillColor: AppColors.cWhiteColor,
-                selectedFillColor: AppColors.cWhiteColor,
-                inactiveFillColor: AppColors.cWhiteColor,
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 25.0),
+              child: PinCodeTextField(
+                appContext: context,
+                controller: phoneNumberController,
+                length: 6,
+                enableActiveFill: true,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                pastedTextStyle: Theme.of(context).textTheme.headlineMedium,
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(8),
+                  fieldWidth: 50,
+                  inactiveColor: AppColors.cPrimaryColor,
+                  selectedColor: AppColors.cPrimaryColor,
+                  activeFillColor: AppColors.cWhiteColor,
+                  selectedFillColor: AppColors.cWhiteColor,
+                  inactiveFillColor: AppColors.cWhiteColor,
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    // currentText = value;
+                  });
+                },
+                onCompleted: (value) {
+                  otpValidation();
+                },
+                beforeTextPaste: (text) {
+                  return true;
+                },
               ),
-              onChanged: (value) {
-                setState(() {
-                  // currentText = value;
-                });
-              },
-              onCompleted: (value) {
-                otpValidation();
-              },
-              beforeTextPaste: (text) {
-                return true;
-              },
             ),
             const SizedBox(height: 30.0),
             Text(

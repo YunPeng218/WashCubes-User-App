@@ -53,9 +53,6 @@ class _SelectItemsState extends State<SelectItems> {
 
     try {
       Map<String, dynamic> orderDetails = {
-        // 'lockerSiteId': widget.lockerSite.id,
-        // 'compartmentId': widget.compartment?.id,
-        // 'compartmentNumber': widget.compartment?.compartmentNumber,
         'serviceId': widget.service?.id,
         'orderItems': [],
       };
@@ -77,7 +74,6 @@ class _SelectItemsState extends State<SelectItems> {
       );
 
       if (response.statusCode == 200) {
-        // Handle the success scenario, e.g., navigate to the next screen
         final Map<String, dynamic> data = json.decode(response.body);
         if (data.containsKey('newOrder')) {
           final dynamic orderData = data['newOrder'];
@@ -98,7 +94,6 @@ class _SelectItemsState extends State<SelectItems> {
         } else {
           print('Response data does not contain services.');
         }
-        // Navigator.push(...);
       } else {
         print(
             'Failed to send order details. Status code: ${response.statusCode}');
@@ -154,10 +149,8 @@ class _SelectItemsState extends State<SelectItems> {
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.service?.items.length ??
-                      0, // Use null-aware operator
+                  itemCount: widget.service?.items.length ?? 0,
                   itemBuilder: ((context, index) {
-                    // Check if widget.service and widget.service.items are not null
                     if (widget.service != null &&
                         widget.service?.items != null) {
                       ServiceItem? item = widget.service?.items[index];
@@ -169,11 +162,11 @@ class _SelectItemsState extends State<SelectItems> {
                             color: Colors.blue[50],
                           ),
                           child: Image.asset(
-                            'assets/images/select_item/${item?.name.replaceAll(RegExp(r'[ /]'), '')}.png', // Use the image asset path from the map
-                            width: 50, // Set the desired width
-                            height: 50, // Set the desired height
+                            'assets/images/select_item/${item?.name.replaceAll(RegExp(r'[ /]'), '')}.png',
+                            width: 50,
+                            height: 50,
                           ),
-                        ), // Replace with your own icons
+                        ),
                         title: Text(
                           item?.name ?? 'Default',
                           style: CTextTheme.blackTextTheme.headlineMedium,
@@ -186,14 +179,12 @@ class _SelectItemsState extends State<SelectItems> {
                             initialQuantity: selectedQuantity[item?.id] ?? 0,
                             onChanged: (quantity) {
                               setState(() {
-                                // Update the selected quantities map
                                 selectedQuantity[item?.id ?? 'Default'] =
                                     quantity;
                               });
                             }),
                       );
                     } else {
-                      // Return an empty container or a loading indicator
                       return Container();
                     }
                   }),
@@ -205,10 +196,17 @@ class _SelectItemsState extends State<SelectItems> {
         //Bottom Bar of Est.Price & Checkout Button
         bottomNavigationBar: SingleChildScrollView(
           child: Container(
-            color: AppColors.cBarColor,
+            decoration: BoxDecoration(
+              color: AppColors.cBarColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+            ),
             padding: const EdgeInsets.all(cDefaultSize),
             child: Column(
               children: [
+                const SizedBox(height: 5.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -228,65 +226,73 @@ class _SelectItemsState extends State<SelectItems> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10.0),
-                OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppColors.cWhiteColor),
-                  ),
-                  onPressed: () {
-                    // Check out action
-                    bool noItemSelected =
-                        selectedQuantity.values.every((value) => value == 0);
+                const SizedBox(height: 15.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: AppColors.cWhiteColor),
+                        ),
+                        onPressed: () {
+                          // Check out action
+                          bool noItemSelected = selectedQuantity.values
+                              .every((value) => value == 0);
 
-                    if (noItemSelected) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              'No Items Selected.',
-                              style: CTextTheme.blackTextTheme.headlineLarge,
-                            ),
-                            content: Text(
-                              'Please select some items to proceed.',
-                              style: CTextTheme.blackTextTheme.headlineMedium,
-                            ),
-                            actions: <Widget>[
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(
-                                  'OK',
-                                  style:
-                                      CTextTheme.blackTextTheme.headlineMedium,
-                                ),
-                              ),
-                            ],
+                          if (noItemSelected) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    'No Items Selected.',
+                                    style:
+                                        CTextTheme.blackTextTheme.headlineLarge,
+                                  ),
+                                  content: Text(
+                                    'Please select some items to proceed.',
+                                    style: CTextTheme
+                                        .blackTextTheme.headlineMedium,
+                                  ),
+                                  actions: <Widget>[
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        'OK',
+                                        style: CTextTheme
+                                            .blackTextTheme.headlineMedium,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            return;
+                          }
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              //Alert Dialog PopUp of Order Price Estimation Confirmation
+                              return CancelConfirmAlert(
+                                  title: 'Note',
+                                  content:
+                                      'If your order exceeds the estimated price, we\'ll provide further instructions. Click \'Continue\' to agree to our Terms and Conditions and Privacy Policy.',
+                                  onPressedConfirm: sendOrderToServer,
+                                  cancelButtonText: 'Cancel',
+                                  confirmButtonText: 'Confirm');
+                            },
                           );
                         },
-                      );
-                      return;
-                    }
-
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        //Alert Dialog PopUp of Order Price Estimation Confirmation
-                        return CancelConfirmAlert(
-                            title: 'Note',
-                            content:
-                                'If your order exceeds the estimated price, we\'ll provide further instructions. Click \'Continue\' to agree to our Terms and Conditions and Privacy Policy.',
-                            onPressedConfirm: sendOrderToServer,
-                            cancelButtonText: 'Cancel',
-                            confirmButtonText: 'Confirm');
-                      },
-                    );
-                  },
-                  child: const Text(
-                    'Check Out',
-                    style: TextStyle(color: AppColors.cWhiteColor),
-                  ),
+                        child: const Text(
+                          'Check Out',
+                          style: TextStyle(color: AppColors.cWhiteColor),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
