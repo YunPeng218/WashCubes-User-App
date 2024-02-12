@@ -33,7 +33,8 @@ class SettingPageState extends State<SettingPage> {
       );
       if (isAuthenticated) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('isBiometricsEnabled', 'true');
+        prefs.setString('isBiometricsEnabled', 'true');
+        prefs.setString('isAuthenticated', 'true');
         setState(() {
           biometriclight = true;
         });

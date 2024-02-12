@@ -55,6 +55,7 @@ dependencies:
   cloudinary:
   intl:
   local_auth:
+  location:
 
 dev_dependencies:
   flutter_test:
