@@ -179,6 +179,9 @@ class _HomePageState extends State<HomePage> {
                     child: null,
                   ),
                 ),
+                const SizedBox(
+                  width: 10.0,
+                ),
               ],
             ),
             body: SingleChildScrollView(
@@ -197,11 +200,14 @@ class _HomePageState extends State<HomePage> {
                     // Discover Text
                     Text(
                       'Discover your closest\nlaundry lockers',
-                      style: CTextTheme.blackTextTheme.displayLarge,
+                      style: CTextTheme.blackTextTheme.displayMedium,
                     ),
                     const SizedBox(height: 16),
                     // Location Button
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue[50],
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -209,27 +215,17 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => const NearbyLocationPage()),
                         );
                       },
-                      // style:
-                      //     CElevatedButtonTheme.lightElevatedButtonTheme.style,
-                      // ElevatedButton.styleFrom(
-                      //   primary: Colors.blue,
-                      //   onPrimary: Colors.white,
-                      //   shape: RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.circular(30.0),
-                      //   ),
-                      //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      // ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Icon(
                             Icons.location_on,
-                            color: AppColors.cPrimaryColor,
+                            color: AppColors.cBlueColor3,
                           ),
                           Text("Taylor's University",
-                              style: CTextTheme.blackTextTheme.labelLarge),
+                              style: CTextTheme.blackTextTheme.headlineSmall),
                           const Icon(
-                            Icons.keyboard_arrow_down_rounded,
+                            Icons.keyboard_arrow_right_rounded,
                             color: AppColors.cBlackColor,
                           ),
                         ],
@@ -268,12 +264,19 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 15),
                     guestProvider.guestMode
                         ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               const SizedBox(height: 10),
-                              Text(
-                                'Sign In to View Your Orders',
-                                style: CTextTheme.blackTextTheme.headlineSmall,
-                                textAlign: TextAlign.end,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Sign In to View Your Orders',
+                                    style:
+                                        CTextTheme.blackTextTheme.headlineSmall,
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 10),
                               ElevatedButton(
@@ -397,6 +400,7 @@ class _HomePageState extends State<HomePage> {
               },
               tooltip: 'Increment',
               child: Image.asset(cChatBotLogo),
+              backgroundColor: Colors.blue[50],
             ),
             //BottomNavBar
             bottomNavigationBar: const BottomNavBar(),

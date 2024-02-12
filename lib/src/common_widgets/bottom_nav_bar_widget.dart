@@ -10,50 +10,69 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: AppColors.cBarColor,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
-            },
-            icon: const Icon(Icons.home_outlined),
-            color: AppColors.cWhiteColor,
-          ),
-          label: '',
+    const iconPadding = EdgeInsets.only(top: 8.0);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.cBarColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
         ),
-        BottomNavigationBarItem(
-          icon: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const OrderPage()),
-              );
-            },
-            icon: const Icon(Icons.shopping_basket_outlined),
-            color: AppColors.cWhiteColor,
+      ),
+      child: BottomNavigationBar(
+        backgroundColor: Colors.transparent,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: iconPadding,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomePage()),
+                  );
+                },
+                icon: const Icon(Icons.home_outlined),
+                color: AppColors.cWhiteColor,
+              ),
+            ),
+            label: '',
           ),
-          label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AccountPage()),
-              );
-            },
-            icon: const Icon(Icons.person_outlined),
-            color: AppColors.cWhiteColor,
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: iconPadding,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const OrderPage()),
+                  );
+                },
+                icon: const Icon(Icons.shopping_basket_outlined),
+                color: AppColors.cWhiteColor,
+              ),
+            ),
+            label: '',
           ),
-          label: '',
-        ),
-      ],
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: iconPadding,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AccountPage()),
+                  );
+                },
+                icon: const Icon(Icons.person_outlined),
+                color: AppColors.cWhiteColor,
+              ),
+            ),
+            label: '',
+          ),
+        ],
+      ),
     );
   }
 }

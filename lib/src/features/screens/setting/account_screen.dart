@@ -100,12 +100,13 @@ class _AccountPageState extends State<AccountPage> {
                               backgroundColor: AppColors.cWhiteColor,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side: const BorderSide(color: AppColors.cGreyColor1),
+                                side: const BorderSide(
+                                    color: AppColors.cGreyColor1),
                               ),
                             ),
                             child: Text(
                               'Sign In',
-                              style: CTextTheme.blackTextTheme.labelMedium,
+                              style: CTextTheme.blackTextTheme.labelLarge,
                             ),
                           ),
                         ],
@@ -114,8 +115,7 @@ class _AccountPageState extends State<AccountPage> {
                   )
                 : ListView(
                     children: <Widget>[
-                      if (user!=null)
-                        UserHeader(user: user),
+                      if (user != null) UserHeader(user: user),
                       ProfileOption(
                         title: 'Edit Profile',
                         icon: Icons.person_outline_rounded,
@@ -159,8 +159,7 @@ class _AccountPageState extends State<AccountPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => FAQsPage()),
+                            MaterialPageRoute(builder: (context) => FAQsPage()),
                           );
                         },
                       ),
@@ -206,6 +205,7 @@ class _AccountPageState extends State<AccountPage> {
             },
             tooltip: 'Increment',
             child: Image.asset(cChatBotLogo),
+            backgroundColor: Colors.blue[50],
           ),
           // BottomNavBar
           bottomNavigationBar: const BottomNavBar(),
