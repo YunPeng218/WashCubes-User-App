@@ -7,6 +7,7 @@ import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/utilities/user_helper.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -371,24 +372,38 @@ class EditProfileDialog extends StatefulWidget {
 class _EditProfileDialogState extends State<EditProfileDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _controller = TextEditingController();
+  FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _controller.text = widget.currentValue;
+    _focusNode.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isPhoneNumber = widget.title == 'MOBILE NUMBER';
     return AlertDialog(
       title: Text('Edit ${widget.title}'),
       content: Form(
         key: _formKey,
         child: TextFormField(
+          focusNode: _focusNode,
           controller: _controller,
           decoration: InputDecoration(
             labelText: widget.title,
           ),
+          keyboardType: isPhoneNumber ? TextInputType.phone : TextInputType.text,
+          inputFormatters: isPhoneNumber
+              ? [FilteringTextInputFormatter.digitsOnly]
+              : null, // Allow only numeric input if it's a phone number
           validator: (value) {
             if (widget.title == 'EMAIL ADDRESS' && !RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(value ?? '')) {
               return 'Enter a valid email address';
