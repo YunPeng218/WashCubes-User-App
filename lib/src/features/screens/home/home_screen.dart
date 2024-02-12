@@ -4,6 +4,7 @@ import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
+import 'package:device_run_test/src/features/screens/loginSession/SessionExpiredPage.dart';
 import 'package:device_run_test/src/features/screens/nearbylocation/NearbyLocationPage.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:device_run_test/src/features/screens/order/order_screen.dart';
@@ -28,12 +29,15 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   late String userID;
   UserProfile? user;
+  late Timer timer;
+  int elapsedTime = 0;
   String profilePic =
       'https://res.cloudinary.com/ddweldfmx/image/upload/v1707480915/profilePic/zxltbifbulr4m45lbsqq.png';
   var userHelper = UserHelper();
+  bool isInactive = false;
   List<Order> userOrders = [];
   int activeOrdersCount = 0;
   int orderErrorsCount = 0;
@@ -53,8 +57,49 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     init();
     loadUserOrders();
+    timer = Timer.periodic(Duration(seconds: 1), (tm) {
+      if (isInactive) {
+        setState(() {
+          elapsedTime += 1;
+          print(elapsedTime);
+          if (elapsedTime == 300) {
+            setAuthenticationStatus();
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => SessionExpiredPage(),
+              ),
+              (Route<dynamic> route) => false,
+            );
+            timer.cancel();
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState (AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused)
+      isInactive = true;
+    else if (state == AppLifecycleState.resumed) {
+      isInactive = false;
+      elapsedTime = 0;
+    }
+  }
+
+  Future<void> setAuthenticationStatus () async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('isAuthenticated', 'false');
   }
 
   void init() async {
@@ -63,8 +108,7 @@ class _HomePageState extends State<HomePage> {
     if (token != 'No token') {
       loadUserInfo();
     }
-    String isBiometricsEnabled =
-        prefs.getString('isBiometricsEnabled') ?? 'false';
+    String isBiometricsEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
     String isAuthenticated = prefs.getString('isAuthenticated') ?? 'false';
     if (isBiometricsEnabled == 'true' && isAuthenticated == 'false') {
       showBiometricPrompt(context);
@@ -179,6 +223,9 @@ class _HomePageState extends State<HomePage> {
                     child: null,
                   ),
                 ),
+                const SizedBox(
+                  width: 10.0,
+                ),
               ],
             ),
             body: SingleChildScrollView(
@@ -197,11 +244,14 @@ class _HomePageState extends State<HomePage> {
                     // Discover Text
                     Text(
                       'Discover your closest\nlaundry lockers',
-                      style: CTextTheme.blackTextTheme.displayLarge,
+                      style: CTextTheme.blackTextTheme.displayMedium,
                     ),
                     const SizedBox(height: 16),
                     // Location Button
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue[50],
+                      ),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -209,27 +259,17 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => const NearbyLocationPage()),
                         );
                       },
-                      // style:
-                      //     CElevatedButtonTheme.lightElevatedButtonTheme.style,
-                      // ElevatedButton.styleFrom(
-                      //   primary: Colors.blue,
-                      //   onPrimary: Colors.white,
-                      //   shape: RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.circular(30.0),
-                      //   ),
-                      //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      // ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Icon(
                             Icons.location_on,
-                            color: AppColors.cPrimaryColor,
+                            color: AppColors.cBlueColor3,
                           ),
                           Text("Taylor's University",
-                              style: CTextTheme.blackTextTheme.labelLarge),
+                              style: CTextTheme.blackTextTheme.headlineSmall),
                           const Icon(
-                            Icons.keyboard_arrow_down_rounded,
+                            Icons.keyboard_arrow_right_rounded,
                             color: AppColors.cBlackColor,
                           ),
                         ],
@@ -268,12 +308,19 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 15),
                     guestProvider.guestMode
                         ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               const SizedBox(height: 10),
-                              Text(
-                                'Sign In to View Your Orders',
-                                style: CTextTheme.blackTextTheme.headlineSmall,
-                                textAlign: TextAlign.end,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                Text(
+                                  'Sign In to View Your Orders',
+                                  style: 
+                                      CTextTheme.blackTextTheme.headlineSmall,
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 10),
                               ElevatedButton(
@@ -397,6 +444,7 @@ class _HomePageState extends State<HomePage> {
               },
               tooltip: 'Increment',
               child: Image.asset(cChatBotLogo),
+              backgroundColor: Colors.blue[50],
             ),
             //BottomNavBar
             bottomNavigationBar: const BottomNavBar(),

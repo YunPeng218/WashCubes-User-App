@@ -45,6 +45,47 @@ class SettingPageState extends State<SettingPage> {
     }
   }
 
+  Future<void> checkBiometrics(BuildContext context) async {
+    final LocalAuthentication auth = LocalAuthentication();
+    try {
+      final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+      if (canAuthenticateWithBiometrics) {
+        if (canAuthenticateWithBiometrics && await auth.isDeviceSupported()) {
+          // Biometric authentication is available
+          showBiometricPrompt(context);
+        } else {
+          // No biometrics available on the device
+          showCustomDialog(context, 'No biometrics available on this device');
+        }
+      } else {
+        // Biometrics cannot be checked on the device
+        showCustomDialog(context, 'Biometrics cannot be checked on this device');
+      }
+    } on PlatformException catch (e) {
+      print('Error: ${e.message}');
+    }
+  }
+
+  void showCustomDialog(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +162,7 @@ class SettingPageState extends State<SettingPage> {
                         activeColor: AppColors.cSwitchColor,
                         onChanged: (bool value) async {
                           if (value==true)
-                            showBiometricPrompt(context);
+                            checkBiometrics(context);
                           else {
                             SharedPreferences prefs = await SharedPreferences.getInstance();
                             await prefs.setString('isBiometricsEnabled', 'false');
