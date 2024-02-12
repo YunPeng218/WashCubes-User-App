@@ -63,7 +63,8 @@ class _HomePageState extends State<HomePage> {
     if (token != 'No token') {
       loadUserInfo();
     }
-    String isBiometricsEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
+    String isBiometricsEnabled =
+        prefs.getString('isBiometricsEnabled') ?? 'false';
     String isAuthenticated = prefs.getString('isAuthenticated') ?? 'false';
     if (isBiometricsEnabled == 'true' && isAuthenticated == 'false') {
       showBiometricPrompt(context);
@@ -265,27 +266,6 @@ class _HomePageState extends State<HomePage> {
                       style: CTextTheme.blackTextTheme.displaySmall,
                     ),
                     const SizedBox(height: 15),
-                    // Ongoing Order Box
-                    // Container(
-                    // padding: const EdgeInsets.all(2),
-                    // decoration: BoxDecoration(
-                    //   color: Colors.white,
-                    //   borderRadius: BorderRadius.circular(20),
-                    //   boxShadow: [
-                    //     BoxShadow(
-                    //       color: AppColors.cGreyColor2.withOpacity(0.3),
-                    //       spreadRadius: 1,
-                    //       blurRadius: 6,
-                    //       offset: const Offset(0, 3),
-                    //     ),
-                    //   ],
-                    // ),
-                    // child:
-                    // Row(
-                    //   children: <Widget>[
-                    //     Expanded(
-                    //       flex: 6,
-                    //       child:
                     guestProvider.guestMode
                         ? Column(
                             children: <Widget>[
@@ -326,12 +306,10 @@ class _HomePageState extends State<HomePage> {
                         : Column(
                             children: [
                               Card(
-                                // margin: const EdgeInsets.symmetric(
-                                //     vertical: 5.0, horizontal: 15.0),
                                 color: Colors.blue[50],
                                 child: ListTile(
                                   leading: Image.asset(
-                                    cAppLogo,
+                                    cHpOrder,
                                     width: 60,
                                     height: 60,
                                   ),
@@ -353,8 +331,6 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Card(
-                                // margin: const EdgeInsets.symmetric(
-                                //     vertical: 5.0, horizontal: 15.0),
                                 color: Colors.green[50],
                                 child: ListTile(
                                   leading: Image.asset(
@@ -380,8 +356,6 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Card(
-                                // margin: const EdgeInsets.symmetric(
-                                //     vertical: 5.0, horizontal: 15.0),
                                 color: Colors.red[50],
                                 child: ListTile(
                                   leading: Image.asset(
@@ -408,10 +382,6 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                    //   ),
-                    // ],
-                    //),
-                    // )
                   ],
                 ),
               ),

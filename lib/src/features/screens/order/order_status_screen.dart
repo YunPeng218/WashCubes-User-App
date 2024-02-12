@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
+import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_detail_widget.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_widget.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
@@ -9,6 +10,7 @@ import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:device_run_test/src/features/screens/order/order_qr_popup.dart';
 
 class OrderStatusScreen extends StatefulWidget {
   final Order order;
@@ -86,13 +88,38 @@ class _OrderStatusState extends State<OrderStatusScreen> {
     }
   }
 
+  void handleBackButtonPress() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderPage(),
+      ),
+    );
+  }
+
+  void displayOrderQRCode() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return OrderQRScreen(
+            lockerSite: lockerSite,
+            compartment: lockerSite?.compartments.firstWhere((compartment) =>
+                compartment.id == widget.order.lockerDetails?.compartmentId),
+            order: widget.order);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     //final size = MediaQuery.of(context).size;
     return Scaffold(
       //Top Page Bar
       appBar: AppBar(
-        //Order Number
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: handleBackButtonPress,
+        ),
         title: Text(
           'Order #${widget.order.orderNumber}',
           style: CTextTheme.blackTextTheme.displaySmall,

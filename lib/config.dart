@@ -1,6 +1,6 @@
-const url = 'http://192.168.0.188:3000/';
+// const url = 'http://192.168.0.188:3000/';
 //const url = 'http://192.168.1.148:3000/';
-// const url = 'http://192.168.1.7:3000/';
+const url = 'http://192.168.1.7:3000/';
 // const url = 'http://13.228.225.19/';
 const otpverification = '${url}otpgenerator';
 const registration = '${url}registration';

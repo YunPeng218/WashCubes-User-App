@@ -120,7 +120,7 @@ class OrderItem {
 }
 
 class OrderStage {
-  OrderStatus pendingDropOff;
+  OrderStatus dropOff;
   OrderStatus collectedByRider;
   OrderStatus inProgress;
   OrderStatus processingComplete;
@@ -130,7 +130,7 @@ class OrderStage {
   OrderStatus orderError;
 
   OrderStage({
-    required this.pendingDropOff,
+    required this.dropOff,
     required this.collectedByRider,
     required this.inProgress,
     required this.processingComplete,
@@ -142,7 +142,7 @@ class OrderStage {
 
   factory OrderStage.fromJson(Map<String, dynamic> json) {
     return OrderStage(
-      pendingDropOff: OrderStatus.fromJson(json['pendingDropOff']),
+      dropOff: OrderStatus.fromJson(json['dropOff']),
       collectedByRider: OrderStatus.fromJson(json['collectedByRider']),
       inProgress: OrderStatus.fromJson(json['inProgress']),
       processingComplete: OrderStatus.fromJson(json['processingComplete']),
@@ -155,7 +155,7 @@ class OrderStage {
 
   Map<String, dynamic> toJson() {
     return {
-      'pendingDropOff': pendingDropOff.toJson(),
+      'dropOff': dropOff.toJson(),
       'collectedByRider': collectedByRider.toJson(),
       'inProgress': inProgress.toJson(),
       'processingComplete': processingComplete.toJson(),
@@ -168,8 +168,8 @@ class OrderStage {
 
   OrderStatus operator [](String key) {
     switch (key) {
-      case 'pendingDropOff':
-        return pendingDropOff;
+      case 'dropOff':
+        return dropOff;
       case 'collectedByRider':
         return collectedByRider;
       case 'inProgress':
@@ -209,12 +209,12 @@ class OrderStage {
     if (collectedByRider.status) {
       return 'Collected by Rider';
     }
-    if (pendingDropOff.status) {
-      return 'Pending Drop Off';
+    if (dropOff.status) {
+      return 'Drop Off';
     }
 
     // Default status if none are true
-    return 'Unknown';
+    return 'Drop Off Pending';
   }
 }
 

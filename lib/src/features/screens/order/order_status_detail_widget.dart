@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
+import 'package:device_run_test/src/features/screens/order/order_qr_popup.dart';
 
 class OrderStatusDetailWidget extends StatefulWidget {
   final Order order;
@@ -35,6 +36,21 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
                 dropOffSite: widget.lockerSite,
                 collectionSite: widget.collectionSite,
               )),
+    );
+  }
+
+  void displayOrderQRCode() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return OrderQRScreen(
+            lockerSite: widget.lockerSite,
+            compartment: widget.lockerSite?.compartments.firstWhere(
+                (compartment) =>
+                    compartment.id ==
+                    widget.order.lockerDetails?.compartmentId),
+            order: widget.order);
+      },
     );
   }
 
@@ -111,7 +127,7 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: displayOrderQRCode,
                 style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue[50]!)),

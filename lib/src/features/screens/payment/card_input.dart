@@ -5,12 +5,11 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dar
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-import '../order/order_screen.dart';
-
+import 'package:device_run_test/src/features/screens/order/order_qr_popup.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/user.dart';
+import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
 
 class PaymentFormScreen extends StatefulWidget {
   final Order? order;
@@ -41,8 +40,6 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
   String cardHolderName = '';
 
   Future<void> confirmOrder() async {
-    print('CONFIRM ORDER COMPARTMENT: ${widget.compartment?.id}');
-
     Map<String, dynamic> newOrder = {
       'orderNumber': widget.order?.orderNumber,
       'user': {
@@ -86,17 +83,24 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
         final dynamic orderData = data['newOrder'];
         final Order order = Order.fromJson(orderData);
 
-        // Set GuestVisitedOrderSummary to false
-        // Provider.of<GuestVisitedOrderSummaryProvider>(context,
-        //         listen: false)
-        //     .setGuestVisitedOrderSummary(false);
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OrderPage(),
-          ),
-        );
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return OrderQRScreen(
+                lockerSite: widget.lockerSite,
+                compartment: widget.compartment,
+                order: order);
+          },
+        ).then((value) => {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OrderStatusScreen(
+                    order: order,
+                  ),
+                ),
+              )
+            });
       } else {
         print('Response data does not contain saved order.');
       }

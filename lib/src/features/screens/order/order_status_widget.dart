@@ -12,10 +12,17 @@ class OrderStatusWidget extends StatefulWidget {
 }
 
 class OrderStatusWidgetState extends State<OrderStatusWidget> {
+  void initState() {
+    super.initState();
+    print('widget.order: ${widget.order}');
+    print(
+        'widget.order.orderStage AHHHHHh: ${widget.order.orderStage?.dropOff.status ?? 'FUCK'}');
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<StatusItem> statusIcons = [
-      StatusItem(date: '23 NOV', title: 'Pending Drop Off', icon: cDropOffIcon),
+      StatusItem(date: '23 NOV', title: 'Drop Off', icon: cDropOffIcon),
       StatusItem(
           date: '23 NOV',
           title: 'Collected By Rider',
@@ -33,8 +40,7 @@ class OrderStatusWidgetState extends State<OrderStatusWidget> {
     ];
 
     final List<StatusItem> statusIconsGrey = [
-      StatusItem(
-          date: '23 NOV', title: 'Pending Drop Off', icon: cDropOffIconGrey),
+      StatusItem(date: '23 NOV', title: 'Drop Off', icon: cDropOffIconGrey),
       StatusItem(
           date: '23 NOV',
           title: 'Collected By Rider',
@@ -55,7 +61,7 @@ class OrderStatusWidgetState extends State<OrderStatusWidget> {
     ];
 
     final Map<String, String> statusFields = {
-      'Pending Drop Off': 'pendingDropOff',
+      'Drop Off': 'dropOff',
       'Collected By Rider': 'collectedByRider',
       'In Progress': 'inProgress',
       'Processing Complete': 'processingComplete',
@@ -84,35 +90,45 @@ class OrderStatusWidgetState extends State<OrderStatusWidget> {
                   switch (index) {
                     case 0:
                       isStatusTrue =
-                          widget.order.orderStage!.pendingDropOff.status;
+                          widget.order.orderStage?.dropOff.status ?? false;
                       break;
                     case 1:
                       isStatusTrue =
-                          widget.order.orderStage!.collectedByRider.status;
+                          widget.order.orderStage?.collectedByRider.status ??
+                              false;
                       break;
                     case 2:
-                      isStatusTrue = widget.order.orderStage!.inProgress.status;
+                      isStatusTrue =
+                          widget.order.orderStage?.inProgress.status ?? false;
                       break;
                     case 3:
                       isStatusTrue =
-                          widget.order.orderStage!.processingComplete.status;
+                          widget.order.orderStage?.processingComplete.status ??
+                              false;
                       break;
                     case 4:
                       isStatusTrue =
-                          widget.order.orderStage!.outForDelivery.status;
+                          widget.order.orderStage?.outForDelivery.status ??
+                              false;
                       break;
                     case 5:
                       isStatusTrue =
-                          widget.order.orderStage!.readyForCollection.status;
+                          widget.order.orderStage?.readyForCollection.status ??
+                              false;
                       break;
                     case 6:
-                      isStatusTrue = widget.order.orderStage!.completed.status;
+                      isStatusTrue =
+                          widget.order.orderStage?.completed.status ?? false;
                       break;
                     default:
                       isStatusTrue = false;
                   }
 
-                  String statusKey = statusFields[statusIcons[index].title]!;
+                  String statusKey =
+                      statusFields[statusIcons[index].title] ?? '';
+                  String? dateUpdated = widget
+                      .order.orderStage![statusKey].dateUpdated
+                      ?.toString();
 
                   return isStatusTrue
                       ? Row(
@@ -126,14 +142,9 @@ class OrderStatusWidgetState extends State<OrderStatusWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    // Use the dateUpdated from the OrderStage model
-                                    widget.order.orderStage![statusKey]
-                                                .dateUpdated !=
-                                            null
-                                        ? widget.order.getFormattedDateTime(
-                                            widget.order.orderStage![statusKey]
-                                                .dateUpdated
-                                                .toString())
+                                    dateUpdated != null
+                                        ? widget.order
+                                            .getFormattedDateTime(dateUpdated)
                                         : 'N/A',
                                     style: isStatusTrue
                                         ? CTextTheme
@@ -210,204 +221,3 @@ class StatusItem {
 
   StatusItem({required this.date, required this.title, required this.icon});
 }
-
-//   Padding(
-        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-        //     child: Row(
-        //       children: [
-        //         Image.asset(cReservedIcon),
-        //         const SizedBox(width: 20),
-        //         SizedBox(
-        //           width: size.width * 0.6,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text(
-        //                 'YOOO',
-        //                 style: CTextTheme.blackTextTheme.labelLarge,
-        //               ),
-        //               Text(
-        //                 'Reserved',
-        //                 style: CTextTheme.blueTextTheme.headlineMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-        //     child: Row(
-        //       children: [
-        //         Image.asset(cDropOffIcon),
-        //         const SizedBox(width: 20),
-        //         SizedBox(
-        //           width: size.width * 0.6,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text(
-        //                 'NOV 23',
-        //                 style: CTextTheme.blackTextTheme.labelLarge,
-        //               ),
-        //               Text(
-        //                 'Drop Off',
-        //                 style: CTextTheme.blueTextTheme.headlineMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-        //     child: Row(
-        //       children: [
-        //         Image.asset(cCollectedOperatorIcon),
-        //         const SizedBox(width: 20),
-        //         SizedBox(
-        //           width: size.width * 0.6,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text(
-        //                 'NOV 23',
-        //                 style: CTextTheme.blackTextTheme.labelLarge,
-        //               ),
-        //               Text(
-        //                 'Collected By Operator',
-        //                 style: CTextTheme.blueTextTheme.headlineMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-        //     child: Row(
-        //       children: [
-        //         Image.asset(cInProgressIcon),
-        //         const SizedBox(width: 20),
-        //         SizedBox(
-        //           width: size.width * 0.6,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text(
-        //                 'NOV 24',
-        //                 style: CTextTheme.blackTextTheme.labelLarge,
-        //               ),
-        //               Text(
-        //                 'In Progress',
-        //                 style: CTextTheme.blueTextTheme.headlineMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-        //     child: Row(
-        //       children: [
-        //         Image.asset(cPrepCompletionIcon),
-        //         const SizedBox(width: 20),
-        //         SizedBox(
-        //           width: size.width * 0.6,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text(
-        //                 'NOV 25',
-        //                 style: CTextTheme.blackTextTheme.labelLarge,
-        //               ),
-        //               Text(
-        //                 'Preparation Completed',
-        //                 style: CTextTheme.blueTextTheme.headlineMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-        //     child: Row(
-        //       children: [
-        //         Image.asset(cDeliveryIcon),
-        //         const SizedBox(width: 20),
-        //         SizedBox(
-        //           width: size.width * 0.6,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text(
-        //                 'NOV 26',
-        //                 style: CTextTheme.blackTextTheme.labelLarge,
-        //               ),
-        //               Text(
-        //                 'Out Of Delivery',
-        //                 style: CTextTheme.blueTextTheme.headlineMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-        //     child: Row(
-        //       children: [
-        //         Image.asset(cCollectionIcon),
-        //         const SizedBox(width: 20),
-        //         SizedBox(
-        //           width: size.width * 0.6,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text(
-        //                 'NOV 26',
-        //                 style: CTextTheme.blackTextTheme.labelLarge,
-        //               ),
-        //               Text(
-        //                 'Ready For Collection',
-        //                 style: CTextTheme.blueTextTheme.headlineMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        //   Padding(
-        //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-        //     child: Row(
-        //       children: [
-        //         Image.asset(cCompleteIcon),
-        //         const SizedBox(width: 20),
-        //         SizedBox(
-        //           width: size.width * 0.6,
-        //           child: Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text(
-        //                 'NOV 26',
-        //                 style: CTextTheme.blackTextTheme.labelLarge,
-        //               ),
-        //               Text(
-        //                 'Completed',
-        //                 style: CTextTheme.blueTextTheme.headlineMedium,
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),

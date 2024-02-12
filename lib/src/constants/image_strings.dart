@@ -78,3 +78,6 @@ const String cMaybank = "assets/images/bank_image/maybank_logo.png";
 const String cCIMB = "assets/images/bank_image/cimb_logo.png";
 const String cPublicBank = "assets/images/bank_image/publicbank_logo.png";
 const String cHongLeongBank = "assets/images/bank_image/hongleongbank_logo.png";
+
+// QR Codes
+const String cDummyOrderQR = 'assets/images/qr_codes/dummy_order_qr.png';

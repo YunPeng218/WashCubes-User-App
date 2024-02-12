@@ -298,9 +298,6 @@ class OrderPageState extends State<OrderPage>
             order.orderStage?.orderError.status == false)
         .toList();
 
-    print('YO');
-    print(filteredOrders);
-
     if (filteredOrders.isEmpty) {
       return Column(
         children: [
