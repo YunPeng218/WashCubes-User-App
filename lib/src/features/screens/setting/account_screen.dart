@@ -116,6 +116,7 @@ class _AccountPageState extends State<AccountPage> {
                 : ListView(
                     children: <Widget>[
                       if (user != null) UserHeader(user: user),
+                      SizedBox(height: 15),
                       ProfileOption(
                         title: 'Edit Profile',
                         icon: Icons.person_outline_rounded,

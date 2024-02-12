@@ -82,6 +82,7 @@ class ProfileHeader extends StatefulWidget {
 class _ProfileHeaderState extends State <ProfileHeader> {
   File? imageFile;
   String? imageUrl;
+  bool isUploading = false;
 
   @override
   void initState() {
@@ -101,23 +102,35 @@ class _ProfileHeaderState extends State <ProfileHeader> {
   }
 
   Future<void> uploadImage() async {
-    final url = Uri.parse('https://api.cloudinary.com/v1_1/ddweldfmx/upload');
-    final request = http.MultipartRequest('POST', url)
-      ..fields['upload_preset'] = 'xcbbr3ok'
-      ..files.add(await http.MultipartFile.fromPath('file', imageFile!.path));
-    final response = await request.send();
-    print('Upload response status code: ${response.statusCode}');
-    if (response.statusCode == 200) {
-      final responseData = await response.stream.toBytes();
-      final responseString = utf8.decode(responseData);
-      final jsonMap = jsonDecode(responseString);
+    setState(() {
+      isUploading = true;
+    });
+    try {
+      final url = Uri.parse('https://api.cloudinary.com/v1_1/ddweldfmx/upload');
+      final request = http.MultipartRequest('POST', url)
+        ..fields['upload_preset'] = 'xcbbr3ok'
+        ..files.add(await http.MultipartFile.fromPath('file', imageFile!.path));
+      final response = await request.send();
+      print('Upload response status code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final responseData = await response.stream.toBytes();
+        final responseString = utf8.decode(responseData);
+        final jsonMap = jsonDecode(responseString);
+        setState(() {
+          final url = jsonMap['url'];
+          imageUrl = url;
+        });
+        updateProfilePicURL(imageUrl);
+      }
+    } catch (error) {
+      print('Error uploading image: $error');
+    } finally {
       setState(() {
-        final url = jsonMap['url'];
-        imageUrl = url;
+        isUploading = false;
       });
-      updateProfilePicURL(imageUrl);
     }
   }
+
 
   Future<void> updateProfilePicURL(imageUrl) async {
     Map<String, dynamic> newDetails = {
@@ -163,38 +176,50 @@ class _ProfileHeaderState extends State <ProfileHeader> {
                 ),
               ),
             ),
+            if (isUploading)
+              Positioned(
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
             IconButton(
               icon: const Icon(
-                Icons.camera_enhance, 
+                Icons.camera_enhance,
                 color: Colors.grey,
               ),
               onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          leading: const Icon(Icons.camera),
-                          title: const Text('Take a photo'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            pickImage(ImageSource.camera);
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(Icons.image),
-                          title: Text('Choose from gallery'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            pickImage(ImageSource.gallery);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
+                if (!isUploading) {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: const Icon(Icons.camera),
+                            title: const Text('Take a photo'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              pickImage(ImageSource.camera);
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.image),
+                            title: Text('Choose from gallery'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              pickImage(ImageSource.gallery);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
             ),
           ],

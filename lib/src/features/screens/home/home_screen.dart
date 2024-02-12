@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       if (isInactive) {
         setState(() {
           elapsedTime += 1;
-          print(elapsedTime);
           if (elapsedTime == 300) {
             setAuthenticationStatus();
             Navigator.of(context).pushAndRemoveUntil(
