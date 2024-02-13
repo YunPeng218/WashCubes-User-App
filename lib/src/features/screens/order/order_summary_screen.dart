@@ -10,26 +10,20 @@ import 'dart:convert';
 import 'package:device_run_test/config.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-
-// SCREENS
-import '../payment/payment_method.dart';
-import '../home/home_screen.dart';
-import '../welcome/welcome_screen.dart';
-import '../order/select_item_screen.dart';
-import '../order/collection_site_select.dart';
-
-// ASSETS
+import 'package:device_run_test/src/features/screens/payment/payment_method.dart';
+import 'package:device_run_test/src/features/screens/home/home_screen.dart';
+import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
+import 'package:device_run_test/src/features/screens/order/select_item_screen.dart';
+import 'package:device_run_test/src/features/screens/order/collection_site_select.dart';
+//import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
-
-// MODELS
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/user.dart';
-
-// UTILS
 import 'package:device_run_test/src/utilities/guest_mode.dart';
+//import 'package:device_run_test/src/utilities/locker_service.dart';
 
 class OrderSummary extends StatefulWidget {
   final LockerSite? lockerSite;
@@ -53,9 +47,41 @@ class OrderSummary extends StatefulWidget {
   _OrderSummaryState createState() => _OrderSummaryState();
 }
 
-class _OrderSummaryState extends State<OrderSummary> {
+class _OrderSummaryState extends State<OrderSummary>
+    with WidgetsBindingObserver {
   late String token;
   User? user;
+  // late BuildContext _context;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   print('State = $state');
+  //   if (state == AppLifecycleState.paused) {
+  //     final lockerService = Provider.of<LockerService>(_context, listen: false);
+  //     lockerService.freeUpLockerCompartment(
+  //         widget.lockerSite, widget.compartment);
+  //   } else if (state == AppLifecycleState.resumed) {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => OrderPage(),
+  //       ),
+  //     );
+  //   }
+  // }
 
   Future<User?> getUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -241,9 +267,7 @@ class _OrderSummaryState extends State<OrderSummary> {
 
   Future<void> cancelOrder() async {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => HomePage()));
+        context, MaterialPageRoute(builder: (context) => HomePage()));
   }
 
   void handleBackButtonPress() {
@@ -276,6 +300,7 @@ class _OrderSummaryState extends State<OrderSummary> {
 
   @override
   Widget build(BuildContext context) {
+    // _context = context;
     final orderItems = widget.order?.orderItems;
 
     return PopScope(

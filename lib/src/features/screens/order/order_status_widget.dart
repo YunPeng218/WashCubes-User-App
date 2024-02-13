@@ -14,9 +14,6 @@ class OrderStatusWidget extends StatefulWidget {
 class OrderStatusWidgetState extends State<OrderStatusWidget> {
   void initState() {
     super.initState();
-    print('widget.order: ${widget.order}');
-    print(
-        'widget.order.orderStage AHHHHHh: ${widget.order.orderStage?.dropOff.status ?? 'FUCK'}');
   }
 
   @override

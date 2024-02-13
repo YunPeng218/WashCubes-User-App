@@ -136,42 +136,42 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
     List<String> compartmentDimensions = ['315mm', '472.5mm', '630mm', '945mm'];
 
     // SHOW DIALOG IF LOCKER SITE IS FULL
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (availableCompartments?.availableCompartmentsBySize.isEmpty ?? false) {
-    //     showDialog(
-    //       context: context,
-    //       builder: (BuildContext context) {
-    //         return AlertDialog(
-    //           title: Text(
-    //             'No Available Compartments',
-    //             style: CTextTheme.blackTextTheme.headlineMedium,
-    //           ),
-    //           content: Text(
-    //             'Sorry, there are no available compartments for any size. Please select another locker site.',
-    //             style: CTextTheme.blackTextTheme.headlineMedium,
-    //           ),
-    //           actions: <Widget>[
-    //             TextButton(
-    //               onPressed: () {
-    //                 Navigator.of(context).pop();
-    //                 Navigator.push(
-    //                   context,
-    //                   MaterialPageRoute(
-    //                     builder: (context) => LockerSiteSelect(),
-    //                   ),
-    //                 );
-    //               },
-    //               child: Text(
-    //                 'Go Back',
-    //                 style: CTextTheme.blackTextTheme.headlineSmall,
-    //               ),
-    //             ),
-    //           ],
-    //         );
-    //       },
-    //     );
-    //   }
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (availableCompartments?.availableCompartmentsBySize.isEmpty ?? false) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                'No Available Compartments',
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
+              content: Text(
+                'Sorry, there are no available compartments for any size. Please select another locker site.',
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LockerSiteSelect(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Go Back',
+                    style: CTextTheme.blackTextTheme.headlineSmall,
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
 
     return PopScope(
       canPop: false,

@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:device_run_test/config.dart';
-
 import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
 import 'online_banking_option.dart';
-import '../order/order_screen.dart';
-
+import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/user.dart';
+//import 'package:provider/provider.dart';
+//import 'package:device_run_test/src/utilities/locker_service.dart';
 
 class PaymentScreen extends StatefulWidget {
   final Order? order;
@@ -35,9 +35,11 @@ class PaymentScreen extends StatefulWidget {
   _PaymentScreenState createState() => _PaymentScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
+class _PaymentScreenState extends State<PaymentScreen>
+    with WidgetsBindingObserver {
   static const maxSeconds = 10 * 60;
   int seconds = maxSeconds;
+  // late BuildContext _context;
 
   //Payment Timer
   void startTimer() {
@@ -55,9 +57,33 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     startTimer();
-    print(widget.compartment.id);
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   print('State = $state');
+  //   if (state == AppLifecycleState.paused) {
+  //     final lockerService = Provider.of<LockerService>(_context, listen: false);
+  //     lockerService.freeUpLockerCompartment(
+  //         widget.lockerSite, widget.compartment);
+  //   } else if (state == AppLifecycleState.resumed) {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => OrderPage(),
+  //       ),
+  //     );
+  //   }
+  // }
 
   void handlePaymentMethodSelection() {
     Navigator.push(
@@ -111,6 +137,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // _context = context;
     return PopScope(
       canPop: false,
       child: Scaffold(

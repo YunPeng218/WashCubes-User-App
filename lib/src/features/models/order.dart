@@ -55,6 +55,8 @@ class Order {
 
   String getFormattedDateTime(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
+    final timeZoneOffset = Duration(hours: 8);
+    dateTime = dateTime.add(timeZoneOffset);
     String formattedDate = DateFormat.yMMMd().format(dateTime);
     String formattedTime = DateFormat.jm().format(dateTime);
     return '${formattedDate} / ${formattedTime}';

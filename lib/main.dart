@@ -1,5 +1,6 @@
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:device_run_test/src/features/screens/home/home_screen.dart';
+import 'package:device_run_test/src/utilities/locker_service.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/utilities/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,9 @@ void main() async {
     providers: [
       ChangeNotifierProvider<GuestModeProvider>(
         create: (_) => GuestModeProvider(),
+      ),
+      ChangeNotifierProvider<LockerService>(
+        create: (_) => LockerService(),
       ),
     ],
     child: MyApp(

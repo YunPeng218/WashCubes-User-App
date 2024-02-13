@@ -27,8 +27,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
       Marker(
         markerId: const MarkerId('marker_1'),
         position: const LatLng(3.1309800148010254, 101.62559509277344),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueAzure),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         infoWindow: const InfoWindow(
           title: 'Tropicana City Office Tower',
         ),
@@ -36,8 +35,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
       Marker(
         markerId: const MarkerId('marker_2'),
         position: const LatLng(3.0649349689483643, 101.6168441772461),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueAzure),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         infoWindow: const InfoWindow(
           title: 'Taylor’s University',
         ),
@@ -45,8 +43,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
       Marker(
         markerId: const MarkerId('marker_3'),
         position: const LatLng(3.0635976791381836, 101.6085433959961),
-        icon: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueAzure),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
         infoWindow: const InfoWindow(
           title: 'Sunway Geo Residences',
         ),
@@ -58,7 +55,10 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nearby Locations', style: CTextTheme.blackTextTheme.displaySmall,),
+        title: Text(
+          'Nearby Locations',
+          style: CTextTheme.blackTextTheme.displaySmall,
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -78,11 +78,11 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                 });
                 _showAlertDialog(context);
               },
-              backgroundColor: AppColors.cBarColor,
+              backgroundColor: AppColors.cBlueColor3,
               mini: true,
               child: const Icon(
                 Icons.map,
-                color:  AppColors.cWhiteColor,
+                color: AppColors.cWhiteColor,
               ),
             ),
           ),
@@ -108,7 +108,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                   const SizedBox(height: 20),
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColors.cBarColor,
+                      color: AppColors.cBlueColor3,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: TextButton(
@@ -116,7 +116,8 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const NearbyLocationListPage(),
+                            builder: (context) =>
+                                const NearbyLocationListPage(),
                           ),
                         );
                       },
@@ -142,7 +143,10 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Select an action', style: CTextTheme.blackTextTheme.headlineMedium,),
+          title: Text(
+            'Select an action',
+            style: CTextTheme.blackTextTheme.headlineMedium,
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -150,21 +154,30 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                   onPressed: () {
                     // TODO: Implement action for "Open in Maps" here.
                   },
-                  child: Text('Open in Maps', style: CTextTheme.blackTextTheme.headlineMedium,),
+                  child: Text(
+                    'Open in Maps',
+                    style: CTextTheme.blackTextTheme.headlineMedium,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 OutlinedButton(
                   onPressed: () {
                     // TODO: Implement action for "Open in Waze" here.
                   },
-                  child: Text('Open in Waze', style: CTextTheme.blackTextTheme.headlineMedium,),
+                  child: Text(
+                    'Open in Waze',
+                    style: CTextTheme.blackTextTheme.headlineMedium,
+                  ),
                 ),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Close', style: CTextTheme.blackTextTheme.headlineMedium,),
+              child: Text(
+                'Close',
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the AlertDialog.
               },

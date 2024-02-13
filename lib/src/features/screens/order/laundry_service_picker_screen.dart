@@ -1,15 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:device_run_test/src/constants/sizes.dart';
+//import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:device_run_test/src/features/screens/order/select_item_screen.dart';
 import 'package:device_run_test/src/features/screens/order/locker_compartment_select.dart';
-
 import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
@@ -29,7 +28,8 @@ class LaundryServicePicker extends StatefulWidget {
   _LaundryServicePickerState createState() => _LaundryServicePickerState();
 }
 
-class _LaundryServicePickerState extends State<LaundryServicePicker> {
+class _LaundryServicePickerState extends State<LaundryServicePicker>
+    with WidgetsBindingObserver {
   List<Service> services = [];
 
   Map<String, String> serviceImages = {
@@ -43,8 +43,31 @@ class _LaundryServicePickerState extends State<LaundryServicePicker> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     fetchServices();
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   super.didChangeAppLifecycleState(state);
+  //   print('State = $state');
+  //   if (state == AppLifecycleState.paused) {
+  //     freeUpLockerCompartment(widget.lockerSite, widget.compartment);
+  //   } else if (state == AppLifecycleState.resumed) {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => OrderPage(),
+  //       ),
+  //     );
+  //   }
+  // }
 
   // GET SERVICES FROM BACKEND
   Future<void> fetchServices() async {
@@ -95,19 +118,44 @@ class _LaundryServicePickerState extends State<LaundryServicePicker> {
             title: 'Warning',
             content:
                 'Are you sure you want to go back? Any assigned compartments will be released.',
-            onPressedConfirm: freeUpLockerCompartment,
+            onPressedConfirm: checkForAllocatedCompartment,
             cancelButtonText: 'Cancel',
             confirmButtonText: 'Confirm');
       },
     );
   }
 
-  void freeUpLockerCompartment() async {
+  void checkForAllocatedCompartment() async {
     if (widget.compartment != null) {
-      try {
+      int? responseStatus =
+          await freeUpLockerCompartment(widget.lockerSite, widget.compartment);
+      if (responseStatus == 200) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => LockerCompartmentSelect(
+                    selectedLockerSite: widget.lockerSite,
+                  )),
+        );
+      }
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LockerCompartmentSelect(
+                  selectedLockerSite: widget.lockerSite,
+                )),
+      );
+    }
+  }
+
+  Future<int?> freeUpLockerCompartment(
+      LockerSite? lockerSite, LockerCompartment? compartment) async {
+    try {
+      if (compartment != null) {
         Map<String, dynamic> compartmentToRelease = {
-          'lockerSiteId': widget.lockerSite?.id,
-          'compartmentId': widget.compartment?.id,
+          'lockerSiteId': lockerSite?.id,
+          'compartmentId': compartment.id,
         };
 
         final response = await http.post(
@@ -116,29 +164,13 @@ class _LaundryServicePickerState extends State<LaundryServicePicker> {
           headers: {'Content-Type': 'application/json'},
         );
 
-        if (response.statusCode == 200) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => LockerCompartmentSelect(
-                      selectedLockerSite: widget.lockerSite,
-                    )),
-          );
-        } else {
-          throw Exception('Failed to release compartment');
-        }
-      } catch (error) {
-        print('Error releasing compartment: $error');
+        return response.statusCode;
+      } else {
+        return null;
       }
-    } else {
-      // Navigate back if compartment is null
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => LockerCompartmentSelect(
-                  selectedLockerSite: widget.lockerSite,
-                )),
-      );
+    } catch (error) {
+      print('Error releasing compartment: $error');
+      return null;
     }
   }
 

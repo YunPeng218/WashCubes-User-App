@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:device_run_test/config.dart';
@@ -17,7 +19,7 @@ class EditProfilePage extends StatefulWidget {
   _EditProfilePageState createState() => _EditProfilePageState();
 }
 
-class _EditProfilePageState extends State <EditProfilePage> {
+class _EditProfilePageState extends State<EditProfilePage> {
   UserProfile? user;
 
   @override
@@ -50,21 +52,28 @@ class _EditProfilePageState extends State <EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile', style: CTextTheme.blackTextTheme.displaySmall,),
+        title: Text(
+          'Edit Profile',
+          style: CTextTheme.blackTextTheme.displaySmall,
+        ),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(cDefaultSize),
         child: ListView(
           children: <Widget>[
-            if (user!=null)
-            ProfileHeader(user: user),
-            if (user!=null)
-              EditableProfileItem(title: 'PREFERRED NAME', value: user!.name, user: user),
-            if (user!=null)
-              EditableProfileItem(title: 'MOBILE NUMBER', value: user!.phoneNumber.toString(), user: user),
-            if (user!=null)
-              EditableProfileItem(title: 'EMAIL ADDRESS', value: user!.email, user: user),
+            if (user != null) ProfileHeader(user: user),
+            if (user != null)
+              EditableProfileItem(
+                  title: 'PREFERRED NAME', value: user!.name, user: user),
+            if (user != null)
+              EditableProfileItem(
+                  title: 'MOBILE NUMBER',
+                  value: user!.phoneNumber.toString(),
+                  user: user),
+            if (user != null)
+              EditableProfileItem(
+                  title: 'EMAIL ADDRESS', value: user!.email, user: user),
           ],
         ),
       ),
@@ -80,7 +89,7 @@ class ProfileHeader extends StatefulWidget {
   _ProfileHeaderState createState() => _ProfileHeaderState();
 }
 
-class _ProfileHeaderState extends State <ProfileHeader> {
+class _ProfileHeaderState extends State<ProfileHeader> {
   File? imageFile;
   String? imageUrl;
   bool isUploading = false;
@@ -91,10 +100,10 @@ class _ProfileHeaderState extends State <ProfileHeader> {
     imageUrl = widget.user!.profilePicURL;
   }
 
-  Future<void> pickImage (ImageSource source) async {
+  Future<void> pickImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     XFile? pickedFile = await picker.pickImage(source: source);
-    setState((){
+    setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
         uploadImage();
@@ -132,7 +141,6 @@ class _ProfileHeaderState extends State <ProfileHeader> {
     }
   }
 
-
   Future<void> updateProfilePicURL(imageUrl) async {
     Map<String, dynamic> newDetails = {
       'userId': widget.user!.id,
@@ -153,11 +161,11 @@ class _ProfileHeaderState extends State <ProfileHeader> {
           widget.user = UserProfile.fromJson(userData);
         });
         ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Profile picture updated successfully!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+          SnackBar(
+            content: Text('Profile picture updated successfully!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }
@@ -236,7 +244,9 @@ class EditableProfileItem extends StatefulWidget {
   String value;
   UserProfile? user;
 
-  EditableProfileItem({Key? key, required this.title, required this.value, required this.user}) : super(key: key);
+  EditableProfileItem(
+      {Key? key, required this.title, required this.value, required this.user})
+      : super(key: key);
 
   @override
   _EditableProfileItemState createState() => _EditableProfileItemState();
@@ -282,7 +292,8 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
       );
 
       if (response.statusCode == 200) {
-        _EditProfilePageState? pageState = context.findAncestorStateOfType<_EditProfilePageState>();
+        _EditProfilePageState? pageState =
+            context.findAncestorStateOfType<_EditProfilePageState>();
         if (pageState != null) {
           pageState.loadUserInfo();
         }
@@ -336,10 +347,11 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
             children: [
               Text(
                 widget.value,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: CTextTheme.blackTextTheme.headlineLarge,
               ),
               IconButton(
-                icon: const Icon(Icons.edit_outlined, color: AppColors.cGreyColor2),
+                icon: const Icon(Icons.edit_outlined,
+                    color: AppColors.cGreyColor2),
                 onPressed: () {
                   showEditDialog(context, widget.title, widget.value);
                 },
@@ -391,7 +403,18 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
   Widget build(BuildContext context) {
     bool isPhoneNumber = widget.title == 'MOBILE NUMBER';
     return AlertDialog(
-      title: Text('Edit ${widget.title}'),
+      title: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Edit ${widget.title}',
+                  style: CTextTheme.blackTextTheme.headlineLarge),
+            ],
+          ),
+          const SizedBox(height: 20.0),
+        ],
+      ),
       content: Form(
         key: _formKey,
         child: TextFormField(
@@ -400,14 +423,18 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
           decoration: InputDecoration(
             labelText: widget.title,
           ),
-          keyboardType: isPhoneNumber ? TextInputType.phone : TextInputType.text,
+          keyboardType:
+              isPhoneNumber ? TextInputType.phone : TextInputType.text,
           inputFormatters: isPhoneNumber
               ? [FilteringTextInputFormatter.digitsOnly]
               : null, // Allow only numeric input if it's a phone number
           validator: (value) {
-            if (widget.title == 'EMAIL ADDRESS' && !RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(value ?? '')) {
+            if (widget.title == 'EMAIL ADDRESS' &&
+                !RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                    .hasMatch(value ?? '')) {
               return 'Enter a valid email address';
-            } else if (widget.title == 'MOBILE NUMBER' && !RegExp(r'^601[0-46-9][0-9]{7,8}$').hasMatch(value ?? '')) {
+            } else if (widget.title == 'MOBILE NUMBER' &&
+                !RegExp(r'^601[0-46-9][0-9]{7,8}$').hasMatch(value ?? '')) {
               return 'Enter a valid phone number starting with 601';
             } else if (value == '') {
               return 'Enter a value';
@@ -419,7 +446,9 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
+          child: Text(
+            'Cancel',
+          ),
         ),
         TextButton(
           onPressed: () {

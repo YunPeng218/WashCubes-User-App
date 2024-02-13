@@ -113,10 +113,10 @@ class _AccountPageState extends State<AccountPage> {
                       ),
                     ],
                   )
-                : ListView(
-                    children: <Widget>[
+                : Column(
+                    children: [
                       if (user != null) UserHeader(user: user),
-                      SizedBox(height: 15),
+                      SizedBox(height: 30.0),
                       ProfileOption(
                         title: 'Edit Profile',
                         icon: Icons.person_outline_rounded,

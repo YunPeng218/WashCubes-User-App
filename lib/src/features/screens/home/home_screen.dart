@@ -86,9 +86,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState (AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused)
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused)
       isInactive = true;
     else if (state == AppLifecycleState.resumed) {
       isInactive = false;
@@ -96,7 +97,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> setAuthenticationStatus () async {
+  Future<void> setAuthenticationStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('isAuthenticated', 'false');
   }
@@ -107,7 +108,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (token != 'No token') {
       loadUserInfo();
     }
-    String isBiometricsEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
+    String isBiometricsEnabled =
+        prefs.getString('isBiometricsEnabled') ?? 'false';
     String isAuthenticated = prefs.getString('isAuthenticated') ?? 'false';
     if (isBiometricsEnabled == 'true' && isAuthenticated == 'false') {
       showBiometricPrompt(context);
@@ -265,7 +267,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             Icons.location_on,
                             color: AppColors.cBlueColor3,
                           ),
-                          Text("Taylor's University",
+                          Text("View Locker Sites",
                               style: CTextTheme.blackTextTheme.headlineSmall),
                           const Icon(
                             Icons.keyboard_arrow_right_rounded,

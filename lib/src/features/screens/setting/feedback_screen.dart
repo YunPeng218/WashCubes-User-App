@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:device_run_test/config.dart';
-import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -39,18 +37,26 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedback Ratings', style: CTextTheme.blackTextTheme.displaySmall,),
+        title: Text(
+          'Feedback Ratings',
+          style: CTextTheme.blackTextTheme.displaySmall,
+        ),
         centerTitle: true,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(24),
         children: [
           Text(
             'Rate Our Service',
             style: CTextTheme.blackTextTheme.displayMedium,
           ),
-          Text('Are you satisfied with our service?', style: CTextTheme.greyTextTheme.labelLarge,),
-          const SizedBox(height: 10.0,),
+          Text(
+            'Are you satisfied with our service?',
+            style: CTextTheme.greyTextTheme.labelLarge,
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
           RatingBar.builder(
             initialRating: _rating,
             minRating: 1,
@@ -68,11 +74,14 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
               });
             },
           ),
-          const SizedBox(height: 10.0,),
+          const SizedBox(
+            height: 20.0,
+          ),
           Text(
             'Tell us what can be improved?',
             style: CTextTheme.blackTextTheme.headlineMedium,
           ),
+          const SizedBox(height: 10.0),
           Wrap(
             spacing: 8,
             children: _improvementOptions.map((option) {
@@ -91,7 +100,7 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 30.0),
           TextField(
             controller: _feedbackController,
             maxLines: 5,
@@ -101,9 +110,12 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
               labelStyle: CTextTheme.blackTextTheme.headlineMedium,
             ),
           ),
-          const SizedBox(height: cDefaultSize),
+          const SizedBox(height: 15.0),
           ElevatedButton(
-            child: Text('Submit', style: CTextTheme.blackTextTheme.headlineMedium,),
+            child: Text(
+              'Submit',
+              style: CTextTheme.blackTextTheme.headlineMedium,
+            ),
             onPressed: () {
               _handleSubmitFeedback();
             },
@@ -130,37 +142,37 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
     };
 
     try {
-        // Continue with submitting feedback
-        final response = await http.post(
-          Uri.parse(feedback),
-          body: json.encode(newFeedback),
-          headers: {'Content-Type': 'application/json'},
-        );
+      // Continue with submitting feedback
+      final response = await http.post(
+        Uri.parse(feedback),
+        body: json.encode(newFeedback),
+        headers: {'Content-Type': 'application/json'},
+      );
 
-        if (response.statusCode == 200) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Feedback Submitted Successfully'),
-                content: Text('Thank you for your feedback!'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      // Close the dialog
-                      Navigator.of(context).pop();
-                      // Navigate back to the previous screen
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          print('Failed to submit feedback. Status code: ${response.statusCode}');
-        }
+      if (response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Feedback Submitted Successfully'),
+              content: Text('Thank you for your feedback!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                    // Navigate back to the previous screen
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        print('Failed to submit feedback. Status code: ${response.statusCode}');
+      }
     } catch (error) {
       print('Error submitting feedback: $error');
     }

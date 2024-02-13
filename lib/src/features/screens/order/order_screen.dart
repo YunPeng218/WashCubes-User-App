@@ -79,8 +79,25 @@ class OrderPageState extends State<OrderPage>
     }
   }
 
-  // HANDLE CREATE ORDER BUTTON PRESS
   void handleCreateButtonPress() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        //Alert Dialog PopUp of Backtrack Confirmation
+        return CancelConfirmAlert(
+            title: 'Warning',
+            content:
+                'If you close the app during the order creation process, any assigned compartments will be released and you will be brought to this page. Do you want to proceed?',
+            onPressedConfirm: getMethodToSelectLocekerSite,
+            cancelButtonText: 'Cancel',
+            confirmButtonText: 'Confirm');
+      },
+    );
+  }
+
+  // HANDLE CREATE ORDER BUTTON PRESS
+  void getMethodToSelectLocekerSite() {
+    Navigator.of(context).pop();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -232,8 +249,9 @@ class OrderPageState extends State<OrderPage>
                 Tab(text: 'Order Error'),
                 Tab(text: 'Completed'),
               ],
-              indicatorColor:
-                  AppColors.cBlueColor3, // Set the indicator color to blue
+              indicatorColor: AppColors.cBlueColor3,
+              labelStyle: CTextTheme.blackTextTheme
+                  .headlineSmall, // Set the indicator color to blue
             ),
             const SizedBox(height: 15.0),
             isSignedIn
