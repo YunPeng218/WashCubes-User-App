@@ -51,6 +51,19 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
     }
   }
 
+  // HANDLE LOCKER SITE SELECTION
+  Future<void> handleLockerSiteSelection(LockerSite selectedLockerSite) async {
+    // Store the selected locker site in the app's state or perform other actions
+    print('Selected Locker Site: ${selectedLockerSite.name}');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            LockerCompartmentSelect(selectedLockerSite: selectedLockerSite),
+      ),
+    );
+  }
+
   void handleBackButtonPress() {
     showDialog(
       context: context,
@@ -121,19 +134,6 @@ class _LockerSiteSelectState extends State<LockerSiteSelect> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  // HANDLE LOCKER SITE SELECTION
-  Future<void> handleLockerSiteSelection(LockerSite selectedLockerSite) async {
-    // Store the selected locker site in the app's state or perform other actions
-    print('Selected Locker Site: ${selectedLockerSite.name}');
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            LockerCompartmentSelect(selectedLockerSite: selectedLockerSite),
       ),
     );
   }

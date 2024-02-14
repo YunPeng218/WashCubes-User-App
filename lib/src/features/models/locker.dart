@@ -2,6 +2,7 @@
 class LockerSite {
   final String id;
   final String name;
+  final String address;
   final GeoLocation location;
   final List<LockerCompartment> compartments;
   final int v;
@@ -9,6 +10,7 @@ class LockerSite {
   LockerSite({
     required this.id,
     required this.name,
+    required this.address,
     required this.location,
     required this.compartments,
     required this.v,
@@ -18,6 +20,7 @@ class LockerSite {
     return LockerSite(
       id: json['_id'],
       name: json['name'],
+      address: json['address'],
       location: GeoLocation.fromJson(json['location']),
       compartments: (json['compartments'] as List<dynamic>)
           .map((compartmentJson) => LockerCompartment.fromJson(compartmentJson))

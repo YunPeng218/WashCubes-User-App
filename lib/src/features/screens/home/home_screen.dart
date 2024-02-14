@@ -5,7 +5,7 @@ import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
 import 'package:device_run_test/src/features/screens/loginSession/SessionExpiredPage.dart';
-import 'package:device_run_test/src/features/screens/nearbylocation/NearbyLocationPage.dart';
+import 'package:device_run_test/src/features/screens/nearbylocation/nearby_location_page.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
