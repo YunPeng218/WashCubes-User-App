@@ -6,10 +6,14 @@ import 'package:device_run_test/src/utilities/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:device_run_test/src/utilities/guest_mode.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+    statusBarColor: Colors.black, // Set the status bar color to white
+  ));
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<GuestModeProvider>(

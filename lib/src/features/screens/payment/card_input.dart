@@ -10,9 +10,6 @@ import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
-// import 'package:provider/provider.dart';
-// import 'package:device_run_test/src/utilities/locker_service.dart';
-// import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 
 class PaymentFormScreen extends StatefulWidget {
   final Order? order;
@@ -147,117 +144,120 @@ class _PaymentFormScreenState extends State<PaymentFormScreen>
   @override
   Widget build(BuildContext context) {
     // _context = context;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Credit / Debit Card',
-          style: CTextTheme.blackTextTheme.displaySmall,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Credit / Debit Card',
+            style: CTextTheme.blackTextTheme.displaySmall,
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(cDefaultSize),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'CARD NUMBER',
-                  hintText: 'Card Number',
-                  border: OutlineInputBorder(),
+        body: Padding(
+          padding: const EdgeInsets.all(cDefaultSize),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'CARD NUMBER',
+                    hintText: 'Card Number',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onSaved: (value) {
+                    cardNumber = value ?? '';
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                onSaved: (value) {
-                  cardNumber = value ?? '';
-                },
-              ),
-              const SizedBox(height: 16.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'EXPIRY DATE',
-                        hintText: 'MM / YY',
-                        border: OutlineInputBorder(),
+                const SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'EXPIRY DATE',
+                          hintText: 'MM / YY',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onSaved: (value) {
+                          expiryDate = value ?? '';
+                        },
                       ),
-                      keyboardType: TextInputType.number,
-                      onSaved: (value) {
-                        expiryDate = value ?? '';
-                      },
                     ),
-                  ),
-                  const SizedBox(width: 16.0),
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: 'CVV',
-                        hintText: 'CVV',
-                        border: OutlineInputBorder(),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'CVV',
+                          hintText: 'CVV',
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onSaved: (value) {
+                          cvv = value ?? '';
+                        },
                       ),
-                      keyboardType: TextInputType.number,
-                      onSaved: (value) {
-                        cvv = value ?? '';
-                      },
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'NAME ON CARD',
-                  hintText: 'Name on Card',
-                  border: OutlineInputBorder(),
+                  ],
                 ),
-                keyboardType: TextInputType.name,
-                onSaved: (value) {
-                  cardHolderName = value ?? '';
-                },
-              ),
-              const SizedBox(height: 16.0),
-              Row(
-                children: [
-                  const Icon(Icons.check_circle,
-                      color: AppColors.cPrimaryColor),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Text(
-                      'Your card details will be saved securely.',
-                      style: CTextTheme.blueTextTheme.headlineMedium,
-                    ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'NAME ON CARD',
+                    hintText: 'Name on Card',
+                    border: OutlineInputBorder(),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                'We ensure the security and privacy of your card information. Rest assured, i3wash does not have access to your card details.',
-                style: CTextTheme.greyTextTheme.headlineMedium,
-              ),
-            ],
+                  keyboardType: TextInputType.name,
+                  onSaved: (value) {
+                    cardHolderName = value ?? '';
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    const Icon(Icons.check_circle,
+                        color: AppColors.cPrimaryColor),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        'Your card details will be saved securely.',
+                        style: CTextTheme.blueTextTheme.headlineMedium,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  'We ensure the security and privacy of your card information. Rest assured, i3wash does not have access to your card details.',
+                  style: CTextTheme.greyTextTheme.headlineMedium,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(cDefaultSize),
-        child: ElevatedButton(
-          onPressed: () async {
-            // if (_formKey.currentState!.validate()) {
-            //   _formKey.currentState!.save();
-            //   // You can now use the card details for processing
-            // }
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const OrderPage()),
-            // );
-            await confirmOrder();
-          },
-          child: Text(
-            'Check Out',
-            style: CTextTheme.blackTextTheme.headlineMedium,
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.all(cDefaultSize),
+          child: ElevatedButton(
+            onPressed: () async {
+              // if (_formKey.currentState!.validate()) {
+              //   _formKey.currentState!.save();
+              //   // You can now use the card details for processing
+              // }
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => const OrderPage()),
+              // );
+              await confirmOrder();
+            },
+            child: Text(
+              'Check Out',
+              style: CTextTheme.blackTextTheme.headlineMedium,
+            ),
           ),
         ),
       ),

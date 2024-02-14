@@ -26,8 +26,6 @@ import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/utilities/user_helper.dart';
 import 'package:device_run_test/src/utilities/order_helper.dart';
 
-// Make the icons resemble an open locker compartment, and within the compartment there is laundry, for each size from small to extra large, put an increasing amount of laundry
-
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});
   @override
@@ -320,10 +318,9 @@ class OrderPageState extends State<OrderPage>
             );
           },
           tooltip: 'Increment',
-          child: Image.asset(cChatBotLogo),
           backgroundColor: Colors.blue[50],
+          child: Image.asset(cChatBotLogo),
         ),
-        //Bottom Navigation Bar
         bottomNavigationBar: const BottomNavBar(),
       ),
     );
@@ -367,11 +364,6 @@ class OrderPageState extends State<OrderPage>
         return -1;
       }
       return dateUpdatedB.compareTo(dateUpdatedA);
-      // int dateComparison = dateUpdatedB.compareTo(dateUpdatedA);
-      // print('Comparing order ${a.orderNumber} and ${b.orderNumber}');
-      // print('Date comparison result: $dateComparison');
-
-      // return dateComparison;
     });
 
     return ListView.builder(

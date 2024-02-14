@@ -193,265 +193,250 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GuestModeProvider>(
-      builder: (context, guestProvider, child) {
-        return SafeArea(
-          child: Scaffold(
-            // Notification icon and circle avatar
-            appBar: AppBar(
-              //Notification Icon Button
-              leading: IconButton(
+    return Scaffold(
+      // Notification icon and circle avatar
+      appBar: AppBar(
+        //Notification Icon Button
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const NotificationScreen()),
+            );
+          },
+          icon: const Icon(Icons.notifications_none),
+        ),
+        //Avatar Icon
+        actions: <Widget>[
+          CircleAvatar(
+            backgroundImage: NetworkImage(profilePic),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AccountPage()),
+                );
+              },
+              child: null,
+            ),
+          ),
+          const SizedBox(
+            width: 10.0,
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(height: 16),
+              // Good Morning Text
+              Text(
+                'Good Morning, Trimity!',
+                style: CTextTheme.blackTextTheme.headlineSmall,
+              ),
+              const SizedBox(height: 8),
+              // Discover Text
+              Text(
+                'Discover your closest\nlaundry lockers',
+                style: CTextTheme.blackTextTheme.displayMedium,
+              ),
+              const SizedBox(height: 16),
+              // Location Button
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue[50],
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const NotificationScreen()),
+                        builder: (context) => const NearbyLocationPage()),
                   );
                 },
-                icon: const Icon(Icons.notifications_none),
-              ),
-              //Avatar Icon
-              actions: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage(profilePic),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AccountPage()),
-                      );
-                    },
-                    child: null,
-                  ),
-                ),
-                const SizedBox(
-                  width: 10.0,
-                ),
-              ],
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const SizedBox(height: 16),
-                    // Good Morning Text
-                    Text(
-                      'Good Morning, Trimity!',
-                      style: CTextTheme.blackTextTheme.headlineSmall,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(
+                      Icons.location_on,
+                      color: AppColors.cBlueColor3,
                     ),
-                    const SizedBox(height: 8),
-                    // Discover Text
-                    Text(
-                      'Discover your closest\nlaundry lockers',
-                      style: CTextTheme.blackTextTheme.displayMedium,
+                    Text("View Locker Sites",
+                        style: CTextTheme.blackTextTheme.headlineSmall),
+                    const Icon(
+                      Icons.keyboard_arrow_right_rounded,
+                      color: AppColors.cBlackColor,
                     ),
-                    const SizedBox(height: 16),
-                    // Location Button
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[50],
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const NearbyLocationPage()),
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            Icons.location_on,
-                            color: AppColors.cBlueColor3,
-                          ),
-                          Text("View Locker Sites",
-                              style: CTextTheme.blackTextTheme.headlineSmall),
-                          const Icon(
-                            Icons.keyboard_arrow_right_rounded,
-                            color: AppColors.cBlackColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Special Event Title
-                    Text(
-                      'Special Event',
-                      style: CTextTheme.blackTextTheme.displaySmall,
-                    ),
-                    // RecyclerView for images
-                    SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 4, // The number of items in the list
-                        itemBuilder: (context, index) {
-                          return SizedBox(
-                            width: 200,
-                            height: 200,
-                            child: Image.asset(
-                                'assets/images/homepage_image/special_event_${index + 1}.png'),
-                          );
-                        },
-                      ),
-                    ),
-                    const Divider(),
-                    // Ongoing Order Section
-                    const SizedBox(height: 5),
-                    // Ongoing Order Title
-                    Text(
-                      'Ongoing Orders',
-                      style: CTextTheme.blackTextTheme.displaySmall,
-                    ),
-                    const SizedBox(height: 15),
-                    guestProvider.guestMode
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Sign In to View Your Orders',
-                                    style:
-                                        CTextTheme.blackTextTheme.headlineSmall,
-                                    textAlign: TextAlign.end,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const WelcomeScreen()),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  foregroundColor:
-                                      AppColors.cBlackColor, // Text color
-                                  backgroundColor: AppColors
-                                      .cWhiteColor, // Button Fill color
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    side: const BorderSide(
-                                        color: AppColors.cGreyColor1),
-                                  ),
-                                ),
-                                child: Text(
-                                  'Sign In',
-                                  style: CTextTheme.blackTextTheme.labelMedium,
-                                ),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              Card(
-                                color: Colors.blue[50],
-                                child: ListTile(
-                                  leading: Image.asset(
-                                    cHpOrder,
-                                    width: 60,
-                                    height: 60,
-                                  ),
-                                  title: Text(activeOrdersCount.toString(),
-                                      style: CTextTheme
-                                          .blackTextTheme.headlineLarge),
-                                  subtitle: Text('Active Orders',
-                                      style: CTextTheme
-                                          .greyTextTheme.headlineMedium),
-                                  trailing: const Icon(
-                                      Icons.arrow_forward_ios_rounded),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => OrderPage()),
-                                    );
-                                  },
-                                ),
-                              ),
-                              Card(
-                                color: Colors.green[50],
-                                child: ListTile(
-                                  leading: Image.asset(
-                                    cCompleteIcon,
-                                    width: 60,
-                                    height: 60,
-                                  ),
-                                  title: Text(completedOrdersCount.toString(),
-                                      style: CTextTheme
-                                          .blackTextTheme.headlineLarge),
-                                  subtitle: Text('Completed Orders',
-                                      style: CTextTheme
-                                          .greyTextTheme.headlineMedium),
-                                  trailing: const Icon(
-                                      Icons.arrow_forward_ios_rounded),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => OrderPage()),
-                                    );
-                                  },
-                                ),
-                              ),
-                              Card(
-                                color: Colors.red[50],
-                                child: ListTile(
-                                  leading: Image.asset(
-                                    cOrderErrorIcon,
-                                    width: 60,
-                                    height: 60,
-                                  ),
-                                  title: Text(orderErrorsCount.toString(),
-                                      style: CTextTheme
-                                          .blackTextTheme.headlineLarge),
-                                  subtitle: Text('Order Errors',
-                                      style: CTextTheme
-                                          .greyTextTheme.headlineMedium),
-                                  trailing: const Icon(
-                                      Icons.arrow_forward_ios_rounded),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => OrderPage()),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
                   ],
                 ),
               ),
-            ),
-            //ChatBot Trimi Button
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ChatbotScreen()),
-                );
-              },
-              tooltip: 'Increment',
-              child: Image.asset(cChatBotLogo),
-              backgroundColor: Colors.blue[50],
-            ),
-            //BottomNavBar
-            bottomNavigationBar: const BottomNavBar(),
+              const SizedBox(height: 16),
+              // Special Event Title
+              Text(
+                'Special Event',
+                style: CTextTheme.blackTextTheme.displaySmall,
+              ),
+              // RecyclerView for images
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 4, // The number of items in the list
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: 200,
+                      height: 200,
+                      child: Image.asset(
+                          'assets/images/homepage_image/special_event_${index + 1}.png'),
+                    );
+                  },
+                ),
+              ),
+              const Divider(),
+              // Ongoing Order Section
+              const SizedBox(height: 5),
+              // Ongoing Order Title
+              Text(
+                'Ongoing Orders',
+                style: CTextTheme.blackTextTheme.displaySmall,
+              ),
+              const SizedBox(height: 15),
+              Provider.of<GuestModeProvider>(context, listen: false).guestMode
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Sign In to View Your Orders',
+                              style: CTextTheme.blackTextTheme.headlineSmall,
+                              textAlign: TextAlign.end,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const WelcomeScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor:
+                                AppColors.cBlackColor, // Text color
+                            backgroundColor:
+                                AppColors.cWhiteColor, // Button Fill color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(
+                                  color: AppColors.cGreyColor1),
+                            ),
+                          ),
+                          child: Text(
+                            'Sign In',
+                            style: CTextTheme.blackTextTheme.labelMedium,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Card(
+                          color: Colors.blue[50],
+                          child: ListTile(
+                            leading: Image.asset(
+                              cHpOrder,
+                              width: 60,
+                              height: 60,
+                            ),
+                            title: Text(activeOrdersCount.toString(),
+                                style: CTextTheme.blackTextTheme.headlineLarge),
+                            subtitle: Text('Active Orders',
+                                style: CTextTheme.greyTextTheme.headlineMedium),
+                            trailing:
+                                const Icon(Icons.arrow_forward_ios_rounded),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderPage()),
+                              );
+                            },
+                          ),
+                        ),
+                        Card(
+                          color: Colors.green[50],
+                          child: ListTile(
+                            leading: Image.asset(
+                              cCompleteIcon,
+                              width: 60,
+                              height: 60,
+                            ),
+                            title: Text(completedOrdersCount.toString(),
+                                style: CTextTheme.blackTextTheme.headlineLarge),
+                            subtitle: Text('Completed Orders',
+                                style: CTextTheme.greyTextTheme.headlineMedium),
+                            trailing:
+                                const Icon(Icons.arrow_forward_ios_rounded),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderPage()),
+                              );
+                            },
+                          ),
+                        ),
+                        Card(
+                          color: Colors.red[50],
+                          child: ListTile(
+                            leading: Image.asset(
+                              cOrderErrorIcon,
+                              width: 60,
+                              height: 60,
+                            ),
+                            title: Text(orderErrorsCount.toString(),
+                                style: CTextTheme.blackTextTheme.headlineLarge),
+                            subtitle: Text('Order Errors',
+                                style: CTextTheme.greyTextTheme.headlineMedium),
+                            trailing:
+                                const Icon(Icons.arrow_forward_ios_rounded),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OrderPage()),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
+      //ChatBot Trimi Button
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+          );
+        },
+        tooltip: 'Increment',
+        child: Image.asset(cChatBotLogo),
+        backgroundColor: Colors.blue[50],
+      ),
+      //BottomNavBar
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }

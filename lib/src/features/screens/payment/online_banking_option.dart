@@ -73,41 +73,44 @@ class _BankSelectionScreenState extends State<BankSelectionScreen>
   @override
   Widget build(BuildContext context) {
     // _context = context;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Select Your Option',
-          style: CTextTheme.blackTextTheme.displaySmall,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Select Your Option',
+            style: CTextTheme.blackTextTheme.displaySmall,
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: ListView.builder(
-        itemCount: banks.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: AssetImage(banks[index].logoPath),
-            ),
-            title: Text(
-              banks[index].name,
-              style: CTextTheme.blackTextTheme.headlineMedium,
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentFormScreen(
-                          order: widget.order,
-                          lockerSite: widget.lockerSite,
-                          compartment: widget.compartment,
-                          user: widget.user,
-                          collectionSite: widget.collectionSite,
-                        )),
-              );
-            },
-          );
-        },
+        body: ListView.builder(
+          itemCount: banks.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundImage: AssetImage(banks[index].logoPath),
+              ),
+              title: Text(
+                banks[index].name,
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PaymentFormScreen(
+                            order: widget.order,
+                            lockerSite: widget.lockerSite,
+                            compartment: widget.compartment,
+                            user: widget.user,
+                            collectionSite: widget.collectionSite,
+                          )),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

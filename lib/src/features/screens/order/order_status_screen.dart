@@ -112,49 +112,50 @@ class _OrderStatusState extends State<OrderStatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final size = MediaQuery.of(context).size;
-    return Scaffold(
-      //Top Page Bar
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: handleBackButtonPress,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: handleBackButtonPress,
+          ),
+          title: Text(
+            'Order #${widget.order.orderNumber}',
+            style: CTextTheme.blackTextTheme.displaySmall,
+          ),
+          centerTitle: true,
+          //Customer Support Icon Button
+          actions: [
+            IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const SupportAlertWidget();
+                    },
+                  );
+                },
+                icon: const Icon(Icons.headset_mic_outlined)),
+          ],
         ),
-        title: Text(
-          'Order #${widget.order.orderNumber}',
-          style: CTextTheme.blackTextTheme.displaySmall,
-        ),
-        centerTitle: true,
-        //Customer Support Icon Button
-        actions: [
-          IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const SupportAlertWidget();
-                  },
-                );
-              },
-              icon: const Icon(Icons.headset_mic_outlined)),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(20.0), //Padding Around Screen
-          child: Column(
-            children: [
-              OrderStatusWidget(
-                order: widget.order,
-              ),
-              Divider(),
-              OrderStatusDetailWidget(
-                order: widget.order,
-                lockerSite: lockerSite,
-                collectionSite: collectionSite,
-                service: service,
-              ),
-            ],
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20.0), //Padding Around Screen
+            child: Column(
+              children: [
+                OrderStatusWidget(
+                  order: widget.order,
+                ),
+                Divider(),
+                OrderStatusDetailWidget(
+                  order: widget.order,
+                  lockerSite: lockerSite,
+                  collectionSite: collectionSite,
+                  service: service,
+                ),
+              ],
+            ),
           ),
         ),
       ),
