@@ -27,7 +27,7 @@ class CancelConfirmAlert extends StatelessWidget {
       content: Text(
         content,
         textAlign: TextAlign.center,
-        style: CTextTheme.blackTextTheme.headlineMedium,
+        style: CTextTheme.blackTextTheme.headlineSmall,
       ),
       actions: <Widget>[
         Row(

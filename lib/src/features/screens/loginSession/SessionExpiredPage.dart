@@ -1,4 +1,5 @@
 import 'package:device_run_test/src/features/screens/home/home_screen.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 
 class SessionExpiredPage extends StatelessWidget {
@@ -11,15 +12,12 @@ class SessionExpiredPage extends StatelessWidget {
           children: <Widget>[
             Text(
               'Session Expired',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: CTextTheme.blackTextTheme.displayLarge,
             ),
             SizedBox(height: 20),
             Text(
               "Looks like you've been inactive for 5 minutes.\nTo continue, please reauthenticate again.",
-              style: TextStyle(fontSize: 16),
+              style: CTextTheme.blackTextTheme.headlineLarge,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
@@ -31,7 +29,7 @@ class SessionExpiredPage extends StatelessWidget {
                       builder: (context) => const HomePage()),
                 );
               },
-              child: Text('Reauthenticate Now'),
+              child: Text('Reauthenticate Now', style: CTextTheme.blackTextTheme.headlineMedium,),
             ),
           ],
         ),
