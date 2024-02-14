@@ -210,7 +210,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         children: <Widget>[
                           ListTile(
                             leading: const Icon(Icons.camera),
-                            title: const Text('Take a photo'),
+                            title: Text('Take a photo', style: CTextTheme.blackTextTheme.headlineMedium,),
                             onTap: () {
                               Navigator.pop(context);
                               pickImage(ImageSource.camera);
@@ -218,7 +218,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           ),
                           ListTile(
                             leading: Icon(Icons.image),
-                            title: Text('Choose from gallery'),
+                            title: Text('Choose from gallery', style: CTextTheme.blackTextTheme.headlineMedium,),
                             onTap: () {
                               Navigator.pop(context);
                               pickImage(ImageSource.gallery);
@@ -336,10 +336,7 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
         children: [
           Text(
             widget.title,
-            style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 12,
-            ),
+            style: CTextTheme.greyTextTheme.headlineSmall,
           ),
           const SizedBox(height: 4),
           Row(
@@ -447,7 +444,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(
-            'Cancel',
+            'Cancel', style: CTextTheme.blackTextTheme.headlineSmall,
           ),
         ),
         TextButton(
@@ -457,7 +454,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
               Navigator.pop(context);
             }
           },
-          child: Text('Save'),
+          child: Text('Save', style: CTextTheme.blackTextTheme.headlineSmall,),
         ),
       ],
     );
