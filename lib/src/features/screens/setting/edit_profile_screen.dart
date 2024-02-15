@@ -405,7 +405,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Edit ${widget.title}',
+              Text('EDIT ${widget.title}',
                   style: CTextTheme.blackTextTheme.headlineLarge),
             ],
           ),
@@ -417,9 +417,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
         child: TextFormField(
           focusNode: _focusNode,
           controller: _controller,
-          decoration: InputDecoration(
-            labelText: widget.title,
-          ),
+          style: CTextTheme.blackTextTheme.headlineMedium,
           keyboardType:
               isPhoneNumber ? TextInputType.phone : TextInputType.text,
           inputFormatters: isPhoneNumber
