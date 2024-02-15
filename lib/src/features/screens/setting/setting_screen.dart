@@ -56,11 +56,11 @@ class SettingPageState extends State<SettingPage> {
           showBiometricPrompt(context);
         } else {
           // No biometrics available on the device
-          showCustomDialog(context, 'No biometrics available on this device');
+          showCustomDialog(context, 'Please enable biometrics under phone settings.');
         }
       } else {
         // Biometrics cannot be checked on the device
-        showCustomDialog(context, 'Biometrics cannot be checked on this device');
+        showCustomDialog(context, 'Biometrics is not supported on this device.');
       }
     } on PlatformException catch (e) {
       print('Error: ${e.message}');
@@ -72,14 +72,23 @@ class SettingPageState extends State<SettingPage> {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Error'),
-        content: Text(message),
+        title: Text(
+          'Error',
+          style: CTextTheme.blackTextTheme.headlineLarge
+        ),
+        content: Text(
+          message,
+          style: CTextTheme.blackTextTheme.headlineMedium
+        ),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('OK'),
+            child: Text(
+              'OK',
+              style: CTextTheme.blackTextTheme.headlineMedium,
+            ),
           ),
         ],
       );
@@ -154,17 +163,17 @@ class SettingPageState extends State<SettingPage> {
                   future: isBiometricsEnabled(),
                   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      return Text('Error loading biometric status');
+                      return const Text('Error loading biometric status');
                     } else {
                       return Switch(
                         value: snapshot.data ?? false,
                         activeColor: AppColors.cSwitchColor,
                         onChanged: (bool value) async {
-                          if (value==true)
+                          if (value==true) {
                             checkBiometrics(context);
-                          else {
+                          } else {
                             SharedPreferences prefs = await SharedPreferences.getInstance();
                             await prefs.setString('isBiometricsEnabled', 'false');
                           }

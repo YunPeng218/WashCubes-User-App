@@ -27,6 +27,7 @@ const String cSpecialEventImage4 =
 
 //Trimi Mascot Icons
 const String cChatBotLogo = "assets/images/homepage_image/chatbot_icon.png";
+const String cChatBotLogoLarge = "assets/images/homepage_image/chatbot_icon_large.png";
 const String cTrimiDefault = "assets/logos/TrimiDefault.png";
 const String cTrimiBig = "assets/logos/TrimiBig.png";
 

@@ -154,8 +154,14 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Feedback Submitted Successfully'),
-              content: Text('Thank you for your feedback!'),
+              title: Text(
+                'Feedback Submitted Successfully',
+                style: CTextTheme.blackTextTheme.headlineLarge
+              ),
+              content: Text(
+                'Thank you for your feedback!',
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -164,7 +170,10 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
                     // Navigate back to the previous screen
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: Text(
+                    'OK',
+                    style: CTextTheme.blackTextTheme.headlineMedium,
+                  ),
                 ),
               ],
             );

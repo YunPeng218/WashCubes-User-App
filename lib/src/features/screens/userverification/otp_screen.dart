@@ -85,7 +85,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
 
   void otpValidation() async {
     var response = await http.post(Uri.parse(registration),
-        body: {"otpRes": phoneNumberController.text});
+        body: {"otpRes": phoneNumberController.text, "fcmToken": prefs.getString('fcmToken')});
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse['status'] == 'existingUser') {
       var myToken = jsonResponse['token'];
@@ -139,7 +139,10 @@ class _OTPPageState extends State<OTPVerifyPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Error'),
+            title: Text(
+              'Error',
+              style: CTextTheme.blackTextTheme.headlineLarge
+            ),
             content: Text(
               'The OTP entered is incorrect. Please try again.',
               style: CTextTheme.blackTextTheme.headlineMedium,

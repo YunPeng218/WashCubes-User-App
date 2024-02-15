@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "654111065024",
+    "project_id": "washcubes-3b1fb",
+    "storage_bucket": "washcubes-3b1fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654111065024:android:aafd833dd0aeb738e43e25",
+        "android_client_info": {
+          "package_name": "com.example.device_run_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvQWuQqY0yCqC01guB5AqqjgqMOLkF0M0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

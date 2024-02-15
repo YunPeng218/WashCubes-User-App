@@ -1,22 +1,30 @@
-// import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NotificationBar extends StatelessWidget {
   const NotificationBar({
-    super.key,
+    Key? key,
     required this.size,
-  });
+    required this.title,
+    required this.message,
+    required this.date, 
+    this.isRead = false,
+  }) : super(key: key);
 
   final Size size;
+  final String title;
+  final String message;
+  final String date;
+  final bool isRead;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(cDefaultSize - 10),
-      //height: cFormHeight * 3.5,
+      color: isRead ? Colors.white : Colors.grey[200],
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -27,19 +35,25 @@ class NotificationBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Your Laundry is Ready for Pick Up!',
-                  style: CTextTheme.blackTextTheme.headlineSmall,
+                  title,
+                  style: isRead
+                    ? CTextTheme.greyTextTheme.headlineSmall
+                    : CTextTheme.blackTextTheme.headlineSmall,
                 ),
                 Text(
-                  'Order #91296 is now ready for pick up at Taylor’s University!',
-                  style: CTextTheme.blackTextTheme.labelLarge,
+                  message,
+                  style: isRead
+                    ? CTextTheme.greyTextTheme.labelLarge
+                    : CTextTheme.blackTextTheme.labelLarge,
                 ),
               ],
             ),
           ),
           Text(
-            'Nov23',
-            style: CTextTheme.greyTextTheme.headlineSmall,
+            DateFormat('dd MMM').format(DateTime.parse(date)),
+            style: isRead
+              ? CTextTheme.greyTextTheme.headlineSmall
+              : CTextTheme.blackTextTheme.headlineSmall,
           ),
         ],
       ),

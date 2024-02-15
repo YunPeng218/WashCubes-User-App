@@ -10,6 +10,7 @@ import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart
 import 'package:device_run_test/src/utilities/guest_mode.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'edit_profile_screen.dart';
@@ -17,6 +18,8 @@ import 'faq_screen.dart';
 import 'policy_screen.dart';
 import 'feedback_screen.dart';
 import 'package:device_run_test/src/utilities/user_helper.dart';
+import 'package:http/http.dart' as http;
+import 'package:device_run_test/config.dart';
 
 class AccountPage extends StatefulWidget {
   @override
@@ -181,9 +184,14 @@ class _AccountPageState extends State<AccountPage> {
                         title: 'Logout',
                         icon: Icons.logout,
                         onTap: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          await prefs.clear();
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          var token = prefs.getString('token');
+                          Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
+                          http.patch(Uri.parse(deleteFCMToken),
+                            body: {"userId": jwtDecodedToken['_id'], "fcmToken": prefs.getString('fcmToken')});
+                          await prefs.remove('token');
+                          await prefs.remove('isBiometricsEnabled');
+                          await prefs.remove('isAuthenticated');
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => const WelcomeScreen(),
