@@ -7,5 +7,6 @@ const otpverification = '${url}otpgenerator';
 const registration = '${url}registration';
 const feedback = '${url}createFeedback';
 const deleteFCMToken = '${url}deleteFCMToken';
+const addFCMToken = '${url}addFCMToken';
 
 const OPEN_AI_KEY = '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';

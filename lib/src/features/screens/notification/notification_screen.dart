@@ -62,7 +62,7 @@ class _NotifScreenState extends State<NotificationScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(
-              'Confirm Delete',
+              'Confirmation',
               style: CTextTheme.blackTextTheme.headlineLarge
             ),
             content: Text(

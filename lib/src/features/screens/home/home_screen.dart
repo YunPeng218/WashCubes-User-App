@@ -108,8 +108,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (token != 'No token') {
       loadUserInfo();
     }
-    String isBiometricsEnabled =
-        prefs.getString('isBiometricsEnabled') ?? 'false';
+    String isBiometricsEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
     String isAuthenticated = prefs.getString('isAuthenticated') ?? 'false';
     if (isBiometricsEnabled == 'true' && isAuthenticated == 'false') {
       showBiometricPrompt(context);

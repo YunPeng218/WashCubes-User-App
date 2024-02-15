@@ -90,6 +90,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
     if (jsonResponse['status'] == 'existingUser') {
       var myToken = jsonResponse['token'];
       prefs.setString('token', myToken);
+      prefs.setString('isNotificationEnabled', 'true');
 
       // Set Guest Mode to False
       Provider.of<GuestModeProvider>(context, listen: false)
@@ -133,6 +134,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
           .setGuestMode(false);
       var myToken = jsonResponse['token'];
       prefs.setString('token', myToken);
+      prefs.setString('isNotificationEnabled', 'true');
       checkBiometrics(context);
     } else if (jsonResponse['status'] == 'wrongOTP') {
       showDialog(
