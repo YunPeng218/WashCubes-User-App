@@ -63,9 +63,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     timer = Timer.periodic(Duration(seconds: 1), (tm) {
       if (isInactive) {
         setState(() {
-          setAuthenticationStatus(false);
           elapsedTime += 1;
           if (elapsedTime == 300) {
+            setSessionStatus(true);
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => SessionExpiredPage(),
@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      setAuthenticationStatus(false);
       isInactive = true;
     } else if (state == AppLifecycleState.resumed) {
       setAuthenticationStatus(true);
@@ -102,6 +103,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     prefs.setString('isAuthenticated', boolean ? 'true' : 'false');
   }
 
+  Future<void> setSessionStatus(bool boolean) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('sessionExpired', boolean ? 'true' : 'false');
+  }
+
   void init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? 'No token';
@@ -110,10 +116,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
     String isBiometricsEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
     String isAuthenticated = prefs.getString('isAuthenticated') ?? 'false';
-    print(isBiometricsEnabled + isAuthenticated);
-    if (isBiometricsEnabled == 'true' && isAuthenticated == 'false') {
+    String sessionExpired = prefs.getString('sessionExpired') ?? 'false';
+    if ((isBiometricsEnabled == 'true' && isAuthenticated == 'false') || isBiometricsEnabled == 'true' && sessionExpired == 'true') {
       showBiometricPrompt(context);
-    }
+    } 
   }
 
   // Function to show biometric prompt
@@ -126,6 +132,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       );
       if (isAuthenticated) {
         prefs.setString('isAuthenticated', 'true');
+        prefs.setString('sessionExpired', 'false');
       } else {
         SystemNavigator.pop();
       }

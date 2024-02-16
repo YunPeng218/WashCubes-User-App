@@ -31,6 +31,7 @@ class BiometricSetupPage extends StatelessWidget {
           (Route<dynamic> route) => false);
         prefs.setString('isBiometricsEnabled', 'true');
         prefs.setString('isAuthenticated', 'true');
+        prefs.setString('sessionExpired', 'false');
       } else {
         print('Biometric authentication failed');
       }
