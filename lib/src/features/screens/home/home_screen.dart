@@ -63,9 +63,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     timer = Timer.periodic(Duration(seconds: 1), (tm) {
       if (isInactive) {
         setState(() {
+          setAuthenticationStatus(false);
           elapsedTime += 1;
           if (elapsedTime == 300) {
-            setAuthenticationStatus();
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => SessionExpiredPage(),
@@ -86,20 +86,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused)
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
       isInactive = true;
-    else if (state == AppLifecycleState.resumed) {
+    } else if (state == AppLifecycleState.resumed) {
+      setAuthenticationStatus(true);
       isInactive = false;
       elapsedTime = 0;
     }
   }
 
-  Future<void> setAuthenticationStatus() async {
+  Future<void> setAuthenticationStatus(bool boolean) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('isAuthenticated', 'false');
+    prefs.setString('isAuthenticated', boolean ? 'true' : 'false');
   }
 
   void init() async {
@@ -110,6 +110,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
     String isBiometricsEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
     String isAuthenticated = prefs.getString('isAuthenticated') ?? 'false';
+    print(isBiometricsEnabled + isAuthenticated);
     if (isBiometricsEnabled == 'true' && isAuthenticated == 'false') {
       showBiometricPrompt(context);
     }
