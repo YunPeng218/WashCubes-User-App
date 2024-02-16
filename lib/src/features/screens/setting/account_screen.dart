@@ -192,6 +192,7 @@ class _AccountPageState extends State<AccountPage> {
                           await prefs.remove('token');
                           await prefs.remove('isBiometricsEnabled');
                           await prefs.remove('isAuthenticated');
+                          await prefs.remove('isNotificationEnabled');
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => const WelcomeScreen(),
