@@ -32,7 +32,7 @@ class OTPVerifyPage extends StatefulWidget {
 
 class _OTPPageState extends State<OTPVerifyPage> {
   late SharedPreferences prefs;
-  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
   String currentText = "";
 
   @override
@@ -85,7 +85,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
 
   void otpValidation() async {
     var response = await http.post(Uri.parse(registration),
-        body: {"otpRes": phoneNumberController.text, "fcmToken": prefs.getString('fcmToken')});
+        body: {"otpRes": otpController.text, "fcmToken": prefs.getString('fcmToken')});
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse['status'] == 'existingUser') {
       var myToken = jsonResponse['token'];
@@ -194,7 +194,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
                   const EdgeInsets.symmetric(vertical: 0.0, horizontal: 25.0),
               child: PinCodeTextField(
                 appContext: context,
-                controller: phoneNumberController,
+                controller: otpController,
                 length: 6,
                 enableActiveFill: true,
                 keyboardType: TextInputType.number,
