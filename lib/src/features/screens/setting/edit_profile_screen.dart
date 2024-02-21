@@ -6,6 +6,7 @@ import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/features/models/user.dart';
+import 'package:device_run_test/src/features/screens/userverification/otp_screen.dart';
 import 'package:device_run_test/src/utilities/user_helper.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -271,17 +272,23 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
         case 'PREFERRED NAME':
           newDetails['name'] = value;
           newDetails['email'] = widget.user!.email;
-          newDetails['phoneNumber'] = widget.user!.phoneNumber;
           break;
         case 'MOBILE NUMBER':
-          newDetails['phoneNumber'] = value;
-          newDetails['name'] = widget.user!.name;
-          newDetails['email'] = widget.user!.email;
-          break;
+          var reqUrl = '${url}sendOTP';
+          var response = await http.post(Uri.parse(reqUrl),
+            body: {"phoneNumber": value});
+          var jsonResponse = jsonDecode(response.body);
+          String otpGenerated = jsonResponse['otp'];
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OTPVerifyPage(phoneNumber: value, otp: otpGenerated, isUpdating: true)
+            )
+          );
+          return;
         case 'EMAIL ADDRESS':
           newDetails['email'] = value;
           newDetails['name'] = widget.user!.name;
-          newDetails['phoneNumber'] = widget.user!.phoneNumber;
           break;
       }
 
@@ -297,6 +304,12 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
         if (pageState != null) {
           pageState.loadUserInfo();
         }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile updated successfully!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
       } else {
         throw Exception('Failed to update user details');
       }
@@ -315,12 +328,6 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
           onEdit: (newValue) {
             updateUserDetails(title, newValue);
             pageState?.loadUserInfo();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Profile updated successfully!'),
-                duration: Duration(seconds: 2),
-              ),
-            );
           },
         );
       },

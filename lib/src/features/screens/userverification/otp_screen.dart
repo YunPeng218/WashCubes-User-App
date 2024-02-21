@@ -3,9 +3,11 @@
 import 'dart:async';
 
 import 'package:device_run_test/src/features/screens/onboarding/onboarding_screen.dart';
+import 'package:device_run_test/src/features/screens/setting/edit_profile_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'dart:convert';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:http/http.dart' as http;
@@ -29,8 +31,9 @@ class OTPVerifyPage extends StatefulWidget {
   final String phoneNumber; 
   String otp;
   bool isResendButtonEnabled = false;
+  bool isUpdating;
 
-  OTPVerifyPage({required this.phoneNumber, required this.otp, Key? key}): super(key: key);
+  OTPVerifyPage({required this.phoneNumber, required this.otp, required this.isUpdating, Key? key}): super(key: key);
 
   @override
   _OTPPageState createState() => _OTPPageState();
@@ -125,7 +128,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
   }
 
   void otpValidation() async {
-    if (widget.otp == otpController.text) {
+    if ((widget.otp == otpController.text) && !widget.isUpdating) {
       var reqUrl = '${url}userVerification';
       var response = await http.post(Uri.parse(reqUrl),
         body: {"phoneNumber": widget.phoneNumber, "fcmToken": prefs.getString('fcmToken')});
@@ -179,6 +182,28 @@ class _OTPPageState extends State<OTPVerifyPage> {
         prefs.setString('token', myToken);
         prefs.setString('isNotificationEnabled', 'true');
         checkBiometrics(context);
+      } 
+    } else if ((widget.otp == otpController.text) && widget.isUpdating) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
+      String userId = jwtDecodedToken['_id'];
+      var reqUrl = '${url}editPhoneNumber';
+      var response = await http.patch(Uri.parse(reqUrl),
+        body: {"userId": userId, "phoneNumber": widget.phoneNumber});
+      var jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['status'] == 'Success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile updated successfully!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditProfilePage()));
       } 
     } else {
       showDialog(

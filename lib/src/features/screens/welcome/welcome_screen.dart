@@ -39,7 +39,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         String otpGenerated = jsonResponse['otp'];
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OTPVerifyPage(phoneNumber: phoneNumberController.text, otp: otpGenerated)),
+          MaterialPageRoute(builder: (context) => OTPVerifyPage(phoneNumber: phoneNumberController.text, otp: otpGenerated, isUpdating: false)),
         );
       } else {
         setState(() {
