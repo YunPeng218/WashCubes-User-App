@@ -143,8 +143,9 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
 
     try {
       // Continue with submitting feedback
+      var reqUrl = '${url}createFeedback';
       final response = await http.post(
-        Uri.parse(feedback),
+        Uri.parse(reqUrl),
         body: json.encode(newFeedback),
         headers: {'Content-Type': 'application/json'},
       );

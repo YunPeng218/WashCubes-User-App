@@ -1,9 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:device_run_test/src/features/screens/onboarding/onboarding_screen.dart';
+import 'package:device_run_test/src/features/screens/setting/edit_profile_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'dart:convert';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +28,12 @@ import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/utilities/guest_mode.dart';
 
 class OTPVerifyPage extends StatefulWidget {
-  const OTPVerifyPage({super.key});
+  final String phoneNumber; 
+  String otp;
+  bool isResendButtonEnabled = false;
+  bool isUpdating;
+
+  OTPVerifyPage({required this.phoneNumber, required this.otp, required this.isUpdating, Key? key}): super(key: key);
 
   @override
   _OTPPageState createState() => _OTPPageState();
@@ -32,14 +41,37 @@ class OTPVerifyPage extends StatefulWidget {
 
 class _OTPPageState extends State<OTPVerifyPage> {
   late SharedPreferences prefs;
-  TextEditingController phoneNumberController = TextEditingController();
-  String currentText = "";
+  TextEditingController otpController = TextEditingController();
+  late Timer timer;
+  int remainingSeconds = 60;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initSharedPref();
+    startTimer();
+  }
+
+  void startTimer() {
+    const duration = Duration(seconds: 1);
+    timer = Timer.periodic(duration, (Timer t) {
+      setState(() {
+        if (remainingSeconds > 0) {
+          remainingSeconds--;
+        } else {
+          widget.otp = '';
+          widget.isResendButtonEnabled = true;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   void initSharedPref() async {
@@ -47,7 +79,19 @@ class _OTPPageState extends State<OTPVerifyPage> {
   }
 
   void resendOTP() async {
-    await http.post(Uri.parse(otpverification));
+    if (widget.isResendButtonEnabled) {
+      var reqUrl = '${url}sendOTP';
+      var response = await http.post(Uri.parse(reqUrl),
+        body: {"phoneNumber": widget.phoneNumber});
+      var jsonResponse = jsonDecode(response.body);
+      setState(() {
+        widget.otp = jsonResponse['otp'];
+        widget.isResendButtonEnabled = false;
+        remainingSeconds = 60;
+      });
+      timer.cancel();
+      startTimer();
+    }
   }
 
   Future<void> checkBiometrics(BuildContext context) async {
@@ -84,59 +128,84 @@ class _OTPPageState extends State<OTPVerifyPage> {
   }
 
   void otpValidation() async {
-    var response = await http.post(Uri.parse(registration),
-        body: {"otpRes": phoneNumberController.text, "fcmToken": prefs.getString('fcmToken')});
-    var jsonResponse = jsonDecode(response.body);
-    if (jsonResponse['status'] == 'existingUser') {
-      var myToken = jsonResponse['token'];
-      prefs.setString('token', myToken);
-      prefs.setString('isNotificationEnabled', 'true');
+    if ((widget.otp == otpController.text) && !widget.isUpdating) {
+      var reqUrl = '${url}userVerification';
+      var response = await http.post(Uri.parse(reqUrl),
+        body: {"phoneNumber": widget.phoneNumber, "fcmToken": prefs.getString('fcmToken')});
+      var jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['status'] == 'existingUser') {
+        var myToken = jsonResponse['token'];
+        prefs.setString('token', myToken);
+        prefs.setString('isNotificationEnabled', 'true');
 
-      // Set Guest Mode to False
-      Provider.of<GuestModeProvider>(context, listen: false)
-          .setGuestMode(false);
-
-      // Check if Guest Has Made Order
-      if (Provider.of<GuestModeProvider>(context, listen: false)
-          .guestMadeOrder) {
+        // Set Guest Mode to False
         Provider.of<GuestModeProvider>(context, listen: false)
-            .setGuestMadeOrder(false);
+            .setGuestMode(false);
+
+        // Check if Guest Has Made Order
+        if (Provider.of<GuestModeProvider>(context, listen: false)
+            .guestMadeOrder) {
+          Provider.of<GuestModeProvider>(context, listen: false)
+              .setGuestMadeOrder(false);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OrderSummary(
+                order: Provider.of<GuestModeProvider>(context, listen: false)
+                    .guestOrder,
+                service: Provider.of<GuestModeProvider>(context, listen: false)
+                    .guestService,
+                lockerSite: Provider.of<GuestModeProvider>(context, listen: false)
+                    .guestLockerSite,
+                selectedCompartmentSize:
+                    Provider.of<GuestModeProvider>(context, listen: false)
+                        .guestSelectedCompartmentSize,
+                compartment: null,
+                collectionSite:
+                    Provider.of<GuestModeProvider>(context, listen: false)
+                        .guestCollectionSite,
+              ),
+            ),
+          );
+        } else {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+              (Route<dynamic> route) => false);
+        }
+      } else if (jsonResponse['status'] == 'newUser') {
+        // Set Guest Mode to False
+        Provider.of<GuestModeProvider>(context, listen: false)
+            .setGuestMode(false);
+        var myToken = jsonResponse['token'];
+        prefs.setString('token', myToken);
+        prefs.setString('isNotificationEnabled', 'true');
+        checkBiometrics(context);
+      } 
+    } else if ((widget.otp == otpController.text) && widget.isUpdating) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
+      String userId = jwtDecodedToken['_id'];
+      var reqUrl = '${url}editPhoneNumber';
+      var response = await http.patch(Uri.parse(reqUrl),
+        body: {"userId": userId, "phoneNumber": widget.phoneNumber});
+      var jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['status'] == 'Success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile updated successfully!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Navigator.pop(context);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => OrderSummary(
-              order: Provider.of<GuestModeProvider>(context, listen: false)
-                  .guestOrder,
-              service: Provider.of<GuestModeProvider>(context, listen: false)
-                  .guestService,
-              lockerSite: Provider.of<GuestModeProvider>(context, listen: false)
-                  .guestLockerSite,
-              selectedCompartmentSize:
-                  Provider.of<GuestModeProvider>(context, listen: false)
-                      .guestSelectedCompartmentSize,
-              compartment: null,
-              collectionSite:
-                  Provider.of<GuestModeProvider>(context, listen: false)
-                      .guestCollectionSite,
-            ),
-          ),
-        );
-      } else {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ),
-            (Route<dynamic> route) => false);
-      }
-    } else if (jsonResponse['status'] == 'newUser') {
-      // Set Guest Mode to False
-      Provider.of<GuestModeProvider>(context, listen: false)
-          .setGuestMode(false);
-      var myToken = jsonResponse['token'];
-      prefs.setString('token', myToken);
-      prefs.setString('isNotificationEnabled', 'true');
-      checkBiometrics(context);
-    } else if (jsonResponse['status'] == 'wrongOTP') {
+            builder: (context) => EditProfilePage()));
+      } 
+    } else {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -194,7 +263,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
                   const EdgeInsets.symmetric(vertical: 0.0, horizontal: 25.0),
               child: PinCodeTextField(
                 appContext: context,
-                controller: phoneNumberController,
+                controller: otpController,
                 length: 6,
                 enableActiveFill: true,
                 keyboardType: TextInputType.number,
@@ -210,11 +279,6 @@ class _OTPPageState extends State<OTPVerifyPage> {
                   selectedFillColor: AppColors.cWhiteColor,
                   inactiveFillColor: AppColors.cWhiteColor,
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    // currentText = value;
-                  });
-                },
                 onCompleted: (value) {
                   otpValidation();
                 },
@@ -228,19 +292,31 @@ class _OTPPageState extends State<OTPVerifyPage> {
               "Didn't receive OTP code?",
               style: CTextTheme.blackTextTheme.headlineMedium,
             ),
+            Text(
+              'Resend in ${remainingSeconds}s',
+              style: const TextStyle(
+                color: AppColors.cGreyColor2,
+              ),
+            ),
             //OTP Resend Link
             TextButton(
               onPressed: () {
                 resendOTP();
               }, // Resend OTP Code
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Resend Code',
                     style: TextStyle(
-                        color: AppColors.cBlueColor2,
-                        decoration: TextDecoration.underline),
+                      color: widget.isResendButtonEnabled
+                          ? AppColors.cBlueColor2
+                          : AppColors.cGreyColor2,
+                      decoration: widget.isResendButtonEnabled
+                          ? TextDecoration.underline
+                          : TextDecoration.none,
+                      decorationColor: AppColors.cBlueColor2,
+                    ),
                   ),
                 ],
               ),
