@@ -187,7 +187,8 @@ class _AccountPageState extends State<AccountPage> {
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           var token = prefs.getString('token');
                           Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
-                          http.patch(Uri.parse(deleteFCMToken),
+                          var reqUrl = '${url}deleteFCMToken';
+                          http.patch(Uri.parse(reqUrl),
                             body: {"userId": jwtDecodedToken['_id'], "fcmToken": prefs.getString('fcmToken')});
                           await prefs.remove('token');
                           await prefs.remove('isBiometricsEnabled');

@@ -141,14 +141,16 @@ class SettingPageState extends State<SettingPage> {
                             SharedPreferences prefs = await SharedPreferences.getInstance();
                             var token = prefs.getString('token');
                             Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
-                            http.patch(Uri.parse(addFCMToken),
+                            var reqUrl = '${url}addFCMToken';
+                            http.patch(Uri.parse(reqUrl),
                               body: {"userId": jwtDecodedToken['_id'], "fcmToken": prefs.getString('fcmToken')});
                             await prefs.setString('isNotificationEnabled', 'true');
                           } else {
                             SharedPreferences prefs = await SharedPreferences.getInstance();
                             var token = prefs.getString('token');
                             Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
-                            http.patch(Uri.parse(deleteFCMToken),
+                            var reqUrl = '${url}deleteFCMToken';
+                            http.patch(Uri.parse(reqUrl),
                               body: {"userId": jwtDecodedToken['_id'], "fcmToken": prefs.getString('fcmToken')});
                             await prefs.setString('isNotificationEnabled', 'false');
                           }

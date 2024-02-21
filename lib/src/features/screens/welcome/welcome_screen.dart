@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/outlinedbutton_theme.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
@@ -30,12 +32,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     RegExp pattern = RegExp(r'^(601)[0-46-9][0-9]{7,8}$');
     if (phoneNumberController.text.isNotEmpty) {
       if (pattern.hasMatch(phoneNumberController.text)) {
+        var reqUrl = '${url}sendOTP';
+        var response = await http.post(Uri.parse(reqUrl),
+            body: {"phoneNumber": phoneNumberController.text});
+        var jsonResponse = jsonDecode(response.body);
+        String otpGenerated = jsonResponse['otp'];
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
+          MaterialPageRoute(builder: (context) => OTPVerifyPage(phoneNumber: phoneNumberController.text, otp: otpGenerated)),
         );
-        await http.post(Uri.parse(otpverification),
-            body: {"phoneNumber": phoneNumberController.text});
       } else {
         setState(() {
           errorText = 'Invalid Phone Number Entered.';
@@ -90,27 +95,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                     ),
                   ),
-
-                  // TextFormField(
-                  //   decoration: const InputDecoration(
-                  //     labelText: 'Enter Phone Number Starts with 60',
-                  //     hintText: '60123456789',
-                  //     counterText: '',
-                  //   ),
-                  //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  //   keyboardType: TextInputType.number,
-                  //   maxLength: 13,
-                  //   validator: (value) {
-                  //     if (value == null || value.isEmpty) {
-                  //       return 'Please enter a value';
-                  //     }
-                  //     RegExp pattern = RegExp(r'^(601)[0-46-9][0-9]{7,8}$');
-                  //     if (!pattern.hasMatch(value)) {
-                  //       return 'Invalid phone number pattern';
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
                 ),
               ),
             ),
@@ -150,21 +134,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
               ),
             ),
-            //start biometric icon
-            // const Text(
-            //   'OR',
-            //   style: TextStyle(color: AppColors.cGreyColor3,
-            //   )
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     IconButton(icon: const Icon(Icons.camera_front, size: 40.0), onPressed: () {null;},),
-            //     IconButton(icon: const Icon(Icons.fingerprint, size: 40.0), onPressed: () {null;},),
-            //     IconButton(icon: const Icon(Icons.qr_code, size: 40.0), onPressed: () {null;},),
-            //   ],
-            // ),
-            // Add more widgets as needed
           ],
         ),
       ),
