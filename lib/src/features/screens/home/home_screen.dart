@@ -4,7 +4,7 @@ import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/features/screens/chatbot/chatbotScreen.dart';
-import 'package:device_run_test/src/features/screens/loginSession/SessionExpiredPage.dart';
+import 'package:device_run_test/src/features/screens/login_session/session_expired_page.dart';
 import 'package:device_run_test/src/features/screens/nearbylocation/nearby_location_page.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
 import 'package:device_run_test/src/features/screens/order/order_screen.dart';
@@ -88,7 +88,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
       setAuthenticationStatus(false);
       isInactive = true;
     } else if (state == AppLifecycleState.resumed) {
@@ -114,12 +115,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (token != 'No token') {
       loadUserInfo();
     }
-    String isBiometricsEnabled = prefs.getString('isBiometricsEnabled') ?? 'false';
+    String isBiometricsEnabled =
+        prefs.getString('isBiometricsEnabled') ?? 'false';
     String isAuthenticated = prefs.getString('isAuthenticated') ?? 'false';
     String sessionExpired = prefs.getString('sessionExpired') ?? 'false';
-    if ((isBiometricsEnabled == 'true' && isAuthenticated == 'false') || isBiometricsEnabled == 'true' && sessionExpired == 'true') {
+    if ((isBiometricsEnabled == 'true' && isAuthenticated == 'false') ||
+        isBiometricsEnabled == 'true' && sessionExpired == 'true') {
       showBiometricPrompt(context);
-    } 
+    }
   }
 
   // Function to show biometric prompt
