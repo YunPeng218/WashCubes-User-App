@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/screens/order/laundry_service_picker_screen.dart';
-import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
 
 // UTILS
 import 'package:device_run_test/src/utilities/guest_mode.dart';
@@ -19,16 +18,16 @@ import 'package:device_run_test/src/constants/sizes.dart';
 
 class LockerCompartmentSelect extends StatefulWidget {
   final LockerSite? selectedLockerSite;
-  LockerCompartmentSelect({required this.selectedLockerSite});
+  const LockerCompartmentSelect({super.key, required this.selectedLockerSite});
   @override
-  _LockerCompartmentSelectState createState() =>
-      _LockerCompartmentSelectState();
+  LockerCompartmentSelectState createState() => LockerCompartmentSelectState();
 }
 
-class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
+class LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
   LockerAvailabilityResponse? availableCompartments;
   LockerCompartment? assignedCompartment;
 
+  @override
   void initState() {
     super.initState();
     fetchAvailableCompartments();
@@ -37,7 +36,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
   Future<void> fetchAvailableCompartments() async {
     try {
       final response = await http.get(Uri.parse(
-          url + 'compartments?lockerSiteId=${widget.selectedLockerSite?.id}'));
+          '${url}compartments?lockerSiteId=${widget.selectedLockerSite?.id}'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 
@@ -60,9 +59,6 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
   }
 
   Future<void> handleSelection(String selectedSize) async {
-    print(widget.selectedLockerSite);
-    print(selectedSize);
-
     var userHelper = UserHelper();
     bool isSignedIn = await userHelper.isSignedIn();
 
@@ -97,7 +93,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
   Future<LockerCompartment?> assignCompartment(String selectedSize) async {
     try {
       final response = await http.post(
-        Uri.parse(url + 'orders/select-locker-site'),
+        Uri.parse('${url}orders/select-locker-site'),
         body: json.encode({
           'selectedLockerSiteId': widget.selectedLockerSite?.id,
           'selectedSize': selectedSize,
@@ -124,10 +120,7 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
   }
 
   void handleBackButtonPress() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LockerSiteSelect()),
-    );
+    Navigator.pop(context);
   }
 
   @override
@@ -173,88 +166,99 @@ class _LockerCompartmentSelectState extends State<LockerCompartmentSelect> {
     //   }
     // });
 
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              handleBackButtonPress();
-            },
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            handleBackButtonPress();
+          },
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(cDefaultSize),
-            child: Column(
-              children: [
-                Text(
-                  'Select Compartment Size',
-                  style: CTextTheme.blueTextTheme.displayLarge,
-                ),
-                const SizedBox(
-                  height: cDefaultSize * 0.5,
-                ),
-                Provider.of<GuestModeProvider>(context, listen: false).guestMode
-                    ? Text(
-                        'Note For Guests: Locker compartment will only be assigned to you after and sign in and is subject to availability.',
-                        style: CTextTheme.blackTextTheme.headlineSmall,
-                      )
-                    : const SizedBox(
-                        height: cDefaultSize,
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(cDefaultSize),
+          child: Column(
+            children: [
+              Text(
+                'Select Compartment Size',
+                style: CTextTheme.blueTextTheme.displayLarge,
+              ),
+              const SizedBox(
+                height: 30.0,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: Colors.blue[50],
                       ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.blue[50],
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Locker Site Selected:",
-                                style: CTextTheme.blackTextTheme.labelLarge),
-                            Text(widget.selectedLockerSite?.name ?? 'Default',
-                                style:
-                                    CTextTheme.blackTextTheme.headlineMedium),
-                          ],
-                        ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Locker Site Selected:",
+                              style: CTextTheme.blackTextTheme.labelLarge),
+                          Text(widget.selectedLockerSite?.name ?? 'Default',
+                              style: CTextTheme.blackTextTheme.headlineMedium),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 30.0),
-                GridView.count(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16.0,
-                    mainAxisSpacing: 16.0,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: List.generate(compartmentSizes.length, (index) {
-                      final compartmentSize = compartmentSizes[index];
-                      final compartments = availableCompartments
-                              ?.availableCompartmentsBySize[compartmentSize] ??
-                          0;
-                      return CompartmentCard(
-                        compartmentSize: compartmentSize,
-                        dimensions: compartmentDimensions[index],
-                        compartmentsAvailable: compartments,
-                        isFull: compartments == 0 ? true : false,
-                        iconName: 'assets/logos/i3Cubes_logo.png',
-                        onTap: () {
-                          handleSelection(compartmentSizes[index]);
-                        },
-                      );
-                    })),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30.0),
+              GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16.0,
+                  mainAxisSpacing: 16.0,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: List.generate(compartmentSizes.length, (index) {
+                    final compartmentSize = compartmentSizes[index];
+                    final compartments = availableCompartments
+                            ?.availableCompartmentsBySize[compartmentSize] ??
+                        0;
+                    return CompartmentCard(
+                      compartmentSize: compartmentSize,
+                      dimensions: compartmentDimensions[index],
+                      compartmentsAvailable: compartments,
+                      isFull: compartments == 0 ? true : false,
+                      iconName: 'assets/logos/i3Cubes_logo.png',
+                      onTap: () {
+                        handleSelection(compartmentSizes[index]);
+                      },
+                    );
+                  })),
+              const SizedBox(
+                height: 40.0,
+              ),
+              Provider.of<GuestModeProvider>(context, listen: false).guestMode
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Note For Guests:',
+                            style: CTextTheme.blackTextTheme.headlineSmall,
+                          ),
+                          const SizedBox(
+                            height: 5.0,
+                          ),
+                          Text(
+                            'Locker compartment will only be assigned to you after sign in and is subject to availability.',
+                            style: CTextTheme.greyTextTheme.headlineSmall,
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(
+                      height: cDefaultSize,
+                    ),
+            ],
           ),
         ),
       ),

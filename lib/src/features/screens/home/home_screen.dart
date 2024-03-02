@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     init();
     loadUserOrders();
-    timer = Timer.periodic(Duration(seconds: 1), (tm) {
+    timer = Timer.periodic(const Duration(seconds: 1), (tm) {
       if (isInactive) {
         setState(() {
           elapsedTime += 1;
@@ -332,11 +332,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const WelcomeScreen()),
-                            );
+                            Navigator.pushAndRemoveUntil(context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                              return const WelcomeScreen();
+                            }), (route) {
+                              return false;
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor:

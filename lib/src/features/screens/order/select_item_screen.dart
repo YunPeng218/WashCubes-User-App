@@ -2,20 +2,16 @@
 
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-//import 'package:device_run_test/src/utilities/locker_service.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:device_run_test/config.dart';
 import 'order_summary_screen.dart';
-import 'package:device_run_test/src/features/screens/order/laundry_service_picker_screen.dart';
-//import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/src/features/models/order.dart';
-//import 'package:provider/provider.dart';
 
 class SelectItems extends StatefulWidget {
   final LockerSite? lockerSite;
@@ -23,19 +19,19 @@ class SelectItems extends StatefulWidget {
   final String? selectedCompartmentSize;
   final Service? service;
 
-  SelectItems(
-      {required this.lockerSite,
+  const SelectItems(
+      {super.key,
+      required this.lockerSite,
       required this.compartment,
       required this.selectedCompartmentSize,
       required this.service});
 
   @override
-  _SelectItemsState createState() => _SelectItemsState();
+  SelectItemsState createState() => SelectItemsState();
 }
 
-class _SelectItemsState extends State<SelectItems> with WidgetsBindingObserver {
+class SelectItemsState extends State<SelectItems> with WidgetsBindingObserver {
   Map<String, int> selectedQuantity = {};
-  // late BuildContext _context;
 
   @override
   void initState() {
@@ -100,7 +96,7 @@ class _SelectItemsState extends State<SelectItems> with WidgetsBindingObserver {
       }
 
       final response = await http.post(
-        Uri.parse(url + 'orders/create-order'),
+        Uri.parse('${url}orders/create-order'),
         body: json.encode(orderDetails),
         headers: {'Content-Type': 'application/json'},
       );
@@ -120,6 +116,7 @@ class _SelectItemsState extends State<SelectItems> with WidgetsBindingObserver {
                 service: widget.service,
                 order: order,
                 collectionSite: null,
+                justNavigatedFromGuest: false,
               ),
             ),
           );
@@ -136,199 +133,186 @@ class _SelectItemsState extends State<SelectItems> with WidgetsBindingObserver {
   }
 
   void handleBackButtonPress() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => LaundryServicePicker(
-                lockerSite: widget.lockerSite,
-                compartment: widget.compartment,
-              )),
-    );
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     // _context = context;
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              handleBackButtonPress();
-            },
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            handleBackButtonPress();
+          },
         ),
-        body: Container(
-          padding: const EdgeInsets.all(cDefaultSize),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Select Your Items',
-                style: CTextTheme.blueTextTheme.displayLarge,
-              ),
-              const SizedBox(
-                height: cDefaultSize * 0.5,
-              ),
-              Text(
-                'Select your items and quantity for Total Est. Price.',
-                style: CTextTheme.greyTextTheme.headlineSmall,
-              ),
-              const SizedBox(
-                height: cDefaultSize,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: widget.service?.items.length ?? 0,
-                  itemBuilder: ((context, index) {
-                    if (widget.service != null &&
-                        widget.service?.items != null) {
-                      ServiceItem? item = widget.service?.items[index];
-                      return ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.blue[50],
-                          ),
-                          child: Image.asset(
-                            'assets/images/select_item/${item?.name.replaceAll(RegExp(r'[ /]'), '')}.png',
-                            width: 50,
-                            height: 50,
-                          ),
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(cDefaultSize),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Select Your Items',
+              style: CTextTheme.blueTextTheme.displayLarge,
+            ),
+            const SizedBox(
+              height: cDefaultSize * 0.5,
+            ),
+            Text(
+              'Select your items and quantity for Total Est. Price.',
+              style: CTextTheme.greyTextTheme.headlineSmall,
+            ),
+            const SizedBox(
+              height: cDefaultSize,
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.service?.items.length ?? 0,
+                itemBuilder: ((context, index) {
+                  if (widget.service != null && widget.service?.items != null) {
+                    ServiceItem? item = widget.service?.items[index];
+                    return ListTile(
+                      leading: Container(
+                        padding: const EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.blue[50],
                         ),
-                        title: Text(
-                          item?.name ?? 'Default',
-                          style: CTextTheme.blackTextTheme.headlineMedium,
+                        child: Image.asset(
+                          'assets/images/select_item/${item?.name.replaceAll(RegExp(r'[ /]'), '')}.png',
+                          width: 50,
+                          height: 50,
                         ),
-                        subtitle: Text(
-                          'RM ${item?.price.toStringAsFixed(2)}/${item?.unit}',
-                          style: CTextTheme.blackTextTheme.headlineSmall,
-                        ),
-                        trailing: QuantitySelector(
-                            initialQuantity: selectedQuantity[item?.id] ?? 0,
-                            onChanged: (quantity) {
-                              setState(() {
-                                selectedQuantity[item?.id ?? 'Default'] =
-                                    quantity;
-                              });
-                            }),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  }),
-                ),
-              ),
-            ],
-          ),
-        ),
-        //Bottom Bar of Est.Price & Checkout Button
-        bottomNavigationBar: SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.cBarColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
+                      ),
+                      title: Text(
+                        item?.name ?? 'Default',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      ),
+                      subtitle: Text(
+                        'RM ${item?.price.toStringAsFixed(2)}/${item?.unit}',
+                        style: CTextTheme.blackTextTheme.headlineSmall,
+                      ),
+                      trailing: QuantitySelector(
+                          initialQuantity: selectedQuantity[item?.id] ?? 0,
+                          onChanged: (quantity) {
+                            setState(() {
+                              selectedQuantity[item?.id ?? 'Default'] =
+                                  quantity;
+                            });
+                          }),
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
               ),
             ),
-            padding: const EdgeInsets.all(cDefaultSize),
-            child: Column(
-              children: [
-                const SizedBox(height: 5.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Total Est. Price',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.cWhiteColor),
-                    ),
-                    Text(
-                      'RM ${updateEstimatedPrice().toStringAsFixed(2)}',
-                      style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.cWhiteColor),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15.0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: AppColors.cWhiteColor),
-                        ),
-                        onPressed: () {
-                          // Check out action
-                          bool noItemSelected = selectedQuantity.values
-                              .every((value) => value == 0);
+          ],
+        ),
+      ),
+      //Bottom Bar of Est.Price & Checkout Button
+      bottomNavigationBar: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColors.cBarColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+          ),
+          padding: const EdgeInsets.all(cDefaultSize),
+          child: Column(
+            children: [
+              const SizedBox(height: 5.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Total Est. Price',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.cWhiteColor),
+                  ),
+                  Text(
+                    'RM ${updateEstimatedPrice().toStringAsFixed(2)}',
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.cWhiteColor),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 15.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: AppColors.cWhiteColor),
+                      ),
+                      onPressed: () {
+                        bool noItemSelected = selectedQuantity.values
+                            .every((value) => value == 0);
 
-                          if (noItemSelected) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text(
-                                    'No Items Selected.',
-                                    style:
-                                        CTextTheme.blackTextTheme.headlineLarge,
-                                  ),
-                                  content: Text(
-                                    'Please select some items to proceed.',
-                                    style: CTextTheme
-                                        .blackTextTheme.headlineMedium,
-                                  ),
-                                  actions: <Widget>[
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text(
-                                        'OK',
-                                        style: CTextTheme
-                                            .blackTextTheme.headlineMedium,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            return;
-                          }
-
+                        if (noItemSelected) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              //Alert Dialog PopUp of Order Price Estimation Confirmation
-                              return CancelConfirmAlert(
-                                  title: 'Note',
-                                  content:
-                                      'If your order exceeds the estimated price, we\'ll provide further instructions. Click \'Continue\' to agree to our Terms and Conditions and Privacy Policy.',
-                                  onPressedConfirm: sendOrderToServer,
-                                  cancelButtonText: 'Cancel',
-                                  confirmButtonText: 'Confirm');
+                              return AlertDialog(
+                                title: Text(
+                                  'No Items Selected.',
+                                  style:
+                                      CTextTheme.blackTextTheme.headlineLarge,
+                                ),
+                                content: Text(
+                                  'Please select some items to proceed.',
+                                  style:
+                                      CTextTheme.blackTextTheme.headlineMedium,
+                                ),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'OK',
+                                      style: CTextTheme
+                                          .blackTextTheme.headlineMedium,
+                                    ),
+                                  ),
+                                ],
+                              );
                             },
                           );
-                        },
-                        child: const Text(
-                          'Check Out',
-                          style: TextStyle(color: AppColors.cWhiteColor),
-                        ),
+                          return;
+                        }
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            //Alert Dialog PopUp of Order Price Estimation Confirmation
+                            return CancelConfirmAlert(
+                                title: 'Note',
+                                content:
+                                    'If your order exceeds the estimated price, we\'ll provide further instructions. Click \'Continue\' to agree to our Terms and Conditions and Privacy Policy.',
+                                onPressedConfirm: sendOrderToServer,
+                                cancelButtonText: 'Cancel',
+                                confirmButtonText: 'Confirm');
+                          },
+                        );
+                      },
+                      child: const Text(
+                        'Check Out',
+                        style: TextStyle(color: AppColors.cWhiteColor),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -341,13 +325,14 @@ class QuantitySelector extends StatefulWidget {
   final int initialQuantity;
   final Function(int) onChanged;
 
-  QuantitySelector({required this.initialQuantity, required this.onChanged});
+  const QuantitySelector(
+      {super.key, required this.initialQuantity, required this.onChanged});
 
   @override
-  _QuantitySelectorState createState() => _QuantitySelectorState();
+  QuantitySelectorState createState() => QuantitySelectorState();
 }
 
-class _QuantitySelectorState extends State<QuantitySelector> {
+class QuantitySelectorState extends State<QuantitySelector> {
   int quantity = 0;
 
   @override
@@ -373,7 +358,7 @@ class _QuantitySelectorState extends State<QuantitySelector> {
           },
         ),
         Text(
-          '${quantity}',
+          '$quantity',
           style: CTextTheme.blackTextTheme.headlineSmall,
         ),
         IconButton(

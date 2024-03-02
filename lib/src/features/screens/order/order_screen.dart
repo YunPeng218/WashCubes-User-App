@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'create_order_camera.dart';
@@ -201,128 +201,126 @@ class OrderPageState extends State<OrderPage>
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        appBar: AppBar(
-          //Notification Icon Button
-          leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const NotificationScreen()),
-              );
-            },
-            icon: const Icon(Icons.notifications_none),
-          ),
-          // title: const Text('Orders'),
-          //Create Button
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 16),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  handleCreateButtonPress();
-                },
-                icon: const Icon(Icons.add, color: AppColors.cBlackColor),
-                label: Text(
-                  'Create',
-                  style: CTextTheme.blackTextTheme.headlineMedium,
-                ),
-              ),
-            )
-          ],
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 30.0),
-            Text('Your Orders', style: CTextTheme.blackTextTheme.displayMedium),
-            const SizedBox(height: 20.0),
-            TabBar(
-              controller: _tabController,
-              tabs: [
-                Tab(text: 'Active Orders'),
-                Tab(text: 'Order Error'),
-                Tab(text: 'Completed'),
-              ],
-              indicatorColor: AppColors.cBlueColor3,
-              labelStyle: CTextTheme.blackTextTheme
-                  .headlineSmall, // Set the indicator color to blue
-            ),
-            const SizedBox(height: 15.0),
-            isSignedIn
-                ? Expanded(
-                    child: TabBarView(controller: _tabController, children: [
-                      buildActiveOrderList(),
-                      buildOrderErrorList(),
-                      buildCompletedOrderList(),
-                    ]),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          const SizedBox(height: 40),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Sign In to View Your Orders',
-                                style: CTextTheme.blackTextTheme.headlineSmall,
-                                textAlign: TextAlign.end,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const WelcomeScreen()),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor:
-                                  AppColors.cBlackColor, // Text color
-                              backgroundColor:
-                                  AppColors.cWhiteColor, // Button Fill color
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                side: const BorderSide(
-                                    color: AppColors.cGreyColor1),
-                              ),
-                            ),
-                            child: Text(
-                              'Sign In',
-                              style: CTextTheme.blackTextTheme.labelMedium,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-          ],
-        ),
-        //ChatBot Trimi Button
-        floatingActionButton: FloatingActionButton(
+    return Scaffold(
+      appBar: AppBar(
+        //Notification Icon Button
+        leading: IconButton(
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const NotificationScreen()),
             );
           },
-          tooltip: 'Increment',
-          backgroundColor: Colors.blue[50],
-          child: Image.asset(cChatBotLogo),
+          icon: const Icon(Icons.notifications_none),
         ),
-        bottomNavigationBar: const BottomNavBar(),
+        // title: const Text('Orders'),
+        //Create Button
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                handleCreateButtonPress();
+              },
+              icon: const Icon(Icons.add, color: AppColors.cBlackColor),
+              label: Text(
+                'Create',
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
+            ),
+          )
+        ],
       ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 30.0),
+          Text('Your Orders', style: CTextTheme.blackTextTheme.displayMedium),
+          const SizedBox(height: 20.0),
+          TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Active Orders'),
+              Tab(text: 'Order Error'),
+              Tab(text: 'Completed'),
+            ],
+            indicatorColor: AppColors.cBlueColor3,
+            labelStyle: CTextTheme.blackTextTheme
+                .headlineSmall, // Set the indicator color to blue
+          ),
+          const SizedBox(height: 15.0),
+          isSignedIn
+              ? Expanded(
+                  child: TabBarView(controller: _tabController, children: [
+                    buildActiveOrderList(),
+                    buildOrderErrorList(),
+                    buildCompletedOrderList(),
+                  ]),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        const SizedBox(height: 40),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Sign In to View Your Orders',
+                              style: CTextTheme.blackTextTheme.headlineSmall,
+                              textAlign: TextAlign.end,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                              return const WelcomeScreen();
+                            }), (route) {
+                              return false;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor:
+                                AppColors.cBlackColor, // Text color
+                            backgroundColor:
+                                AppColors.cWhiteColor, // Button Fill color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: const BorderSide(
+                                  color: AppColors.cGreyColor1),
+                            ),
+                          ),
+                          child: Text(
+                            'Sign In',
+                            style: CTextTheme.blackTextTheme.labelMedium,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+        ],
+      ),
+      //ChatBot Trimi Button
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ChatbotScreen()),
+          );
+        },
+        tooltip: 'Increment',
+        backgroundColor: Colors.blue[50],
+        child: Image.asset(cChatBotLogo),
+      ),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 

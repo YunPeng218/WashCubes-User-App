@@ -1,6 +1,7 @@
-// ignore_for_file: use_build_context_synchronously, must_be_immutable
+// ignore_for_file: use_build_context_synchronously, must_be_immutable, await_only_futures, deprecated_member_use
 
 import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
+import 'package:device_run_test/src/features/screens/order/select_item_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,11 +12,8 @@ import 'package:device_run_test/config.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:device_run_test/src/features/screens/payment/payment_method.dart';
-import 'package:device_run_test/src/features/screens/home/home_screen.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
-import 'package:device_run_test/src/features/screens/order/select_item_screen.dart';
 import 'package:device_run_test/src/features/screens/order/collection_site_select.dart';
-//import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:device_run_test/src/common_widgets/cancel_confirm_alert.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
@@ -23,7 +21,7 @@ import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/user.dart';
 import 'package:device_run_test/src/utilities/guest_mode.dart';
-//import 'package:device_run_test/src/utilities/locker_service.dart';
+import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 
 class OrderSummary extends StatefulWidget {
   final LockerSite? lockerSite;
@@ -32,6 +30,7 @@ class OrderSummary extends StatefulWidget {
   final Service? service;
   final Order? order;
   final LockerSite? collectionSite;
+  final bool justNavigatedFromGuest;
 
   OrderSummary({
     super.key,
@@ -41,17 +40,17 @@ class OrderSummary extends StatefulWidget {
     required this.service,
     required this.order,
     required this.collectionSite,
+    required this.justNavigatedFromGuest,
   });
 
   @override
-  _OrderSummaryState createState() => _OrderSummaryState();
+  OrderSummaryState createState() => OrderSummaryState();
 }
 
-class _OrderSummaryState extends State<OrderSummary>
+class OrderSummaryState extends State<OrderSummary>
     with WidgetsBindingObserver {
   late String token;
   User? user;
-  // late BuildContext _context;
 
   @override
   void initState() {
@@ -98,19 +97,30 @@ class _OrderSummaryState extends State<OrderSummary>
   }
 
   void navigateToPayment() {
-    print('PAYMENT NAVIGATION: ${widget.compartment?.id}');
     if (widget.collectionSite != null && widget.compartment != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PaymentScreen(
-                  order: widget.order,
-                  lockerSite: widget.lockerSite,
-                  compartment: widget.compartment!,
-                  user: user,
-                  collectionSite: widget.collectionSite,
-                )),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) => PaymentScreen(
+      //             order: widget.order,
+      //             lockerSite: widget.lockerSite,
+      //             compartment: widget.compartment!,
+      //             user: user,
+      //             collectionSite: widget.collectionSite,
+      //           )),
+      // );
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return PaymentScreen(
+          order: widget.order,
+          lockerSite: widget.lockerSite,
+          compartment: widget.compartment!,
+          user: user,
+          collectionSite: widget.collectionSite,
+        );
+      }), (route) {
+        return route.isFirst || route.settings.name == '/order';
+      });
     } else {
       showDialog(
         context: context,
@@ -148,13 +158,10 @@ class _OrderSummaryState extends State<OrderSummary>
 
     if (user != null) {
       if (widget.compartment != null) {
-        print(widget.compartment?.id);
         navigateToPayment();
       } else {
         LockerCompartment? compartment = await getAllocatedCompartment();
         widget.compartment = compartment;
-        print('GET COMPARTMENT');
-        print(compartment?.id);
         if (compartment != null) {
           navigateToPayment();
         } else {
@@ -163,32 +170,65 @@ class _OrderSummaryState extends State<OrderSummary>
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text(
-                  'Sorry, no compartments available.',
+                  'Compartment Allocation Error',
+                  textAlign: TextAlign.center,
                   style: CTextTheme.blackTextTheme.headlineLarge,
                 ),
                 content: Text(
-                  'All compartments are occupied. Would you like to cancel your order or select another locker site.',
-                  style: CTextTheme.blackTextTheme.headlineMedium,
+                  'Sorry, there are no more compartments available for your chosen locker site. Would you like to cancel your order or select another locker site.',
+                  textAlign: TextAlign.center,
+                  style: CTextTheme.blackTextTheme.headlineSmall,
                 ),
                 actions: <Widget>[
-                  TextButton(
-                    onPressed: cancelOrder,
-                    child: Text(
-                      'Cancel Order',
-                      style: CTextTheme.blackTextTheme.headlineMedium,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.blue[100]!)),
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                              return const LockerSiteSelect();
+                            }), (route) {
+                              return route.isFirst ||
+                                  route.settings.name == '/order';
+                            });
+                          },
+                          child: Text(
+                            'Yes',
+                            style: CTextTheme.blackTextTheme.headlineSmall,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LockerSiteSelect()));
-                    },
-                    child: Text(
-                      'Yes',
-                      style: CTextTheme.blackTextTheme.headlineMedium,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.red[100]!)),
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                              return const OrderPage();
+                            }), (route) {
+                              return route.isFirst ||
+                                  route.settings.name == '/order';
+                            });
+                          },
+                          child: Text(
+                            'Cancel Order',
+                            style: CTextTheme.blackTextTheme.headlineSmall,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               );
@@ -227,19 +267,19 @@ class _OrderSummaryState extends State<OrderSummary>
         widget.collectionSite);
     // REDIRECT TO SIGN IN PAGE
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const WelcomeScreen(),
-        ),
-      );
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return const WelcomeScreen();
+      }), (route) {
+        return false;
+      });
     });
   }
 
   Future<LockerCompartment?> getAllocatedCompartment() async {
     try {
       final response = await http.post(
-        Uri.parse(url + 'orders/select-locker-site'),
+        Uri.parse('${url}orders/select-locker-site'),
         body: json.encode({
           'selectedLockerSiteId': widget.lockerSite?.id,
           'selectedSize': widget.selectedCompartmentSize,
@@ -265,46 +305,51 @@ class _OrderSummaryState extends State<OrderSummary>
     return null;
   }
 
-  Future<void> cancelOrder() async {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => HomePage()));
-  }
-
-  void handleBackButtonPress() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        //Alert Dialog PopUp of Backtrack Confirmation
-        return CancelConfirmAlert(
-            title: 'Modify Order',
-            content:
-                'You will be redirected to re-select order items. Do you want to proceed?',
-            onPressedConfirm: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SelectItems(
-                          lockerSite: widget.lockerSite,
-                          compartment: widget.compartment,
-                          selectedCompartmentSize:
-                              widget.selectedCompartmentSize,
-                          service: widget.service,
-                        )),
-              );
-            },
-            cancelButtonText: 'Cancel',
-            confirmButtonText: 'Confirm');
-      },
-    );
+  Future<bool> handleBackButtonPress() async {
+    if (widget.justNavigatedFromGuest == false) {
+      print('YO');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CancelConfirmAlert(
+              title: 'Modify Order',
+              content:
+                  'You will be re-directed to the Select Items page. Do you want to proceed?',
+              onPressedConfirm: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              cancelButtonText: 'Cancel',
+              confirmButtonText: 'Confirm');
+        },
+      );
+      return true;
+    } else {
+      print('YO');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SelectItems(
+            lockerSite: widget.lockerSite,
+            compartment: widget.compartment,
+            selectedCompartmentSize: widget.selectedCompartmentSize,
+            service: widget.service,
+          ),
+        ),
+      );
+      return true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // _context = context;
     final orderItems = widget.order?.orderItems;
 
-    return PopScope(
-      canPop: false,
+    return WillPopScope(
+      onWillPop: () async {
+        bool shouldPop = await handleBackButtonPress();
+        return shouldPop;
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -314,9 +359,7 @@ class _OrderSummaryState extends State<OrderSummary>
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              handleBackButtonPress();
-            },
+            onPressed: handleBackButtonPress,
           ),
         ),
         body: Container(
@@ -369,7 +412,7 @@ class _OrderSummaryState extends State<OrderSummary>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${orderItems[index].name}',
+                                orderItems[index].name,
                                 style: CTextTheme.blackTextTheme.headlineLarge,
                               ),
                               Text(

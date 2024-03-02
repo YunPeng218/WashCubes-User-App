@@ -153,27 +153,27 @@ class OTPPageState extends State<OTPVerifyPage> {
             .guestMadeOrder) {
           Provider.of<GuestModeProvider>(context, listen: false)
               .setGuestMadeOrder(false);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OrderSummary(
-                order: Provider.of<GuestModeProvider>(context, listen: false)
-                    .guestOrder,
-                service: Provider.of<GuestModeProvider>(context, listen: false)
-                    .guestService,
-                lockerSite:
-                    Provider.of<GuestModeProvider>(context, listen: false)
-                        .guestLockerSite,
-                selectedCompartmentSize:
-                    Provider.of<GuestModeProvider>(context, listen: false)
-                        .guestSelectedCompartmentSize,
-                compartment: null,
-                collectionSite:
-                    Provider.of<GuestModeProvider>(context, listen: false)
-                        .guestCollectionSite,
-              ),
-            ),
-          );
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+            return OrderSummary(
+              order: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestOrder,
+              service: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestService,
+              lockerSite: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestLockerSite,
+              selectedCompartmentSize:
+                  Provider.of<GuestModeProvider>(context, listen: false)
+                      .guestSelectedCompartmentSize,
+              compartment: null,
+              collectionSite:
+                  Provider.of<GuestModeProvider>(context, listen: false)
+                      .guestCollectionSite,
+              justNavigatedFromGuest: true,
+            );
+          }), (route) {
+            return false;
+          });
         } else {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(

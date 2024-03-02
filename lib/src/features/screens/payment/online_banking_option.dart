@@ -26,10 +26,10 @@ class BankSelectionScreen extends StatefulWidget {
   });
 
   @override
-  _BankSelectionScreenState createState() => _BankSelectionScreenState();
+  BankSelectionScreenState createState() => BankSelectionScreenState();
 }
 
-class _BankSelectionScreenState extends State<BankSelectionScreen>
+class BankSelectionScreenState extends State<BankSelectionScreen>
     with WidgetsBindingObserver {
   // late BuildContext _context;
 
@@ -73,44 +73,41 @@ class _BankSelectionScreenState extends State<BankSelectionScreen>
   @override
   Widget build(BuildContext context) {
     // _context = context;
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Select Your Option',
-            style: CTextTheme.blackTextTheme.displaySmall,
-          ),
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Select Your Option',
+          style: CTextTheme.blackTextTheme.displaySmall,
         ),
-        body: ListView.builder(
-          itemCount: banks.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundImage: AssetImage(banks[index].logoPath),
-              ),
-              title: Text(
-                banks[index].name,
-                style: CTextTheme.blackTextTheme.headlineMedium,
-              ),
-              trailing: const Icon(Icons.arrow_forward_ios),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PaymentFormScreen(
-                            order: widget.order,
-                            lockerSite: widget.lockerSite,
-                            compartment: widget.compartment,
-                            user: widget.user,
-                            collectionSite: widget.collectionSite,
-                          )),
-                );
-              },
-            );
-          },
-        ),
+        centerTitle: true,
+      ),
+      body: ListView.builder(
+        itemCount: banks.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: AssetImage(banks[index].logoPath),
+            ),
+            title: Text(
+              banks[index].name,
+              style: CTextTheme.blackTextTheme.headlineMedium,
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PaymentFormScreen(
+                          order: widget.order,
+                          lockerSite: widget.lockerSite,
+                          compartment: widget.compartment,
+                          user: widget.user,
+                          collectionSite: widget.collectionSite,
+                        )),
+              );
+            },
+          );
+        },
       ),
     );
   }

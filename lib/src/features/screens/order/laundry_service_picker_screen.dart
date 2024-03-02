@@ -1,14 +1,12 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:device_run_test/src/constants/sizes.dart';
-//import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:device_run_test/src/features/screens/order/select_item_screen.dart';
-import 'package:device_run_test/src/features/screens/order/locker_compartment_select.dart';
 import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
@@ -19,16 +17,17 @@ class LaundryServicePicker extends StatefulWidget {
   final LockerCompartment? compartment;
   final String? selectedCompartmentSize;
 
-  LaundryServicePicker(
-      {required this.lockerSite,
+  const LaundryServicePicker(
+      {super.key,
+      required this.lockerSite,
       required this.compartment,
       this.selectedCompartmentSize});
 
   @override
-  _LaundryServicePickerState createState() => _LaundryServicePickerState();
+  LaundryServicePickerState createState() => LaundryServicePickerState();
 }
 
-class _LaundryServicePickerState extends State<LaundryServicePicker>
+class LaundryServicePickerState extends State<LaundryServicePicker>
     with WidgetsBindingObserver {
   List<Service> services = [];
 
@@ -109,7 +108,7 @@ class _LaundryServicePickerState extends State<LaundryServicePicker>
     );
   }
 
-  void handleBackButtonPress() async {
+  Future<bool> handleBackButtonPress() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -123,29 +122,19 @@ class _LaundryServicePickerState extends State<LaundryServicePicker>
             confirmButtonText: 'Confirm');
       },
     );
+    return true;
   }
 
-  void checkForAllocatedCompartment() async {
+  Future<void> checkForAllocatedCompartment() async {
+    Navigator.pop(context);
     if (widget.compartment != null) {
       int? responseStatus =
           await freeUpLockerCompartment(widget.lockerSite, widget.compartment);
       if (responseStatus == 200) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => LockerCompartmentSelect(
-                    selectedLockerSite: widget.lockerSite,
-                  )),
-        );
+        Navigator.pop(context);
       }
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => LockerCompartmentSelect(
-                  selectedLockerSite: widget.lockerSite,
-                )),
-      );
+      Navigator.pop(context);
     }
   }
 
@@ -159,7 +148,7 @@ class _LaundryServicePickerState extends State<LaundryServicePicker>
         };
 
         final response = await http.post(
-          Uri.parse(url + 'locker/release-compartment'),
+          Uri.parse('${url}locker/release-compartment'),
           body: json.encode(compartmentToRelease),
           headers: {'Content-Type': 'application/json'},
         );
@@ -176,8 +165,11 @@ class _LaundryServicePickerState extends State<LaundryServicePicker>
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
+    return WillPopScope(
+      onWillPop: () async {
+        bool shouldPop = await handleBackButtonPress();
+        return shouldPop;
+      },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -248,9 +240,7 @@ class ServiceCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(iconName,
-                height: size.height *
-                    0.1), // Replace with NetworkImage if your images are network-based
+            Image.asset(iconName, height: size.height * 0.1),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(

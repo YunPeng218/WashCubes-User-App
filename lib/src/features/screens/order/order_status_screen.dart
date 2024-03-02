@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
 import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_detail_widget.dart';
@@ -25,6 +27,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
   LockerSite? collectionSite;
   Service? service;
 
+  @override
   void initState() {
     super.initState();
     fetchOrderLockerInfo();
@@ -88,13 +91,14 @@ class _OrderStatusState extends State<OrderStatusScreen> {
     }
   }
 
-  void handleBackButtonPress() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OrderPage(),
-      ),
-    );
+  bool handleBackButtonPress() {
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+      return const OrderPage();
+    }), (route) {
+      return false;
+    });
+    return true;
   }
 
   void displayOrderQRCode() {
@@ -112,13 +116,18 @@ class _OrderStatusState extends State<OrderStatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
+    return WillPopScope(
+      onWillPop: () async {
+        bool shouldPop = handleBackButtonPress();
+        return shouldPop;
+      },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: handleBackButtonPress,
+            onPressed: () {
+              handleBackButtonPress();
+            },
           ),
           title: Text(
             'Order #${widget.order.orderNumber}',
@@ -147,7 +156,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
                 OrderStatusWidget(
                   order: widget.order,
                 ),
-                Divider(),
+                const Divider(),
                 OrderStatusDetailWidget(
                   order: widget.order,
                   lockerSite: lockerSite,

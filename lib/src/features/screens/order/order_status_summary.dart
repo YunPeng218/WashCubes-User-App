@@ -1,6 +1,5 @@
 import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
-import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/models/order.dart';
@@ -26,13 +25,14 @@ class OrderStatusSummaryScreen extends StatefulWidget {
 
 class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
   void handleBackButtonPress() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => OrderStatusScreen(
-                order: widget.order,
-              )),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) => OrderStatusScreen(
+    //             order: widget.order,
+    //           )),
+    // );
+    Navigator.pop(context);
   }
 
   @override
@@ -81,7 +81,7 @@ class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
                 ],
               ),
               const SizedBox(height: 30.0),
-              Container(
+              SizedBox(
                 height: 300,
                 child: ListView.builder(
                   shrinkWrap: true,

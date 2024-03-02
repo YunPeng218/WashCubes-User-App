@@ -2,7 +2,6 @@ import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../home/home_screen.dart';
 import './nearby_location_list.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:permission_handler/permission_handler.dart';
@@ -14,13 +13,13 @@ import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/screens/nearbylocation/locker_site_details.dart';
 
 class NearbyLocationPage extends StatefulWidget {
-  const NearbyLocationPage({Key? key}) : super(key: key);
+  const NearbyLocationPage({super.key});
 
   @override
-  _NearbyLocationPageState createState() => _NearbyLocationPageState();
+  NearbyLocationPageState createState() => NearbyLocationPageState();
 }
 
-class _NearbyLocationPageState extends State<NearbyLocationPage> {
+class NearbyLocationPageState extends State<NearbyLocationPage> {
   GoogleMapController? mapController;
   bool _infoWindowOpen = false;
   LatLng? currentLocation;
@@ -74,7 +73,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
 
   Future<void> fetchLockerSites() async {
     try {
-      var reqUrl = url + 'lockers';
+      var reqUrl = '${url}lockers';
       final response = await http.get(Uri.parse(reqUrl));
 
       if (response.statusCode == 200) {
@@ -110,7 +109,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
   Future<int?> fetchAvailableCompartments(LockerSite? lockerSite) async {
     try {
       final response = await http
-          .get(Uri.parse(url + 'compartments?lockerSiteId=${lockerSite?.id}'));
+          .get(Uri.parse('${url}compartments?lockerSiteId=${lockerSite?.id}'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 
@@ -201,9 +200,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomePage()),
-            );
+            Navigator.pop(context);
           },
         ),
         actions: <Widget>[
@@ -227,7 +224,7 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
         ],
       ),
       body: isLocationLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Stack(
               children: [
                 GoogleMap(
@@ -262,6 +259,11 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                                   ),
                                 );
                               },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        AppColors.cBarColor),
+                              ),
                               child: Row(
                                 children: [
                                   const Icon(
@@ -276,11 +278,6 @@ class _NearbyLocationPageState extends State<NearbyLocationPage> {
                                   ),
                                   const SizedBox(width: 5),
                                 ],
-                              ),
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        AppColors.cBarColor),
                               ),
                             ),
                           ],
@@ -314,7 +311,7 @@ class LockerInfoCardState extends State<LockerInfoCard> {
   Future<void> fetchAvailableCompartments() async {
     try {
       final response = await http.get(Uri.parse(
-          url + 'compartments?lockerSiteId=${widget.lockerSite?.id}'));
+          '${url}compartments?lockerSiteId=${widget.lockerSite?.id}'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 

@@ -27,7 +27,7 @@ class OrderStatusDetailWidget extends StatefulWidget {
 class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
   void viewOrderSummary() {
     print(widget.service);
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => OrderStatusSummaryScreen(

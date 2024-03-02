@@ -22,11 +22,13 @@ import 'package:http/http.dart' as http;
 import 'package:device_run_test/config.dart';
 
 class AccountPage extends StatefulWidget {
+  const AccountPage({super.key});
+
   @override
-  _AccountPageState createState() => _AccountPageState();
+  AccountPageState createState() => AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class AccountPageState extends State<AccountPage> {
   UserProfile? user;
 
   @override
@@ -184,12 +186,16 @@ class _AccountPageState extends State<AccountPage> {
                         title: 'Logout',
                         icon: Icons.logout,
                         onTap: () async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
                           var token = prefs.getString('token');
-                          Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
+                          Map<String, dynamic> jwtDecodedToken =
+                              JwtDecoder.decode(token!);
                           var reqUrl = '${url}deleteFCMToken';
-                          http.patch(Uri.parse(reqUrl),
-                            body: {"userId": jwtDecodedToken['_id'], "fcmToken": prefs.getString('fcmToken')});
+                          http.patch(Uri.parse(reqUrl), body: {
+                            "userId": jwtDecodedToken['_id'],
+                            "fcmToken": prefs.getString('fcmToken')
+                          });
                           await prefs.remove('token');
                           await prefs.remove('isBiometricsEnabled');
                           await prefs.remove('isAuthenticated');

@@ -18,10 +18,10 @@ class NearbyLocationsScreen extends StatefulWidget {
       required this.lockerSiteAvailabilities});
 
   @override
-  _NearbyLocationsScreenState createState() => _NearbyLocationsScreenState();
+  NearbyLocationsScreenState createState() => NearbyLocationsScreenState();
 }
 
-class _NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
+class NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
   @override
   void initState() {
     super.initState();
@@ -134,12 +134,7 @@ class _NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
                   Expanded(
                       child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NearbyLocationPage(),
-                              ),
-                            );
+                            Navigator.pop(context);
                           },
                           child: Text(
                             'Back to Map',
