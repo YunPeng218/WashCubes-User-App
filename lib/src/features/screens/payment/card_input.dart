@@ -5,7 +5,7 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dar
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:device_run_test/src/features/screens/order/order_qr_popup.dart';
+import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/user.dart';
@@ -118,7 +118,7 @@ class PaymentFormScreenState extends State<PaymentFormScreen>
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return OrderQRScreen(
+            return DropoffQRScreen(
                 lockerSite: widget.lockerSite,
                 compartment: widget.compartment,
                 order: order);

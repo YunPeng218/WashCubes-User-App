@@ -10,6 +10,7 @@ import 'package:device_run_test/src/features/screens/notification/notification_s
 import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
+import 'package:device_run_test/src/features/screens/order_error/order_error_screen.dart';
 
 // STYLES
 import '../../../common_widgets/bottom_nav_bar_widget.dart';
@@ -369,7 +370,10 @@ class OrderPageState extends State<OrderPage>
       itemCount: filteredOrders.length,
       itemBuilder: (context, index) {
         Order order = filteredOrders[index];
-        return OrderCard(order: order);
+        return OrderCard(
+          order: order,
+          hasOrderError: false,
+        );
       },
     );
   }
@@ -399,7 +403,10 @@ class OrderPageState extends State<OrderPage>
       itemCount: filteredOrders.length,
       itemBuilder: (context, index) {
         Order order = filteredOrders[index];
-        return OrderCard(order: order);
+        return OrderCard(
+          order: order,
+          hasOrderError: true,
+        );
       },
     );
   }
@@ -427,7 +434,10 @@ class OrderPageState extends State<OrderPage>
       itemCount: filteredOrders.length,
       itemBuilder: (context, index) {
         Order order = filteredOrders[index];
-        return OrderCard(order: order);
+        return OrderCard(
+          order: order,
+          hasOrderError: false,
+        );
       },
     );
   }
@@ -436,10 +446,12 @@ class OrderPageState extends State<OrderPage>
 //Order ListView Class
 class OrderCard extends StatelessWidget {
   final Order order;
+  final bool hasOrderError;
 
   OrderCard({
     Key? key,
     required this.order,
+    required this.hasOrderError,
   }) : super(key: key);
 
   Map<String, String> statusIcons = {
@@ -499,14 +511,23 @@ class OrderCard extends StatelessWidget {
         ),
         trailing: const Icon(Icons.arrow_forward_ios_rounded),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OrderStatusScreen(
-                      order: order,
-                    )),
-          );
-          // Handle the tap if necessary
+          if (hasOrderError) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OrderErrorScreen(
+                        order: order,
+                      )),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => OrderStatusScreen(
+                        order: order,
+                      )),
+            );
+          }
         },
       ),
     );

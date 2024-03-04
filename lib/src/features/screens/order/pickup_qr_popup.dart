@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/constants/image_strings.dart';
-import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
-import 'package:device_run_test/src/features/screens/order/confirm_order_dropoff.dart';
+import 'package:device_run_test/src/features/screens/order/confirm_order_pickup.dart';
 
-class OrderQRScreen extends StatefulWidget {
+class PickupQRScreen extends StatefulWidget {
   final Order? order;
   final LockerSite? lockerSite;
   final LockerCompartment? compartment;
 
-  const OrderQRScreen({
+  const PickupQRScreen({
     super.key,
     required this.order,
     required this.lockerSite,
@@ -19,30 +18,20 @@ class OrderQRScreen extends StatefulWidget {
   });
 
   @override
-  State<OrderQRScreen> createState() => OrderQRScreenState();
+  State<PickupQRScreen> createState() => PickupQRScreenState();
 }
 
-class OrderQRScreenState extends State<OrderQRScreen> {
-  Future<void> confirmOrderDropOff() async {
+class PickupQRScreenState extends State<PickupQRScreen> {
+  Future<void> confirmOrderPickup() async {
+    Navigator.pop(context);
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return ConfirmDropOffScreen(
+        return ConfirmPickupScreen(
             lockerSite: widget.lockerSite,
             compartment: widget.compartment,
             order: widget.order);
       },
-    );
-  }
-
-  void navigateToOrderStatus() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OrderStatusScreen(
-          order: widget.order!,
-        ),
-      ),
     );
   }
 
@@ -53,7 +42,7 @@ class OrderQRScreenState extends State<OrderQRScreen> {
         children: [
           const SizedBox(height: 15.0),
           Text(
-            'Order Successfully Placed!',
+            'Order Collection',
             textAlign: TextAlign.center,
             style: CTextTheme.blackTextTheme.headlineLarge,
           ),
@@ -76,7 +65,7 @@ class OrderQRScreenState extends State<OrderQRScreen> {
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               Text(
-                '${widget.order?.orderNumber ?? 'Loading...'}',
+                widget.order?.orderNumber ?? 'Loading...',
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
             ],
@@ -86,11 +75,11 @@ class OrderQRScreenState extends State<OrderQRScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Drop Off:',
+                'Collection Site:',
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               Text(
-                '${widget.lockerSite?.name ?? 'Loading...'}',
+                widget.lockerSite?.name ?? 'Loading...',
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
             ],
@@ -100,11 +89,11 @@ class OrderQRScreenState extends State<OrderQRScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Compartment:',
+                'Assigned Compartment:',
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               Text(
-                '${widget.compartment?.compartmentNumber ?? 'Loading...'}',
+                widget.compartment?.compartmentNumber ?? 'Loading...',
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
             ],
@@ -118,11 +107,11 @@ class OrderQRScreenState extends State<OrderQRScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
+                    onPressed: confirmOrderPickup,
                     child: Text(
-                      'Confirm Order Drop-Off',
+                      'Confirm Collection',
                       style: CTextTheme.blackTextTheme.headlineSmall,
                     ),
-                    onPressed: confirmOrderDropOff,
                   ),
                 ),
               ],
@@ -135,11 +124,13 @@ class OrderQRScreenState extends State<OrderQRScreen> {
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             Colors.blue[100]!)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text(
                       'To Order Status Page',
                       style: CTextTheme.blackTextTheme.headlineSmall,
                     ),
-                    onPressed: navigateToOrderStatus,
                   ),
                 ),
               ],

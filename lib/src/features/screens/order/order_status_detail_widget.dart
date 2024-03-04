@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
-import 'package:device_run_test/src/features/screens/order/order_qr_popup.dart';
+import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
+import 'package:device_run_test/src/features/screens/order/pickup_qr_popup.dart';
 
 class OrderStatusDetailWidget extends StatefulWidget {
   final Order order;
@@ -13,12 +14,12 @@ class OrderStatusDetailWidget extends StatefulWidget {
   final Service? service;
 
   const OrderStatusDetailWidget({
-    Key? key,
+    super.key,
     required this.order,
     required this.lockerSite,
     required this.collectionSite,
     required this.service,
-  }) : super(key: key);
+  });
 
   @override
   OrderStatusDetailWidgetState createState() => OrderStatusDetailWidgetState();
@@ -26,7 +27,6 @@ class OrderStatusDetailWidget extends StatefulWidget {
 
 class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
   void viewOrderSummary() {
-    print(widget.service);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -39,11 +39,11 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
     );
   }
 
-  void displayOrderQRCode() {
+  void displayDropoffQRCode() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return OrderQRScreen(
+        return DropoffQRScreen(
             lockerSite: widget.lockerSite,
             compartment: widget.lockerSite?.compartments.firstWhere(
                 (compartment) =>
@@ -54,8 +54,24 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
     );
   }
 
+  void displayPickupQRCode() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PickupQRScreen(
+            lockerSite: widget.collectionSite,
+            compartment: widget.collectionSite?.compartments.firstWhere(
+                (compartment) =>
+                    compartment.id ==
+                    widget.order.lockerDetails?.compartmentId),
+            order: widget.order);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    String orderStage = widget.order.orderStage?.getMostRecentStatus() ?? '';
     return //Order Summary & Details
         Column(
       children: [
@@ -123,14 +139,23 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
         const SizedBox(
           height: 5.0,
         ),
-        Row(
+        buildButton(orderStage),
+      ],
+    );
+  }
+
+  Row buildButton(String orderStage) {
+    switch (orderStage) {
+      case 'Drop Off Pending':
+        return Row(
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: displayOrderQRCode,
+                onPressed: displayDropoffQRCode,
                 style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue[50]!)),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blue[50]!),
+                ),
                 child: Text(
                   'Order QR Code',
                   style: CTextTheme.blackTextTheme.headlineMedium,
@@ -138,8 +163,31 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
               ),
             ),
           ],
-        ),
-      ],
-    );
+        );
+      case 'Ready For Collection':
+        return Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: displayPickupQRCode,
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blue[50]!),
+                ),
+                child: Text(
+                  'Order QR Code',
+                  style: CTextTheme.blackTextTheme.headlineMedium,
+                ),
+              ),
+            ),
+          ],
+        );
+      default:
+        return const Row(
+          children: [
+            SizedBox(height: 10.0),
+          ],
+        );
+    }
   }
 }

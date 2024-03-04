@@ -12,17 +12,17 @@ import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:device_run_test/src/features/screens/order/order_qr_popup.dart';
+import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
 
 class OrderStatusScreen extends StatefulWidget {
   final Order order;
-  const OrderStatusScreen({Key? key, required this.order}) : super(key: key);
+  const OrderStatusScreen({super.key, required this.order});
 
   @override
-  State<OrderStatusScreen> createState() => _OrderStatusState();
+  State<OrderStatusScreen> createState() => OrderStatusState();
 }
 
-class _OrderStatusState extends State<OrderStatusScreen> {
+class OrderStatusState extends State<OrderStatusScreen> {
   LockerSite? lockerSite;
   LockerSite? collectionSite;
   Service? service;
@@ -36,8 +36,8 @@ class _OrderStatusState extends State<OrderStatusScreen> {
 
   Future<void> fetchOrderLockerInfo() async {
     try {
-      var reqUrl = url +
-          'locker/order-locker-sites?dropOffSiteId=${widget.order.lockerDetails?.lockerSiteId}&collectionSiteId=${widget.order.collectionSite?.lockerSiteId}';
+      var reqUrl =
+          '${url}locker/order-locker-sites?dropOffSiteId=${widget.order.lockerDetails?.lockerSiteId}&collectionSiteId=${widget.order.collectionSite?.lockerSiteId}';
       final response = await http.get(Uri.parse(reqUrl));
 
       if (response.statusCode == 200) {
@@ -69,7 +69,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
   Future<void> fetchOrderServiceInfo() async {
     try {
       final response =
-          await http.get(Uri.parse(url + 'services/${widget.order.serviceId}'));
+          await http.get(Uri.parse('${url}services/${widget.order.serviceId}'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -105,7 +105,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return OrderQRScreen(
+        return DropoffQRScreen(
             lockerSite: lockerSite,
             compartment: lockerSite?.compartments.firstWhere((compartment) =>
                 compartment.id == widget.order.lockerDetails?.compartmentId),
