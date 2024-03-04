@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:device_run_test/config.dart';
@@ -18,8 +20,8 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotifScreenState extends State<NotificationScreen> {
-
   List<Map<String, dynamic>> notifications = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -34,7 +36,7 @@ class _NotifScreenState extends State<NotificationScreen> {
         Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
         String userId = jwtDecodedToken['_id'];
         final response = await http.get(
-          Uri.parse(url + 'fetchNotification?userId=$userId'),
+          Uri.parse('${url}fetchNotification?userId=$userId'),
         );
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
@@ -42,12 +44,19 @@ class _NotifScreenState extends State<NotificationScreen> {
           fetchedNotifications = fetchedNotifications.reversed.toList();
           setState(() {
             notifications = fetchedNotifications;
+            isLoading = false;
           });
         } else {
           print('Failed to fetch notifications');
+          setState(() {
+            isLoading = false;
+          });
         }
     } catch (error) {
       print('Error fetching notifications: $error');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -93,7 +102,7 @@ class _NotifScreenState extends State<NotificationScreen> {
 
       if (confirmDelete == true) {
         final response = await http.delete(
-          Uri.parse(url + 'deleteAllNotifications?userId=$userId'),
+          Uri.parse('${url}deleteAllNotifications?userId=$userId'),
         );
         if (response.statusCode == 200) {
           setState(() {
@@ -113,7 +122,11 @@ class _NotifScreenState extends State<NotificationScreen> {
     final size = MediaQuery.of(context).size;
 
     Widget bodyWidget;
-    if (notifications.isNotEmpty) {
+    if (isLoading) {
+      bodyWidget = const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (notifications.isNotEmpty) {
       bodyWidget = SingleChildScrollView(
         child: Column(
           children: [

@@ -63,18 +63,24 @@ class _EditProfilePageState extends State<EditProfilePage> {
         padding: const EdgeInsets.all(cDefaultSize),
         child: ListView(
           children: <Widget>[
-            if (user != null) ProfileHeader(user: user),
-            if (user != null)
+            if (user != null) ...[
+              ProfileHeader(user: user),
               EditableProfileItem(
-                  title: 'PREFERRED NAME', value: user!.name, user: user),
-            if (user != null)
+                title: 'PREFERRED NAME', 
+                value: user!.name, 
+                user: user
+              ),
               EditableProfileItem(
-                  title: 'MOBILE NUMBER',
-                  value: user!.phoneNumber.toString(),
-                  user: user),
-            if (user != null)
+                title: 'MOBILE NUMBER',
+                value: user!.phoneNumber.toString(),
+                user: user
+              ),
               EditableProfileItem(
-                  title: 'EMAIL ADDRESS', value: user!.email, user: user),
+                title: 'EMAIL ADDRESS', 
+                value: user!.email, 
+                user: user
+              ),
+            ],
           ],
         ),
       ),
@@ -162,7 +168,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           widget.user = UserProfile.fromJson(userData);
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Profile picture updated successfully!'),
             duration: Duration(seconds: 2),
           ),
@@ -181,13 +187,14 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             GestureDetector(
               child: CircleAvatar(
                 radius: 50,
+                backgroundColor: Colors.transparent,
                 backgroundImage: NetworkImage(
                   imageUrl!,
                 ),
               ),
             ),
             if (isUploading)
-              Positioned(
+              const Positioned(
                 top: 0,
                 bottom: 0,
                 left: 0,
@@ -196,42 +203,51 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   child: CircularProgressIndicator(),
                 ),
               ),
-            IconButton(
-              icon: const Icon(
-                Icons.camera_enhance,
-                color: Colors.grey,
-              ),
-              onPressed: () {
-                if (!isUploading) {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            leading: const Icon(Icons.camera),
-                            title: Text('Take a photo', style: CTextTheme.blackTextTheme.headlineMedium,),
-                            onTap: () {
-                              Navigator.pop(context);
-                              pickImage(ImageSource.camera);
-                            },
-                          ),
-                          ListTile(
-                            leading: Icon(Icons.image),
-                            title: Text('Choose from gallery', style: CTextTheme.blackTextTheme.headlineMedium,),
-                            onTap: () {
-                              Navigator.pop(context);
-                              pickImage(ImageSource.gallery);
-                            },
-                          ),
-                        ],
+              Container(
+                height: 30,
+                width: 30,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 2,
+                    color: AppColors.cGreyColor1,
+                  ),
+                  color: AppColors.cGreyColor1,
+                ),
+                child: GestureDetector( 
+                  onTap: () {
+                    if (!isUploading) {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: const Icon(Icons.camera),
+                                title: Text('Take a photo', style: CTextTheme.blackTextTheme.headlineMedium,),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  pickImage(ImageSource.camera);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.image),
+                                title: Text('Choose from gallery', style: CTextTheme.blackTextTheme.headlineMedium,),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  pickImage(ImageSource.gallery);
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       );
-                    },
-                  );
-                }
-              },
-            ),
+                    }
+                  },
+                  child: const Icon(Icons.camera_alt_rounded, color: AppColors.cBlueColor3),
+                ),
+              ),
           ],
         ),
         const SizedBox(height: 20),
@@ -305,7 +321,7 @@ class _EditableProfileItemState extends State<EditableProfileItem> {
           pageState.loadUserInfo();
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Profile updated successfully!'),
             duration: Duration(seconds: 2),
           ),

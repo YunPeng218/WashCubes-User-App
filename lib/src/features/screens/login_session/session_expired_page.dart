@@ -14,13 +14,13 @@ class SessionExpiredPage extends StatelessWidget {
               'Session Expired',
               style: CTextTheme.blackTextTheme.displayLarge,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               "Looks like you've been inactive for 5 minutes.\nTo continue, please reauthenticate again.",
               style: CTextTheme.blackTextTheme.headlineLarge,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(

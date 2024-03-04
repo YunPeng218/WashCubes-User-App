@@ -225,21 +225,6 @@ class SettingPageState extends State<SettingPage> {
                 ),
               ],
             ),
-            const SizedBox(height: cDefaultSize),
-            // Delete Account Button
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Delete Account',
-                      style: CTextTheme.blackTextTheme.headlineMedium,
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),

@@ -22,39 +22,47 @@ import 'package:http/http.dart' as http;
 import 'package:device_run_test/config.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+  const AccountPage({Key? key}) : super(key: key);
 
   @override
   AccountPageState createState() => AccountPageState();
 }
 
 class AccountPageState extends State<AccountPage> {
-  UserProfile? user;
+  late Future<UserProfile?> userFuture;
+  AccountPageState? pageState;
 
   @override
   void initState() {
     super.initState();
-    init();
+    pageState = context.findAncestorStateOfType<AccountPageState>();
+    userFuture = init();
   }
 
-  void init() async {
+  Future<UserProfile?> init() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? 'No token';
-    if (token != 'No token') loadUserInfo();
+    if (token != 'No token') {
+      return loadUserInfo();
+    }
+    return null;
   }
 
-  Future<void> loadUserInfo() async {
+  Future<UserProfile?> loadUserInfo() async {
     try {
       var userHelper = UserHelper();
       UserProfile? foundUser = await userHelper.getUserDetails();
-      if (mounted) {
-        setState(() {
-          user = foundUser;
-        });
-      }
+      return foundUser;
     } catch (error) {
       print('Failed to load user: $error');
+      return null;
     }
+  }
+
+  void refreshUserData() {
+    setState(() {
+      userFuture = init();
+    });
   }
 
   @override
@@ -63,7 +71,6 @@ class AccountPageState extends State<AccountPage> {
       builder: (context, guestProvider, child) {
         return Scaffold(
           appBar: AppBar(
-            // Notification Button
             leading: IconButton(
               onPressed: () {
                 Navigator.push(
@@ -90,7 +97,7 @@ class AccountPageState extends State<AccountPage> {
                             style: CTextTheme.blackTextTheme.headlineSmall,
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           ElevatedButton(
                             onPressed: () {
                               Navigator.pushReplacement(
@@ -118,102 +125,118 @@ class AccountPageState extends State<AccountPage> {
                       ),
                     ],
                   )
-                : Column(
-                    children: [
-                      if (user != null) UserHeader(user: user),
-                      SizedBox(height: 30.0),
-                      ProfileOption(
-                        title: 'Edit Profile',
-                        icon: Icons.person_outline_rounded,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfilePage()),
-                          ).whenComplete(() => loadUserInfo());
-                        },
-                      ),
-                      const Divider(),
-                      ProfileOption(
-                        title: 'Settings',
-                        icon: Icons.settings_outlined,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SettingPage()),
-                          );
-                        },
-                      ),
-                      const Divider(),
-                      ProfileOption(
-                        title: 'Feedback Ratings',
-                        icon: Icons.star_border_rounded,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const FeedbackRatingsPage()),
-                          );
-                        },
-                      ),
-                      const Divider(),
-                      ProfileOption(
-                        title: 'FAQs',
-                        icon: Icons.question_answer,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => FAQsPage()),
-                          );
-                        },
-                      ),
-                      const Divider(),
-                      ProfileOption(
-                        title: 'Privacy Policy',
-                        icon: Icons.shield_outlined,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PolicyPage()),
-                          );
-                        },
-                      ),
-                      const Divider(),
-                      ProfileOption(
-                        title: 'Logout',
-                        icon: Icons.logout,
-                        onTap: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          var token = prefs.getString('token');
-                          Map<String, dynamic> jwtDecodedToken =
-                              JwtDecoder.decode(token!);
-                          var reqUrl = '${url}deleteFCMToken';
-                          http.patch(Uri.parse(reqUrl), body: {
-                            "userId": jwtDecodedToken['_id'],
-                            "fcmToken": prefs.getString('fcmToken')
-                          });
-                          await prefs.remove('token');
-                          await prefs.remove('isBiometricsEnabled');
-                          await prefs.remove('isAuthenticated');
-                          await prefs.remove('isNotificationEnabled');
-                          await prefs.remove('sessionExpired');
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (context) => const WelcomeScreen(),
+                : FutureBuilder<UserProfile?>(
+                    future: userFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null) {
+                        return Column(
+                          children: [
+                            UserHeader(user: snapshot.data!),
+                            const SizedBox(height: 30.0),
+                            ProfileOption(
+                              title: 'Edit Profile',
+                              icon: Icons.person_outline_rounded,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditProfilePage(),
+                                  ),
+                                ).whenComplete(() {        
+                                  AccountPageState? pageState =
+                                      context.findAncestorStateOfType<AccountPageState>();
+                                  if (pageState != null) {
+                                    refreshUserData();
+                                  }
+                                });
+                              },
                             ),
-                            (Route<dynamic> route) => false,
-                          );
-                        },
-                      ),
-                      const Divider(),
-                    ],
+                            const Divider(),
+                            ProfileOption(
+                              title: 'Settings',
+                              icon: Icons.settings_outlined,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const SettingPage()),
+                                );
+                              },
+                            ),
+                            const Divider(),
+                            ProfileOption(
+                              title: 'Feedback Ratings',
+                              icon: Icons.star_border_rounded,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const FeedbackRatingsPage()),
+                                );
+                              },
+                            ),
+                            const Divider(),
+                            ProfileOption(
+                              title: 'FAQs',
+                              icon: Icons.question_answer,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => FAQsPage()),
+                                );
+                              },
+                            ),
+                            const Divider(),
+                            ProfileOption(
+                              title: 'Privacy Policy',
+                              icon: Icons.shield_outlined,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const PolicyPage()),
+                                );
+                              },
+                            ),
+                            const Divider(),
+                            ProfileOption(
+                              title: 'Logout',
+                              icon: Icons.logout,
+                              onTap: () async {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                var token = prefs.getString('token');
+                                Map<String, dynamic> jwtDecodedToken =
+                                    JwtDecoder.decode(token!);
+                                var reqUrl = '${url}deleteFCMToken';
+                                http.patch(Uri.parse(reqUrl), body: {
+                                  "userId": jwtDecodedToken['_id'],
+                                  "fcmToken": prefs.getString('fcmToken')
+                                });
+                                await prefs.remove('token');
+                                await prefs.remove('isBiometricsEnabled');
+                                await prefs.remove('isAuthenticated');
+                                await prefs.remove('isNotificationEnabled');
+                                await prefs.remove('sessionExpired');
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                    builder: (context) => const WelcomeScreen(),
+                                  ),
+                                  (Route<dynamic> route) => false,
+                                );
+                              },
+                            ),
+                            const Divider(),
+                          ],
+                        );
+                      } else {
+                        return const Center (child: CircularProgressIndicator());
+                      }
+                    },
                   ),
           ),
-          // ChatBot Trimi Button
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
@@ -222,10 +245,9 @@ class AccountPageState extends State<AccountPage> {
               );
             },
             tooltip: 'Increment',
-            child: Image.asset(cChatBotLogo),
             backgroundColor: Colors.blue[50],
+            child: Image.asset(cChatBotLogo),
           ),
-          // BottomNavBar
           bottomNavigationBar: const BottomNavBar(),
         );
       },

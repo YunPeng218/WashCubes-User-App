@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'dart:async';
 
 import 'package:device_run_test/src/common_widgets/bottom_nav_bar_widget.dart';
@@ -34,8 +36,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   UserProfile? user;
   late Timer timer;
   int elapsedTime = 0;
-  String profilePic =
-      'https://res.cloudinary.com/ddweldfmx/image/upload/v1707480915/profilePic/zxltbifbulr4m45lbsqq.png';
+  String? profilePic;
   var userHelper = UserHelper();
   bool isInactive = false;
   List<Order> userOrders = [];
@@ -114,6 +115,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String token = prefs.getString('token') ?? 'No token';
     if (token != 'No token') {
       loadUserInfo();
+    } else {
+      setState(() {
+        profilePic = 'https://res.cloudinary.com/ddweldfmx/image/upload/v1707480915/profilePic/zxltbifbulr4m45lbsqq.png';
+      });
     }
     String isBiometricsEnabled =
         prefs.getString('isBiometricsEnabled') ?? 'false';
@@ -220,12 +225,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         //Avatar Icon
         actions: <Widget>[
           CircleAvatar(
-            backgroundImage: NetworkImage(profilePic),
+            backgroundImage: profilePic != null ? NetworkImage(profilePic!) : null,
+            backgroundColor: Colors.transparent,
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AccountPage()),
+                  MaterialPageRoute(builder: (context) => const AccountPage()),
                 );
               },
               child: null,
@@ -378,7 +384,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => OrderPage()),
+                                    builder: (context) => const OrderPage()),
                               );
                             },
                           ),
@@ -401,7 +407,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => OrderPage()),
+                                    builder: (context) => const OrderPage()),
                               );
                             },
                           ),
@@ -424,7 +430,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => OrderPage()),
+                                    builder: (context) => const OrderPage()),
                               );
                             },
                           ),

@@ -51,7 +51,6 @@ class OTPPageState extends State<OTPVerifyPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initSharedPref();
     startTimer();
