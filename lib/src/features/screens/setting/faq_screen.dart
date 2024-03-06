@@ -21,7 +21,6 @@ class FAQsPage extends StatelessWidget {
       'answer': 'Yes, our smart laundry lockers are equipped with UV sterilization technology, primarily designed to sanitize the locker compartment. This feature helps eliminate germs, bacteria, and odours, ensuring that the environment your clothes are stored in is clean and safe.'
           '\n\nThe UV sterilization primarily targets the locker compartment, indirectly boosting the cleanliness of your clothes. You’ll get back fresh, sanitized garments, making your whole laundry experience more hygienic.'
     },
-    // Add other FAQs here
   ];
 
   FAQsPage({super.key});

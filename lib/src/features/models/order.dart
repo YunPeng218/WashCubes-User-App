@@ -59,7 +59,7 @@ class Order {
     dateTime = dateTime.add(timeZoneOffset);
     String formattedDate = DateFormat.yMMMd().format(dateTime);
     String formattedTime = DateFormat.jm().format(dateTime);
-    return '${formattedDate} / ${formattedTime}';
+    return '$formattedDate / $formattedTime';
   }
 }
 
@@ -193,14 +193,17 @@ class OrderStage {
   }
 
   String getMostRecentStatus() {
+    if (orderError.status) {
+      return 'Order Error';
+    }
     if (completed.status) {
       return 'Completed';
     }
     if (readyForCollection.status) {
-      return 'Ready for Collection';
+      return 'Ready For Collection';
     }
     if (outForDelivery.status) {
-      return 'Out for Delivery';
+      return 'Out For Delivery';
     }
     if (processingComplete.status) {
       return 'Processing Complete';
@@ -209,7 +212,7 @@ class OrderStage {
       return 'In Progress';
     }
     if (collectedByRider.status) {
-      return 'Collected by Rider';
+      return 'Collected By Rider';
     }
     if (dropOff.status) {
       return 'Drop Off';

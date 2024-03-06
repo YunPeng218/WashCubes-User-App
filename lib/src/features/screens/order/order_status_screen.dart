@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:device_run_test/src/common_widgets/support_alert_widget.dart';
 import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_detail_widget.dart';
@@ -10,21 +12,22 @@ import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:device_run_test/src/features/screens/order/order_qr_popup.dart';
+import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
 
 class OrderStatusScreen extends StatefulWidget {
   final Order order;
-  const OrderStatusScreen({Key? key, required this.order}) : super(key: key);
+  const OrderStatusScreen({super.key, required this.order});
 
   @override
-  State<OrderStatusScreen> createState() => _OrderStatusState();
+  State<OrderStatusScreen> createState() => OrderStatusState();
 }
 
-class _OrderStatusState extends State<OrderStatusScreen> {
+class OrderStatusState extends State<OrderStatusScreen> {
   LockerSite? lockerSite;
   LockerSite? collectionSite;
   Service? service;
 
+  @override
   void initState() {
     super.initState();
     fetchOrderLockerInfo();
@@ -33,8 +36,8 @@ class _OrderStatusState extends State<OrderStatusScreen> {
 
   Future<void> fetchOrderLockerInfo() async {
     try {
-      var reqUrl = url +
-          'locker/order-locker-sites?dropOffSiteId=${widget.order.lockerDetails?.lockerSiteId}&collectionSiteId=${widget.order.collectionSite?.lockerSiteId}';
+      var reqUrl =
+          '${url}locker/order-locker-sites?dropOffSiteId=${widget.order.lockerDetails?.lockerSiteId}&collectionSiteId=${widget.order.collectionSite?.lockerSiteId}';
       final response = await http.get(Uri.parse(reqUrl));
 
       if (response.statusCode == 200) {
@@ -66,7 +69,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
   Future<void> fetchOrderServiceInfo() async {
     try {
       final response =
-          await http.get(Uri.parse(url + 'services/${widget.order.serviceId}'));
+          await http.get(Uri.parse('${url}services/${widget.order.serviceId}'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -88,20 +91,21 @@ class _OrderStatusState extends State<OrderStatusScreen> {
     }
   }
 
-  void handleBackButtonPress() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OrderPage(),
-      ),
-    );
+  bool handleBackButtonPress() {
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+      return const OrderPage();
+    }), (route) {
+      return false;
+    });
+    return true;
   }
 
   void displayOrderQRCode() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return OrderQRScreen(
+        return DropoffQRScreen(
             lockerSite: lockerSite,
             compartment: lockerSite?.compartments.firstWhere((compartment) =>
                 compartment.id == widget.order.lockerDetails?.compartmentId),
@@ -112,13 +116,18 @@ class _OrderStatusState extends State<OrderStatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
+    return WillPopScope(
+      onWillPop: () async {
+        bool shouldPop = handleBackButtonPress();
+        return shouldPop;
+      },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: handleBackButtonPress,
+            onPressed: () {
+              handleBackButtonPress();
+            },
           ),
           title: Text(
             'Order #${widget.order.orderNumber}',
@@ -147,7 +156,7 @@ class _OrderStatusState extends State<OrderStatusScreen> {
                 OrderStatusWidget(
                   order: widget.order,
                 ),
-                Divider(),
+                const Divider(),
                 OrderStatusDetailWidget(
                   order: widget.order,
                   lockerSite: lockerSite,

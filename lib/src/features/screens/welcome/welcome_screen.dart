@@ -20,10 +20,10 @@ class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
   @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
+  WelcomeScreenState createState() => WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class WelcomeScreenState extends State<WelcomeScreen> {
   TextEditingController phoneNumberController = TextEditingController();
   bool isNotValidate = false;
   String errorText = '';
@@ -39,7 +39,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         String otpGenerated = jsonResponse['otp'];
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OTPVerifyPage(phoneNumber: phoneNumberController.text, otp: otpGenerated, isUpdating: false)),
+          MaterialPageRoute(
+              builder: (context) => OTPVerifyPage(
+                  phoneNumber: phoneNumberController.text,
+                  otp: otpGenerated,
+                  isUpdating: false)),
         );
       } else {
         setState(() {

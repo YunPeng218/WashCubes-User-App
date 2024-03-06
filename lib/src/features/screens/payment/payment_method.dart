@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'dart:async';
 import 'package:device_run_test/src/constants/colors.dart';
@@ -14,8 +14,6 @@ import 'package:device_run_test/src/features/screens/order/order_screen.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/user.dart';
-//import 'package:provider/provider.dart';
-//import 'package:device_run_test/src/utilities/locker_service.dart';
 
 class PaymentScreen extends StatefulWidget {
   final Order? order;
@@ -32,10 +30,10 @@ class PaymentScreen extends StatefulWidget {
       required this.user,
       required this.collectionSite});
   @override
-  _PaymentScreenState createState() => _PaymentScreenState();
+  PaymentScreenState createState() => PaymentScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen>
+class PaymentScreenState extends State<PaymentScreen>
     with WidgetsBindingObserver {
   static const maxSeconds = 10 * 60;
   int seconds = maxSeconds;
@@ -99,7 +97,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     );
   }
 
-  void handleBackButtonPress() {
+  Future<bool> handleBackButtonPress() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -113,39 +111,47 @@ class _PaymentScreenState extends State<PaymentScreen>
             confirmButtonText: 'Confirm');
       },
     );
+    return true;
   }
 
   Future<void> releaseAssignedCompartment() async {
+    Navigator.pop(context);
+
     Map<String, dynamic> releaseComaprtment = {
       'lockerSiteId': widget.lockerSite?.id,
       'compartmentId': widget.compartment.id,
     };
 
     await http.post(
-      Uri.parse(url + 'locker/release-compartment'),
+      Uri.parse('${url}locker/release-compartment'),
       body: json.encode(releaseComaprtment),
       headers: {'Content-Type': 'application/json'},
     );
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OrderPage(),
-      ),
-    );
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+      return const OrderPage();
+    }), (route) {
+      return false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     // _context = context;
-    return PopScope(
-      canPop: false,
+    return WillPopScope(
+      onWillPop: () async {
+        bool shouldPop = await handleBackButtonPress();
+        return shouldPop;
+      },
       child: Scaffold(
         //Back Button & Countdown Timer
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: handleBackButtonPress,
+            onPressed: () async {
+              await handleBackButtonPress();
+            },
           ),
           actions: <Widget>[
             OutlinedButton(

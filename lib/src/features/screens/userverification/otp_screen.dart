@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, must_be_immutable
 
 import 'dart:async';
 
@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:local_auth/local_auth.dart';
 
 // SCREENS
-import 'package:device_run_test/src/features/screens/biometricSetup/biometric_setup_screen.dart';
+import 'package:device_run_test/src/features/screens/biometric_setup/biometric_setup_screen.dart';
 import 'package:device_run_test/src/features/screens/home/home_screen.dart';
 import 'package:device_run_test/src/features/screens/order/order_summary_screen.dart';
 
@@ -28,18 +28,22 @@ import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/utilities/guest_mode.dart';
 
 class OTPVerifyPage extends StatefulWidget {
-  final String phoneNumber; 
+  final String phoneNumber;
   String otp;
   bool isResendButtonEnabled = false;
   bool isUpdating;
 
-  OTPVerifyPage({required this.phoneNumber, required this.otp, required this.isUpdating, Key? key}): super(key: key);
+  OTPVerifyPage(
+      {required this.phoneNumber,
+      required this.otp,
+      required this.isUpdating,
+      super.key});
 
   @override
-  _OTPPageState createState() => _OTPPageState();
+  OTPPageState createState() => OTPPageState();
 }
 
-class _OTPPageState extends State<OTPVerifyPage> {
+class OTPPageState extends State<OTPVerifyPage> {
   late SharedPreferences prefs;
   TextEditingController otpController = TextEditingController();
   late Timer timer;
@@ -47,7 +51,6 @@ class _OTPPageState extends State<OTPVerifyPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initSharedPref();
     startTimer();
@@ -81,8 +84,8 @@ class _OTPPageState extends State<OTPVerifyPage> {
   void resendOTP() async {
     if (widget.isResendButtonEnabled) {
       var reqUrl = '${url}sendOTP';
-      var response = await http.post(Uri.parse(reqUrl),
-        body: {"phoneNumber": widget.phoneNumber});
+      var response = await http
+          .post(Uri.parse(reqUrl), body: {"phoneNumber": widget.phoneNumber});
       var jsonResponse = jsonDecode(response.body);
       setState(() {
         widget.otp = jsonResponse['otp'];
@@ -130,8 +133,10 @@ class _OTPPageState extends State<OTPVerifyPage> {
   void otpValidation() async {
     if ((widget.otp == otpController.text) && !widget.isUpdating) {
       var reqUrl = '${url}userVerification';
-      var response = await http.post(Uri.parse(reqUrl),
-        body: {"phoneNumber": widget.phoneNumber, "fcmToken": prefs.getString('fcmToken')});
+      var response = await http.post(Uri.parse(reqUrl), body: {
+        "phoneNumber": widget.phoneNumber,
+        "fcmToken": prefs.getString('fcmToken')
+      });
       var jsonResponse = jsonDecode(response.body);
       if (jsonResponse['status'] == 'existingUser') {
         var myToken = jsonResponse['token'];
@@ -147,26 +152,27 @@ class _OTPPageState extends State<OTPVerifyPage> {
             .guestMadeOrder) {
           Provider.of<GuestModeProvider>(context, listen: false)
               .setGuestMadeOrder(false);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => OrderSummary(
-                order: Provider.of<GuestModeProvider>(context, listen: false)
-                    .guestOrder,
-                service: Provider.of<GuestModeProvider>(context, listen: false)
-                    .guestService,
-                lockerSite: Provider.of<GuestModeProvider>(context, listen: false)
-                    .guestLockerSite,
-                selectedCompartmentSize:
-                    Provider.of<GuestModeProvider>(context, listen: false)
-                        .guestSelectedCompartmentSize,
-                compartment: null,
-                collectionSite:
-                    Provider.of<GuestModeProvider>(context, listen: false)
-                        .guestCollectionSite,
-              ),
-            ),
-          );
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+            return OrderSummary(
+              order: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestOrder,
+              service: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestService,
+              lockerSite: Provider.of<GuestModeProvider>(context, listen: false)
+                  .guestLockerSite,
+              selectedCompartmentSize:
+                  Provider.of<GuestModeProvider>(context, listen: false)
+                      .guestSelectedCompartmentSize,
+              compartment: null,
+              collectionSite:
+                  Provider.of<GuestModeProvider>(context, listen: false)
+                      .guestCollectionSite,
+              justNavigatedFromGuest: true,
+            );
+          }), (route) {
+            return false;
+          });
         } else {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
@@ -182,7 +188,7 @@ class _OTPPageState extends State<OTPVerifyPage> {
         prefs.setString('token', myToken);
         prefs.setString('isNotificationEnabled', 'true');
         checkBiometrics(context);
-      } 
+      }
     } else if ((widget.otp == otpController.text) && widget.isUpdating) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
@@ -190,30 +196,26 @@ class _OTPPageState extends State<OTPVerifyPage> {
       String userId = jwtDecodedToken['_id'];
       var reqUrl = '${url}editPhoneNumber';
       var response = await http.patch(Uri.parse(reqUrl),
-        body: {"userId": userId, "phoneNumber": widget.phoneNumber});
+          body: {"userId": userId, "phoneNumber": widget.phoneNumber});
       var jsonResponse = jsonDecode(response.body);
       if (jsonResponse['status'] == 'Success') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Profile updated successfully!'),
             duration: Duration(seconds: 2),
           ),
         );
         Navigator.pop(context);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditProfilePage()));
-      } 
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => EditProfilePage()));
+      }
     } else {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(
-              'Error',
-              style: CTextTheme.blackTextTheme.headlineLarge
-            ),
+            title:
+                Text('Error', style: CTextTheme.blackTextTheme.headlineLarge),
             content: Text(
               'The OTP entered is incorrect. Please try again.',
               style: CTextTheme.blackTextTheme.headlineMedium,

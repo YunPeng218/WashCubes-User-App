@@ -1,9 +1,5 @@
 import 'package:device_run_test/src/constants/colors.dart';
-import 'package:device_run_test/src/features/screens/home/home_screen.dart';
-import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
 import 'package:flutter/material.dart';
-
-import '../features/screens/order/order_screen.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
@@ -13,7 +9,7 @@ class BottomNavBar extends StatelessWidget {
     const iconPadding = EdgeInsets.only(top: 8.0);
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.cBarColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0),
@@ -28,10 +24,7 @@ class BottomNavBar extends StatelessWidget {
               padding: iconPadding,
               child: IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                  );
+                  Navigator.pushNamed(context, '/home');
                 },
                 icon: const Icon(Icons.home_outlined),
                 color: AppColors.cWhiteColor,
@@ -44,10 +37,7 @@ class BottomNavBar extends StatelessWidget {
               padding: iconPadding,
               child: IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const OrderPage()),
-                  );
+                  Navigator.pushNamed(context, '/order');
                 },
                 icon: const Icon(Icons.shopping_basket_outlined),
                 color: AppColors.cWhiteColor,
@@ -60,10 +50,7 @@ class BottomNavBar extends StatelessWidget {
               padding: iconPadding,
               child: IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AccountPage()),
-                  );
+                  Navigator.pushNamed(context, '/account');
                 },
                 icon: const Icon(Icons.person_outlined),
                 color: AppColors.cWhiteColor,

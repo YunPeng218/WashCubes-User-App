@@ -41,7 +41,7 @@ class CollectionSiteSelectState extends State<CollectionSiteSelect> {
 
   Future<void> fetchLockerSites() async {
     try {
-      var reqUrl = url + 'lockers';
+      var reqUrl = '${url}lockers';
       final response = await http.get(Uri.parse(reqUrl));
 
       if (response.statusCode == 200) {
@@ -73,59 +73,62 @@ class CollectionSiteSelectState extends State<CollectionSiteSelect> {
       context,
       MaterialPageRoute(
           builder: (context) => OrderSummary(
-              lockerSite: widget.lockerSite,
-              compartment: widget.compartment,
-              selectedCompartmentSize: widget.selectedCompartmentSize,
-              service: widget.service,
-              order: widget.order,
-              collectionSite: selectedLockerSite)),
+                lockerSite: widget.lockerSite,
+                compartment: widget.compartment,
+                selectedCompartmentSize: widget.selectedCompartmentSize,
+                service: widget.service,
+                order: widget.order,
+                collectionSite: selectedLockerSite,
+                justNavigatedFromGuest: false,
+              )),
     );
+  }
+
+  void handleBackButtonPress() {
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Container(
-          padding: const EdgeInsets.all(cDefaultSize),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Select Order Collection Site',
-                style: CTextTheme.blueTextTheme.displayLarge,
-              ),
-              const SizedBox(
-                height: cDefaultSize * 0.5,
-              ),
-              Text(
-                'Select the locker site where your laundry will be returned.',
-                style: CTextTheme.blackTextTheme.headlineSmall,
-              ),
-              const SizedBox(height: 20.0),
-              ListView.builder(
-                itemCount: lockerSites.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: LockerSiteOption(
-                            title: lockerSites[index].name,
-                            icon: Icons.location_on,
-                            onTap: () async {
-                              await handleCollectionSiteSelection(
-                                  lockerSites[index]);
-                            }),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(),
+      body: Container(
+        padding: const EdgeInsets.all(cDefaultSize),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Select Order Collection Site',
+              style: CTextTheme.blueTextTheme.displayLarge,
+            ),
+            const SizedBox(
+              height: cDefaultSize * 0.5,
+            ),
+            Text(
+              'Select the locker site where your laundry will be returned.',
+              style: CTextTheme.blackTextTheme.headlineSmall,
+            ),
+            const SizedBox(height: 20.0),
+            ListView.builder(
+              itemCount: lockerSites.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    Expanded(
+                      child: LockerSiteOption(
+                          title: lockerSites[index].name,
+                          icon: Icons.location_on,
+                          onTap: () async {
+                            await handleCollectionSiteSelection(
+                                lockerSites[index]);
+                          }),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -138,8 +141,10 @@ class LockerSiteOption extends StatelessWidget {
   final VoidCallback onTap;
 
   const LockerSiteOption(
-      {Key? key, required this.title, required this.onTap, required this.icon})
-      : super(key: key);
+      {super.key,
+      required this.title,
+      required this.onTap,
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {

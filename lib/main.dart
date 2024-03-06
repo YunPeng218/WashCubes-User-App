@@ -1,6 +1,5 @@
 import 'package:device_run_test/firebase_options.dart';
 import 'package:device_run_test/src/features/screens/notification/notification_screen.dart';
-import 'package:device_run_test/src/utilities/locker_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
@@ -11,16 +10,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:device_run_test/src/features/screens/home/home_screen.dart';
 import 'package:device_run_test/src/utilities/theme/theme.dart';
+import 'package:device_run_test/src/features/screens/order/order_screen.dart';
+import 'package:device_run_test/src/features/screens/setting/account_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -38,9 +37,6 @@ void main() async {
     providers: [
       ChangeNotifierProvider<GuestModeProvider>(
         create: (_) => GuestModeProvider(),
-      ),
-      ChangeNotifierProvider<LockerService>(
-        create: (_) => LockerService(),
       ),
     ],
     child: MyApp(
@@ -62,10 +58,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // Notification for when the app is in background
     FirebaseMessaging.onMessageOpenedApp.listen(
-      (RemoteMessage message) async { 
+      (RemoteMessage message) async {
         Navigator.pushNamed(
           navigatorKey.currentState!.context,
           '/notificationPage',
@@ -78,8 +73,8 @@ class MyApp extends StatelessWidget {
       (RemoteMessage? message) {
         if (message != null) {
           Navigator.pushNamed(
-          navigatorKey.currentState!.context,
-          '/notificationPage',
+            navigatorKey.currentState!.context,
+            '/notificationPage',
           );
         }
       },
@@ -88,14 +83,16 @@ class MyApp extends StatelessWidget {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingHandler);
 
     return MaterialApp(
-      // themeMode: ThemeMode.system,
-      theme: CAppTheme.lightTheme,
-      debugShowCheckedModeBanner: false,
-      home: (token != null) ? const HomePage() : const WelcomeScreen(),
-      navigatorKey: navigatorKey,
-      routes: {
-        '/notificationPage': ((context) => const NotificationScreen())
-      }
-    );
+        // themeMode: ThemeMode.system,
+        theme: CAppTheme.lightTheme,
+        debugShowCheckedModeBanner: false,
+        home: (token != null) ? const HomePage() : const WelcomeScreen(),
+        navigatorKey: navigatorKey,
+        routes: {
+          '/notificationPage': ((context) => const NotificationScreen()),
+          '/home': (context) => const HomePage(),
+          '/order': (context) => const OrderPage(),
+          '/account': (context) => const AccountPage(),
+        });
   }
 }

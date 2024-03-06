@@ -45,7 +45,8 @@ class LockerSiteDetailsPopup extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.pop(context);
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => LockerCompartmentSelect(
