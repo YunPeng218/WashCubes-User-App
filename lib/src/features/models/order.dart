@@ -10,7 +10,9 @@ class Order {
   final CollectionLockerDetails? collectionSite;
   final String serviceId;
   final List<OrderItem> orderItems;
+  final List<OrderItem> oldOrderItems;
   final double estimatedPrice;
+  final double finalPrice;
   final OrderStage? orderStage;
   final String createdAt;
   final int v;
@@ -23,7 +25,9 @@ class Order {
     required this.collectionSite,
     required this.serviceId,
     required this.orderItems,
+    required this.oldOrderItems,
     required this.estimatedPrice,
+    required this.finalPrice,
     required this.orderStage,
     required this.createdAt,
     required this.v,
@@ -44,7 +48,11 @@ class Order {
       orderItems: (json['orderItems'] as List<dynamic>)
           .map((item) => OrderItem.fromJson(item))
           .toList(),
+      oldOrderItems: (json['oldOrderItems'] as List<dynamic>)
+          .map((item) => OrderItem.fromJson(item))
+          .toList(),
       estimatedPrice: json['estimatedPrice'].toDouble() ?? 0.0,
+      finalPrice: json['finalPrice']?.toDouble() ?? 0.0,
       orderStage: json['orderStage'] != null
           ? OrderStage.fromJson(json['orderStage'])
           : null, //
@@ -85,11 +93,20 @@ class OrderLockerDetails {
 
 class CollectionLockerDetails {
   final String lockerSiteId;
+  final String compartmentId;
+  final String compartmentNumber;
 
-  CollectionLockerDetails({required this.lockerSiteId});
+  CollectionLockerDetails(
+      {required this.lockerSiteId,
+      required this.compartmentId,
+      required this.compartmentNumber});
 
   factory CollectionLockerDetails.fromJson(Map<String, dynamic> json) {
-    return (CollectionLockerDetails(lockerSiteId: json['lockerSiteId'] ?? ''));
+    return (CollectionLockerDetails(
+      lockerSiteId: json['lockerSiteId'] ?? '',
+      compartmentId: json['compartmentId'] ?? '',
+      compartmentNumber: json['compartmentNumber'] ?? '',
+    ));
   }
 }
 
@@ -129,7 +146,7 @@ class OrderStage {
   OrderStatus outForDelivery;
   OrderStatus readyForCollection;
   OrderStatus completed;
-  OrderStatus orderError;
+  OrderErrorStatus orderError;
 
   OrderStage({
     required this.dropOff,
@@ -151,7 +168,7 @@ class OrderStage {
       outForDelivery: OrderStatus.fromJson(json['outForDelivery']),
       readyForCollection: OrderStatus.fromJson(json['readyForCollection']),
       completed: OrderStatus.fromJson(json['completed']),
-      orderError: OrderStatus.fromJson(json['orderError']),
+      orderError: OrderErrorStatus.fromJson(json['orderError']),
     );
   }
 
@@ -184,8 +201,10 @@ class OrderStage {
         return readyForCollection;
       case 'completed':
         return completed;
-      case 'orderError':
-        return orderError;
+      case 'returnProcessed':
+        return OrderStatus(
+            status: orderError.returnProcessed,
+            dateUpdated: orderError.dateUpdated);
 
       default:
         throw ArgumentError('Invalid status key: $key');
@@ -193,9 +212,6 @@ class OrderStage {
   }
 
   String getMostRecentStatus() {
-    if (orderError.status) {
-      return 'Order Error';
-    }
     if (completed.status) {
       return 'Completed';
     }
@@ -204,6 +220,12 @@ class OrderStage {
     }
     if (outForDelivery.status) {
       return 'Out For Delivery';
+    }
+    if (orderError.status && orderError.userRejected) {
+      return 'Processing Return';
+    }
+    if (orderError.status) {
+      return 'Order Error';
     }
     if (processingComplete.status) {
       return 'Processing Complete';
@@ -265,6 +287,43 @@ class OrderStatus {
     return {
       'status': status,
       'dateUpdated': dateUpdated?.toIso8601String(),
+    };
+  }
+}
+
+class OrderErrorStatus {
+  bool status;
+  DateTime? dateUpdated;
+  List<String> proofPicUrl;
+  bool userRejected;
+  bool returnProcessed;
+
+  OrderErrorStatus({
+    required this.status,
+    this.dateUpdated,
+    required this.proofPicUrl,
+    required this.userRejected,
+    required this.returnProcessed,
+  });
+
+  factory OrderErrorStatus.fromJson(Map<String, dynamic> json) {
+    return OrderErrorStatus(
+      status: json['status'] ?? false,
+      dateUpdated: json['dateUpdated'] != null
+          ? DateTime.parse(json['dateUpdated'])
+          : null,
+      proofPicUrl: List<String>.from(json['proofPicUrl'] ?? []),
+      userRejected: json['userRejected'] ?? false,
+      returnProcessed: json['returnProcessed'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status,
+      'dateUpdated': dateUpdated?.toIso8601String(),
+      'proofPicUrls': proofPicUrl,
+      'userejected': userRejected,
     };
   }
 }

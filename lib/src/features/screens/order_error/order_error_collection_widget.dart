@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:device_run_test/src/features/screens/order/order_status_summary.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +9,13 @@ import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
 import 'package:device_run_test/src/features/screens/order/pickup_qr_popup.dart';
 
-class OrderStatusDetailWidget extends StatefulWidget {
+class OrderErrorDetailWidget extends StatefulWidget {
   final Order order;
   final LockerSite? lockerSite;
   final LockerSite? collectionSite;
   final Service? service;
 
-  const OrderStatusDetailWidget({
+  const OrderErrorDetailWidget({
     super.key,
     required this.order,
     required this.lockerSite,
@@ -22,10 +24,10 @@ class OrderStatusDetailWidget extends StatefulWidget {
   });
 
   @override
-  OrderStatusDetailWidgetState createState() => OrderStatusDetailWidgetState();
+  OrderErrorDetailWidgetState createState() => OrderErrorDetailWidgetState();
 }
 
-class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
+class OrderErrorDetailWidgetState extends State<OrderErrorDetailWidget> {
   void viewOrderSummary() {
     Navigator.push(
       context,
@@ -35,7 +37,7 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
                 service: widget.service,
                 dropOffSite: widget.lockerSite,
                 collectionSite: widget.collectionSite,
-                viewOldOrderSummary: false,
+                viewOldOrderSummary: true,
               )),
     );
   }
@@ -114,7 +116,7 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
               Text(
                 widget.collectionSite?.name ?? 'Loading...',
                 style: CTextTheme.blackTextTheme.headlineMedium,
-              )
+              ),
             ],
           ),
         ),
@@ -123,32 +125,20 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              widget.order.orderStage?.dropOff.status == false
+              Text(
+                'Collection Compartment:',
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
+              widget.order.orderStage?.readyForCollection == true &&
+                      widget.order.collectionSite!.compartmentId.isNotEmpty
                   ? Text(
-                      'Drop Off Compartment:',
+                      widget.collectionSite?.name ?? 'Loading...',
                       style: CTextTheme.blackTextTheme.headlineMedium,
                     )
                   : Text(
-                      'Collection Compartment:',
+                      'N/A',
                       style: CTextTheme.blackTextTheme.headlineMedium,
                     ),
-              widget.order.orderStage?.dropOff.status == false
-                  ? Text(
-                      widget.order.lockerDetails?.compartmentNumber ??
-                          'Loading...',
-                      style: CTextTheme.blackTextTheme.headlineMedium,
-                    )
-                  : widget.order.orderStage?.readyForCollection.status ==
-                              true &&
-                          widget.order.collectionSite!.compartmentId.isNotEmpty
-                      ? Text(
-                          widget.collectionSite?.name ?? 'Loading...',
-                          style: CTextTheme.blackTextTheme.headlineMedium,
-                        )
-                      : Text(
-                          'N/A',
-                          style: CTextTheme.blackTextTheme.headlineMedium,
-                        ),
             ],
           ),
         ),
@@ -181,24 +171,6 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
 
   Row buildButton(String orderStage) {
     switch (orderStage) {
-      case 'Drop Off Pending':
-        return Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: displayDropoffQRCode,
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue[50]!),
-                ),
-                child: Text(
-                  'Order QR Code',
-                  style: CTextTheme.blackTextTheme.headlineMedium,
-                ),
-              ),
-            ),
-          ],
-        );
       case 'Ready For Collection':
         return Row(
           children: [

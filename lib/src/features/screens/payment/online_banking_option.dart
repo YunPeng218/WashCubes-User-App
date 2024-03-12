@@ -15,6 +15,7 @@ class BankSelectionScreen extends StatefulWidget {
   final LockerCompartment? compartment;
   final User? user;
   final LockerSite? collectionSite;
+  final bool isOrderErrorPayment;
 
   const BankSelectionScreen({
     super.key,
@@ -23,6 +24,7 @@ class BankSelectionScreen extends StatefulWidget {
     required this.compartment,
     required this.user,
     required this.collectionSite,
+    required this.isOrderErrorPayment,
   });
 
   @override
@@ -70,6 +72,36 @@ class BankSelectionScreenState extends State<BankSelectionScreen>
   //   }
   // }
 
+  void navigateToCardInput() {
+    if (widget.isOrderErrorPayment == false) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PaymentFormScreen(
+                  order: widget.order,
+                  lockerSite: widget.lockerSite,
+                  compartment: widget.compartment,
+                  user: widget.user,
+                  collectionSite: widget.collectionSite,
+                  isOrderErrorPayment: false,
+                )),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PaymentFormScreen(
+                  order: widget.order,
+                  lockerSite: widget.lockerSite,
+                  compartment: widget.compartment,
+                  user: widget.user,
+                  collectionSite: widget.collectionSite,
+                  isOrderErrorPayment: true,
+                )),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // _context = context;
@@ -93,19 +125,7 @@ class BankSelectionScreenState extends State<BankSelectionScreen>
               style: CTextTheme.blackTextTheme.headlineMedium,
             ),
             trailing: const Icon(Icons.arrow_forward_ios),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentFormScreen(
-                          order: widget.order,
-                          lockerSite: widget.lockerSite,
-                          compartment: widget.compartment,
-                          user: widget.user,
-                          collectionSite: widget.collectionSite,
-                        )),
-              );
-            },
+            onTap: navigateToCardInput,
           );
         },
       ),

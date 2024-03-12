@@ -11,12 +11,15 @@ class OrderStatusSummaryScreen extends StatefulWidget {
   final Service? service;
   final LockerSite? dropOffSite;
   final LockerSite? collectionSite;
+  final bool viewOldOrderSummary;
+
   const OrderStatusSummaryScreen({
     super.key,
     required this.order,
     required this.service,
     required this.dropOffSite,
     required this.collectionSite,
+    required this.viewOldOrderSummary,
   });
 
   @override
@@ -74,10 +77,15 @@ class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.service?.name.toUpperCase() ?? 'Loading...',
-                    style: CTextTheme.blueTextTheme.headlineLarge,
-                  ),
+                  widget.viewOldOrderSummary
+                      ? Text(
+                          'ITEMS TO RETURN',
+                          style: CTextTheme.blueTextTheme.headlineLarge,
+                        )
+                      : Text(
+                          widget.service?.name.toUpperCase() ?? 'Loading...',
+                          style: CTextTheme.blueTextTheme.headlineLarge,
+                        ),
                 ],
               ),
               const SizedBox(height: 30.0),
@@ -85,10 +93,14 @@ class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
                 height: 300,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount:
-                      widget.order.orderItems.length, // Use null-aware operator
+                  itemCount: widget.viewOldOrderSummary
+                      ? widget.order.oldOrderItems.length
+                      : widget
+                          .order.orderItems.length, // Use null-aware operator
                   itemBuilder: ((context, index) {
-                    OrderItem? item = widget.order.orderItems[index];
+                    OrderItem? item = widget.viewOldOrderSummary
+                        ? widget.order.oldOrderItems[index]
+                        : widget.order.orderItems[index];
                     return Column(
                       children: [
                         Row(
@@ -173,19 +185,19 @@ class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
                     ],
                   ),
                   const SizedBox(height: 15.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Compartment:',
-                        style: CTextTheme.blackTextTheme.headlineMedium,
-                      ),
-                      Text(
-                        widget.order.lockerDetails?.compartmentNumber ?? 'N/A',
-                        style: CTextTheme.blackTextTheme.headlineMedium,
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(
+                  //       'Compartment:',
+                  //       style: CTextTheme.blackTextTheme.headlineMedium,
+                  //     ),
+                  //     Text(
+                  //       widget.order.lockerDetails?.compartmentNumber ?? 'N/A',
+                  //       style: CTextTheme.blackTextTheme.headlineMedium,
+                  //     ),
+                  //   ],
+                  // ),
                   const SizedBox(height: 15.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -208,14 +220,34 @@ class _OrderSummaryState extends State<OrderStatusSummaryScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Total Est. Price:',
-                    style: CTextTheme.blueTextTheme.displayMedium,
-                  ),
-                  Text(
-                    'RM ${widget.order.estimatedPrice.toStringAsFixed(2)}',
-                    style: CTextTheme.blueTextTheme.displayMedium,
-                  ),
+                  widget.viewOldOrderSummary
+                      ? Text(
+                          'Total Est. Price:',
+                          style: CTextTheme.blueTextTheme.displayMedium,
+                        )
+                      : widget.order.finalPrice == 0.0
+                          ? Text(
+                              'Total Est. Price:',
+                              style: CTextTheme.blueTextTheme.displayMedium,
+                            )
+                          : Text(
+                              'Final Price:',
+                              style: CTextTheme.blueTextTheme.displayMedium,
+                            ),
+                  widget.viewOldOrderSummary
+                      ? Text(
+                          'RM ${widget.order.estimatedPrice.toStringAsFixed(2)}',
+                          style: CTextTheme.blueTextTheme.displayMedium,
+                        )
+                      : widget.order.finalPrice == 0.0
+                          ? Text(
+                              'RM ${widget.order.estimatedPrice.toStringAsFixed(2)}',
+                              style: CTextTheme.blueTextTheme.displayMedium,
+                            )
+                          : Text(
+                              'RM ${widget.order.finalPrice.toStringAsFixed(2)}',
+                              style: CTextTheme.blueTextTheme.displayMedium,
+                            ),
                 ],
               ),
               const SizedBox(height: 20.0),

@@ -117,6 +117,7 @@ class OrderSummaryState extends State<OrderSummary>
           compartment: widget.compartment!,
           user: user,
           collectionSite: widget.collectionSite,
+          isOrderErrorPayment: false,
         );
       }), (route) {
         return route.isFirst || route.settings.name == '/order';
