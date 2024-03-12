@@ -17,6 +17,7 @@ class PaymentFormScreen extends StatefulWidget {
   final LockerCompartment? compartment;
   final User? user;
   final LockerSite? collectionSite;
+  final bool isOrderErrorPayment;
 
   const PaymentFormScreen({
     super.key,
@@ -25,6 +26,7 @@ class PaymentFormScreen extends StatefulWidget {
     required this.compartment,
     required this.user,
     required this.collectionSite,
+    required this.isOrderErrorPayment,
   });
 
   @override
@@ -141,6 +143,67 @@ class PaymentFormScreenState extends State<PaymentFormScreen>
     }
   }
 
+  Future<void> resolveOrderError() async {
+    Map<String, dynamic> data = {
+      'orderId': widget.order?.id,
+    };
+
+    final response = await http.post(
+      Uri.parse('${url}orders/order-error/resolve'),
+      body: json.encode(data),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Order Error Resolved',
+              textAlign: TextAlign.center,
+              style: CTextTheme.blackTextTheme.headlineLarge,
+            ),
+            content: Text(
+              'The order error for Order #${widget.order?.orderNumber} has been resolved.',
+              textAlign: TextAlign.center,
+              style: CTextTheme.blackTextTheme.headlineSmall,
+            ),
+            actions: <Widget>[
+              Row(
+                children: [
+                  const SizedBox(width: 10.0),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Nice!',
+                        style: CTextTheme.blackTextTheme.headlineSmall,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ).then((value) => {
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (BuildContext context) {
+              return OrderStatusScreen(
+                order: widget.order!,
+              );
+            }), (route) {
+              return route.isFirst || route.settings.name == '/order';
+            })
+          });
+    } else {
+      print('Failed to confirm order. Status code: ${response.statusCode}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // _context = context;
@@ -250,7 +313,11 @@ class PaymentFormScreenState extends State<PaymentFormScreen>
             //   context,
             //   MaterialPageRoute(builder: (context) => const OrderPage()),
             // );
-            await confirmOrder();
+            if (widget.isOrderErrorPayment == false) {
+              await confirmOrder();
+            } else {
+              await resolveOrderError();
+            }
           },
           child: Text(
             'Check Out',

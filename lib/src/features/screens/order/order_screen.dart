@@ -11,6 +11,7 @@ import 'package:device_run_test/src/features/screens/order/order_status_screen.d
 import 'package:device_run_test/src/features/screens/welcome/welcome_screen.dart';
 import 'package:device_run_test/src/features/screens/order/locker_site_select.dart';
 import 'package:device_run_test/src/features/screens/order_error/order_error_screen.dart';
+import 'package:device_run_test/src/features/screens/order_error/order_error_return_screen.dart';
 
 // STYLES
 import '../../../common_widgets/bottom_nav_bar_widget.dart';
@@ -467,14 +468,18 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isOrderErrorReturn = (order.orderStage?.orderError.status ?? false) &&
+        (order.orderStage?.orderError.userRejected ?? false);
     bool isOrderError = order.orderStage?.orderError.status ?? false;
     bool isOrderComplete = order.orderStage?.completed.status ?? false;
 
-    Color cardColor = isOrderError
-        ? Colors.red[50]!
-        : isOrderComplete
-            ? Colors.green[50]!
-            : Colors.blue[50]!;
+    Color cardColor = isOrderErrorReturn
+        ? Colors.orange[50]!
+        : isOrderError
+            ? Colors.red[50]!
+            : isOrderComplete
+                ? Colors.green[50]!
+                : Colors.blue[50]!;
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
@@ -512,13 +517,23 @@ class OrderCard extends StatelessWidget {
         trailing: const Icon(Icons.arrow_forward_ios_rounded),
         onTap: () {
           if (hasOrderError) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => OrderErrorScreen(
-                        order: order,
-                      )),
-            );
+            if (isOrderErrorReturn) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OrderErrorStatusScreen(
+                          order: order,
+                        )),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OrderErrorScreen(
+                          order: order,
+                        )),
+              );
+            }
           } else {
             Navigator.push(
               context,

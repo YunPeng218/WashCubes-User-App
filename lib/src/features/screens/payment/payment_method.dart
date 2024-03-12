@@ -18,17 +18,20 @@ import 'package:device_run_test/src/features/models/user.dart';
 class PaymentScreen extends StatefulWidget {
   final Order? order;
   final LockerSite? lockerSite;
-  final LockerCompartment compartment;
+  final LockerCompartment? compartment;
   final User? user;
   final LockerSite? collectionSite;
+  final bool isOrderErrorPayment;
 
-  const PaymentScreen(
-      {super.key,
-      required this.order,
-      required this.lockerSite,
-      required this.compartment,
-      required this.user,
-      required this.collectionSite});
+  const PaymentScreen({
+    super.key,
+    required this.order,
+    required this.lockerSite,
+    required this.compartment,
+    required this.user,
+    required this.collectionSite,
+    required this.isOrderErrorPayment,
+  });
   @override
   PaymentScreenState createState() => PaymentScreenState();
 }
@@ -41,7 +44,7 @@ class PaymentScreenState extends State<PaymentScreen>
 
   //Payment Timer
   void startTimer() {
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       if (seconds > 0) {
         setState(() {
           seconds--;
@@ -65,53 +68,70 @@ class PaymentScreenState extends State<PaymentScreen>
     super.dispose();
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //   print('State = $state');
-  //   if (state == AppLifecycleState.paused) {
-  //     final lockerService = Provider.of<LockerService>(_context, listen: false);
-  //     lockerService.freeUpLockerCompartment(
-  //         widget.lockerSite, widget.compartment);
-  //   } else if (state == AppLifecycleState.resumed) {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => OrderPage(),
-  //       ),
-  //     );
-  //   }
-  // }
-
   void handlePaymentMethodSelection() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => BankSelectionScreen(
-                order: widget.order,
-                lockerSite: widget.lockerSite,
-                compartment: widget.compartment,
-                user: widget.user,
-                collectionSite: widget.collectionSite,
-              )),
-    );
+    if (widget.isOrderErrorPayment == false) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BankSelectionScreen(
+                  order: widget.order,
+                  lockerSite: widget.lockerSite,
+                  compartment: widget.compartment,
+                  user: widget.user,
+                  collectionSite: widget.collectionSite,
+                  isOrderErrorPayment: false,
+                )),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BankSelectionScreen(
+                  order: widget.order,
+                  lockerSite: widget.lockerSite,
+                  compartment: widget.compartment,
+                  user: widget.user,
+                  collectionSite: widget.collectionSite,
+                  isOrderErrorPayment: true,
+                )),
+      );
+    }
   }
 
   Future<bool> handleBackButtonPress() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        //Alert Dialog PopUp of Order Price Estimation Confirmation
-        return CancelConfirmAlert(
-            title: 'Changed Your Mind?',
-            content:
-                'Your order will be cancelled and you will be redirected to the Order Page. Do you want to proceed?',
-            onPressedConfirm: releaseAssignedCompartment,
-            cancelButtonText: 'Cancel',
-            confirmButtonText: 'Confirm');
-      },
-    );
-    return true;
+    if (widget.isOrderErrorPayment == false) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          //Alert Dialog PopUp of Order Price Estimation Confirmation
+          return CancelConfirmAlert(
+              title: 'Changed Your Mind?',
+              content:
+                  'Your order will be cancelled and you will be redirected to the Order Page. Do you want to proceed?',
+              onPressedConfirm: releaseAssignedCompartment,
+              cancelButtonText: 'Cancel',
+              confirmButtonText: 'Confirm');
+        },
+      );
+      return true;
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          //Alert Dialog PopUp of Order Price Estimation Confirmation
+          return CancelConfirmAlert(
+              title: 'Changed Your Mind?',
+              content: 'Your will be redirected to the Order Error page.',
+              onPressedConfirm: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              cancelButtonText: 'Cancel',
+              confirmButtonText: 'Confirm');
+        },
+      );
+      return true;
+    }
   }
 
   Future<void> releaseAssignedCompartment() async {
@@ -119,7 +139,7 @@ class PaymentScreenState extends State<PaymentScreen>
 
     Map<String, dynamic> releaseComaprtment = {
       'lockerSiteId': widget.lockerSite?.id,
-      'compartmentId': widget.compartment.id,
+      'compartmentId': widget.compartment?.id,
     };
 
     await http.post(
@@ -172,11 +192,17 @@ class PaymentScreenState extends State<PaymentScreen>
               const SizedBox(
                 height: 40.0,
               ),
-              Text(
-                'RM ${widget.order?.estimatedPrice.toStringAsFixed(2)}',
-                style: const TextStyle(
-                    fontSize: 50.0, color: AppColors.cBlueColor3),
-              ),
+              widget.isOrderErrorPayment
+                  ? Text(
+                      'RM ${((widget.order?.finalPrice ?? 0.0) - (widget.order?.estimatedPrice ?? 0.0)).toStringAsFixed(2)}',
+                      style: const TextStyle(
+                          fontSize: 50.0, color: AppColors.cBlueColor3),
+                    )
+                  : Text(
+                      'RM ${widget.order?.estimatedPrice.toStringAsFixed(2)}',
+                      style: const TextStyle(
+                          fontSize: 50.0, color: AppColors.cBlueColor3),
+                    ),
               Text(
                 'Order Number: ${widget.order?.orderNumber}',
                 style: CTextTheme.blackTextTheme.headlineMedium,
