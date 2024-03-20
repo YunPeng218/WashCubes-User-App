@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
-import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
-import 'package:device_run_test/src/features/screens/order/pickup_qr_popup.dart';
+//import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
+//import 'package:device_run_test/src/features/screens/order/pickup_qr_popup.dart';
+import 'package:device_run_test/src/features/screens/order/pickup_qr_screen.dart';
 
 class OrderErrorDetailWidget extends StatefulWidget {
   final Order order;
@@ -42,33 +43,17 @@ class OrderErrorDetailWidgetState extends State<OrderErrorDetailWidget> {
     );
   }
 
-  void displayDropoffQRCode() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DropoffQRScreen(
-            lockerSite: widget.lockerSite,
-            compartment: widget.lockerSite?.compartments.firstWhere(
-                (compartment) =>
-                    compartment.id ==
-                    widget.order.lockerDetails?.compartmentId),
-            order: widget.order);
-      },
-    );
-  }
-
   void displayPickupQRCode() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return PickupQRScreen(
-            lockerSite: widget.collectionSite,
-            compartment: widget.collectionSite?.compartments.firstWhere(
-                (compartment) =>
-                    compartment.id ==
-                    widget.order.lockerDetails?.compartmentId),
-            order: widget.order);
-      },
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PickupQRPage(
+              lockerSite: widget.collectionSite,
+              compartment: widget.collectionSite?.compartments.firstWhere(
+                  (compartment) =>
+                      compartment.id ==
+                      widget.order.lockerDetails?.compartmentId),
+              order: widget.order)),
     );
   }
 
