@@ -11,7 +11,6 @@ import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
 import 'package:device_run_test/src/constants/sizes.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:device_run_test/src/features/screens/payment/payment_method.dart';
@@ -106,19 +105,6 @@ class OrderErrorState extends State<OrderErrorScreen> {
       return false;
     });
     return true;
-  }
-
-  void displayOrderQRCode() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DropoffQRScreen(
-            lockerSite: lockerSite,
-            compartment: lockerSite?.compartments.firstWhere((compartment) =>
-                compartment.id == widget.order.lockerDetails?.compartmentId),
-            order: widget.order);
-      },
-    );
   }
 
   void cancelOrder() async {

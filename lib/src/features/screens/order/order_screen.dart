@@ -414,8 +414,9 @@ class OrderPageState extends State<OrderPage>
 
   Widget buildCompletedOrderList() {
     List<Order> filteredOrders = userOrders
-        .where(
-            (order) => order.orderStage?.getMostRecentStatus() == 'Completed')
+        .where((order) =>
+            order.orderStage?.getMostRecentStatus() == 'Completed' ||
+            order.orderStage?.getMostRecentStatus() == 'Returned')
         .toList();
 
     if (filteredOrders.isEmpty) {
@@ -435,10 +436,17 @@ class OrderPageState extends State<OrderPage>
       itemCount: filteredOrders.length,
       itemBuilder: (context, index) {
         Order order = filteredOrders[index];
-        return OrderCard(
-          order: order,
-          hasOrderError: false,
-        );
+        if (order.orderStage?.orderError.status == true) {
+          return OrderCard(
+            order: order,
+            hasOrderError: true,
+          );
+        } else {
+          return OrderCard(
+            order: order,
+            hasOrderError: false,
+          );
+        }
       },
     );
   }
@@ -472,31 +480,42 @@ class OrderCard extends StatelessWidget {
         (order.orderStage?.orderError.userRejected ?? false);
     bool isOrderError = order.orderStage?.orderError.status ?? false;
     bool isOrderComplete = order.orderStage?.completed.status ?? false;
+    bool isOrderErrorComplete = (order.orderStage?.completed.status ?? false) &&
+        (order.orderStage?.orderError.status ?? false);
 
-    Color cardColor = isOrderErrorReturn
-        ? Colors.orange[50]!
-        : isOrderError
-            ? Colors.red[50]!
-            : isOrderComplete
-                ? Colors.green[50]!
-                : Colors.blue[50]!;
+    Color cardColor = isOrderErrorComplete
+        ? Colors.green[50]!
+        : isOrderErrorReturn
+            ? Colors.orange[50]!
+            : isOrderError
+                ? Colors.red[50]!
+                : isOrderComplete
+                    ? Colors.green[50]!
+                    : Colors.blue[50]!;
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
       color: cardColor,
       child: ListTile(
-        leading: isOrderError
+        leading: isOrderErrorComplete
             ? Image.asset(
-                statusIcons['Order Error'] ?? cAppLogo,
-                width: 70,
-                height: 70,
-              )
-            : Image.asset(
                 statusIcons[order.orderStage?.getMostRecentStatus()] ??
                     cAppLogo,
                 width: 70,
                 height: 70,
-              ),
+              )
+            : isOrderError
+                ? Image.asset(
+                    statusIcons['Order Error'] ?? cAppLogo,
+                    width: 70,
+                    height: 70,
+                  )
+                : Image.asset(
+                    statusIcons[order.orderStage?.getMostRecentStatus()] ??
+                        cAppLogo,
+                    width: 70,
+                    height: 70,
+                  ),
         title: Text(order.getFormattedDateTime(order.createdAt),
             style: CTextTheme.greyTextTheme.labelLarge),
         subtitle: Column(

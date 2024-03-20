@@ -93,7 +93,7 @@ class PickupQRScreenState extends State<PickupQRScreen> {
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               Text(
-                widget.compartment?.compartmentNumber ?? 'Loading...',
+                widget.order!.collectionSite?.compartmentNumber ?? 'Loading...',
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
             ],

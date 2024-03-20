@@ -25,13 +25,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class HomePageState extends State<HomePage> with WidgetsBindingObserver {
   late String userID;
   UserProfile? user;
   late Timer timer;
@@ -117,7 +117,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       loadUserInfo();
     } else {
       setState(() {
-        profilePic = 'https://res.cloudinary.com/ddweldfmx/image/upload/v1707480915/profilePic/zxltbifbulr4m45lbsqq.png';
+        profilePic =
+            'https://res.cloudinary.com/ddweldfmx/image/upload/v1707480915/profilePic/zxltbifbulr4m45lbsqq.png';
       });
     }
     String isBiometricsEnabled =
@@ -194,8 +195,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
           completedOrdersCount = userOrders
               .where((order) =>
-                  order.orderStage?.completed.status == true &&
-                  order.orderStage?.orderError.status != true)
+                  order.orderStage?.completed.status == true ||
+                  (order.orderStage?.orderError.status == true &&
+                      order.orderStage?.completed.status == true))
               .length;
         });
       } else {
@@ -225,7 +227,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         //Avatar Icon
         actions: <Widget>[
           CircleAvatar(
-            backgroundImage: profilePic != null ? NetworkImage(profilePic!) : null,
+            backgroundImage:
+                profilePic != null ? NetworkImage(profilePic!) : null,
             backgroundColor: Colors.transparent,
             child: GestureDetector(
               onTap: () {
@@ -376,7 +379,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             ),
                             title: Text(activeOrdersCount.toString(),
                                 style: CTextTheme.blackTextTheme.headlineLarge),
-                            subtitle: Text('Active Orders',
+                            subtitle: Text('Active',
                                 style: CTextTheme.greyTextTheme.headlineMedium),
                             trailing:
                                 const Icon(Icons.arrow_forward_ios_rounded),
@@ -399,7 +402,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                             ),
                             title: Text(completedOrdersCount.toString(),
                                 style: CTextTheme.blackTextTheme.headlineLarge),
-                            subtitle: Text('Completed Orders',
+                            subtitle: Text('Completed / Returned',
                                 style: CTextTheme.greyTextTheme.headlineMedium),
                             trailing:
                                 const Icon(Icons.arrow_forward_ios_rounded),

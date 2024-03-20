@@ -41,12 +41,10 @@ class ConfirmDropOffScreenState extends State<ConfirmDropOffScreen> {
   Future<void> confirmDropOff() async {
     Map<String, dynamic> confirmDropOff = {
       'orderId': widget.order?.id,
-      'lockerSiteId': widget.lockerSite?.id,
-      'compartmentId': widget.compartment?.id
     };
 
     final response = await http.post(
-      Uri.parse(url + 'orders/confirm-drop-off'),
+      Uri.parse('${url}orders/confirm-drop-off'),
       body: json.encode(confirmDropOff),
       headers: {'Content-Type': 'application/json'},
     );

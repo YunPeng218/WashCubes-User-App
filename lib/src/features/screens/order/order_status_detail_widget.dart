@@ -140,9 +140,12 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
                     )
                   : widget.order.orderStage?.readyForCollection.status ==
                               true &&
-                          widget.order.collectionSite!.compartmentId.isNotEmpty
+                          widget
+                              .order.collectionSite!.compartmentId.isNotEmpty &&
+                          widget.order.orderStage?.completed.status == false
                       ? Text(
-                          widget.collectionSite?.name ?? 'Loading...',
+                          widget.order.collectionSite?.compartmentNumber ??
+                              'Loading...',
                           style: CTextTheme.blackTextTheme.headlineMedium,
                         )
                       : Text(

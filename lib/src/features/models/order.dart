@@ -212,6 +212,9 @@ class OrderStage {
   }
 
   String getMostRecentStatus() {
+    if (completed.status && orderError.status) {
+      return 'Returned';
+    }
     if (completed.status) {
       return 'Completed';
     }
@@ -220,6 +223,9 @@ class OrderStage {
     }
     if (outForDelivery.status) {
       return 'Out For Delivery';
+    }
+    if (processingComplete.status && orderError.status) {
+      return 'Return Processed';
     }
     if (orderError.status && orderError.userRejected) {
       return 'Processing Return';
