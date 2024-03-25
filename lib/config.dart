@@ -5,4 +5,4 @@
 // const url = 'http://172.20.10.2:3000/';
 const url = 'https://ws-wjdp.onrender.com/';
 
-const OPEN_AI_KEY = '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';
+const OPEN_AI_KEY = '';
