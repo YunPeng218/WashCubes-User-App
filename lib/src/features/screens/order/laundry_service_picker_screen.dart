@@ -71,7 +71,7 @@ class LaundryServicePickerState extends State<LaundryServicePicker>
   // GET SERVICES FROM BACKEND
   Future<void> fetchServices() async {
     try {
-      final response = await http.get(Uri.parse(url + 'services'));
+      final response = await http.get(Uri.parse('${url}services'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);

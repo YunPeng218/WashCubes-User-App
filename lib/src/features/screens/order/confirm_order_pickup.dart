@@ -8,6 +8,7 @@ import 'package:device_run_test/src/features/screens/order/order_status_screen.d
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:device_run_test/config.dart';
+import 'package:device_run_test/src/features/screens/order_error/order_error_return_screen.dart';
 
 class ConfirmPickupScreen extends StatefulWidget {
   final Order? order;
@@ -130,43 +131,84 @@ class ConfirmPickupSuccess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        'Collection Successful!',
-        textAlign: TextAlign.center,
-        style: CTextTheme.blackTextTheme.headlineLarge,
-      ),
-      content: Text(
-        'Your order is completed. Thank you for using WashCubes!',
-        textAlign: TextAlign.center,
-        style: CTextTheme.blackTextTheme.headlineMedium,
-      ),
-      actions: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue[100]!)),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OrderStatusScreen(
-                      order: order,
-                    ),
-                  ),
-                );
-              },
-              child: Text(
-                'Nice!',
-                style: CTextTheme.blackTextTheme.headlineSmall,
-              ),
-            ),
-          ],
+    if (order.orderStage?.orderError.status == true) {
+      return AlertDialog(
+        title: Text(
+          'Collection Successful!',
+          textAlign: TextAlign.center,
+          style: CTextTheme.blackTextTheme.headlineLarge,
         ),
-      ],
-    );
+        content: Text(
+          'Your order has been succesfully returned. We apologize for any inconvenience caused.',
+          textAlign: TextAlign.center,
+          style: CTextTheme.blackTextTheme.headlineMedium,
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue[100]!)),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrderErrorStatusScreen(
+                        order: order,
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Nice!',
+                  style: CTextTheme.blackTextTheme.headlineSmall,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {
+      return AlertDialog(
+        title: Text(
+          'Collection Successful!',
+          textAlign: TextAlign.center,
+          style: CTextTheme.blackTextTheme.headlineLarge,
+        ),
+        content: Text(
+          'Your order is completed. Thank you for using WashCubes!',
+          textAlign: TextAlign.center,
+          style: CTextTheme.blackTextTheme.headlineMedium,
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue[100]!)),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrderStatusScreen(
+                        order: order,
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Nice!',
+                  style: CTextTheme.blackTextTheme.headlineSmall,
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    }
   }
 }

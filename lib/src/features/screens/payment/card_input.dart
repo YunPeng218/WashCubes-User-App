@@ -5,7 +5,6 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dar
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/user.dart';
@@ -55,24 +54,6 @@ class PaymentFormScreenState extends State<PaymentFormScreen>
     super.dispose();
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //   print('State = $state');
-  //   if (state == AppLifecycleState.paused) {
-  //     final lockerService = Provider.of<LockerService>(_context, listen: false);
-  //     lockerService.freeUpLockerCompartment(
-  //         widget.lockerSite, widget.compartment);
-  //   } else if (state == AppLifecycleState.resumed) {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => OrderPage(),
-  //       ),
-  //     );
-  //   }
-  // }
-
   Future<void> confirmOrder() async {
     Map<String, dynamic> newOrder = {
       'orderNumber': widget.order?.orderNumber,
@@ -117,24 +98,14 @@ class PaymentFormScreenState extends State<PaymentFormScreen>
         final dynamic orderData = data['newOrder'];
         final Order order = Order.fromJson(orderData);
 
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return DropoffQRScreen(
-                lockerSite: widget.lockerSite,
-                compartment: widget.compartment,
-                order: order);
-          },
-        ).then((value) => {
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return OrderStatusScreen(
-                  order: order,
-                );
-              }), (route) {
-                return route.isFirst || route.settings.name == '/order';
-              })
-            });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrderStatusScreen(
+              order: order,
+            ),
+          ),
+        );
       } else {
         print('Response data does not contain saved order.');
       }

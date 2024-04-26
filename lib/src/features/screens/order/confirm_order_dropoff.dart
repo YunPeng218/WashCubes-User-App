@@ -1,13 +1,11 @@
-// ignore_for_file: must_be_immutable
-
-import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:device_run_test/config.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/screens/order/order_status_screen.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:device_run_test/config.dart';
+import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 
 class ConfirmDropOffScreen extends StatefulWidget {
   final Order? order;
@@ -15,38 +13,31 @@ class ConfirmDropOffScreen extends StatefulWidget {
   final LockerCompartment? compartment;
 
   const ConfirmDropOffScreen({
-    super.key,
+    Key? key,
     required this.order,
     required this.lockerSite,
     required this.compartment,
-  });
+  }) : super(key: key);
 
   @override
   State<ConfirmDropOffScreen> createState() => ConfirmDropOffScreenState();
 }
 
 class ConfirmDropOffScreenState extends State<ConfirmDropOffScreen> {
-  void navigateToOrderStatus(Order order) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => OrderStatusScreen(
-          order: order,
-        ),
-      ),
-    );
-  }
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
-  // CONFIRM DROP OFF ON SERVER SIDE
   Future<void> confirmDropOff() async {
+    if (widget.order == null) {
+      print('Order is null or order id is null.');
+      return;
+    }
+
     Map<String, dynamic> confirmDropOff = {
-      'orderId': widget.order?.id,
-      'lockerSiteId': widget.lockerSite?.id,
-      'compartmentId': widget.compartment?.id
+      'orderId': widget.order!.id,
     };
 
     final response = await http.post(
-      Uri.parse(url + 'orders/confirm-drop-off'),
+      Uri.parse('${url}orders/confirm-drop-off'),
       body: json.encode(confirmDropOff),
       headers: {'Content-Type': 'application/json'},
     );
@@ -64,13 +55,27 @@ class ConfirmDropOffScreenState extends State<ConfirmDropOffScreen> {
               order: order,
             );
           },
-        ).then((value) => {navigateToOrderStatus(order)});
+        ).then((value) => navigateToOrderStatus(order));
       } else {
         print('Response data does not contain saved order.');
       }
     } else {
       print('Failed to confirm order. Status code: ${response.statusCode}');
     }
+  }
+
+  void navigateToOrderStatus(Order order) {
+    if (!mounted) {
+      return;
+    }
+
+    _navigatorKey.currentState!.pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => OrderStatusScreen(
+          order: order,
+        ),
+      ),
+    );
   }
 
   @override
@@ -124,9 +129,10 @@ class ConfirmDropOffScreenState extends State<ConfirmDropOffScreen> {
 }
 
 class ConfirmDropOffSuccess extends StatelessWidget {
-  Order order;
+  final Order order;
 
-  ConfirmDropOffSuccess({super.key, required this.order});
+  const ConfirmDropOffSuccess({Key? key, required this.order})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

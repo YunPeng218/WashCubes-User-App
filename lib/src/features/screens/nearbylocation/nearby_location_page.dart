@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:device_run_test/src/constants/colors.dart';
 import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +100,6 @@ class NearbyLocationPageState extends State<NearbyLocationPage> {
           print('No lockers found.');
         }
       } else {
-        // If the server did not return a 200 OK response, throw an exception.
         throw Exception('Failed to load locker sites');
       }
     } catch (error) {

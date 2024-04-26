@@ -9,7 +9,7 @@ class OrderHelper {
   Future<List<Order>?> getUserOrders(String? userId) async {
     try {
       final response = await http.get(
-        Uri.parse(url + 'orders/user?userId=$userId'),
+        Uri.parse('${url}orders/user?userId=$userId'),
         headers: {
           'Content-Type': 'application/json',
         },

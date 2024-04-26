@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:device_run_test/src/features/models/order.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/models/service.dart';
-import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
-import 'package:device_run_test/src/features/screens/order/pickup_qr_popup.dart';
+//import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
+// import 'package:device_run_test/src/features/screens/order/pickup_qr_popup.dart';
+import 'package:device_run_test/src/features/screens/order/pickup_qr_screen.dart';
+import 'package:device_run_test/src/features/screens/order/dropoff_qr_screen.dart';
 
 class OrderStatusDetailWidget extends StatefulWidget {
   final Order order;
@@ -41,32 +43,30 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
   }
 
   void displayDropoffQRCode() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DropoffQRScreen(
-            lockerSite: widget.lockerSite,
-            compartment: widget.lockerSite?.compartments.firstWhere(
-                (compartment) =>
-                    compartment.id ==
-                    widget.order.lockerDetails?.compartmentId),
-            order: widget.order);
-      },
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => DropOffQRPage(
+              lockerSite: widget.lockerSite,
+              compartment: widget.lockerSite?.compartments.firstWhere(
+                  (compartment) =>
+                      compartment.id ==
+                      widget.order.lockerDetails?.compartmentId),
+              order: widget.order)),
     );
   }
 
   void displayPickupQRCode() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return PickupQRScreen(
-            lockerSite: widget.collectionSite,
-            compartment: widget.collectionSite?.compartments.firstWhere(
-                (compartment) =>
-                    compartment.id ==
-                    widget.order.lockerDetails?.compartmentId),
-            order: widget.order);
-      },
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PickupQRPage(
+              lockerSite: widget.collectionSite,
+              compartment: widget.collectionSite?.compartments.firstWhere(
+                  (compartment) =>
+                      compartment.id ==
+                      widget.order.lockerDetails?.compartmentId),
+              order: widget.order)),
     );
   }
 
@@ -140,9 +140,12 @@ class OrderStatusDetailWidgetState extends State<OrderStatusDetailWidget> {
                     )
                   : widget.order.orderStage?.readyForCollection.status ==
                               true &&
-                          widget.order.collectionSite!.compartmentId.isNotEmpty
+                          widget
+                              .order.collectionSite!.compartmentId.isNotEmpty &&
+                          widget.order.orderStage?.completed.status == false
                       ? Text(
-                          widget.collectionSite?.name ?? 'Loading...',
+                          widget.order.collectionSite?.compartmentNumber ??
+                              'Loading...',
                           style: CTextTheme.blackTextTheme.headlineMedium,
                         )
                       : Text(

@@ -3,7 +3,6 @@ import 'package:device_run_test/src/utilities/theme/widget_themes/text_theme.dar
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'nearby_location_page.dart';
 import 'package:device_run_test/src/features/models/locker.dart';
 import 'package:device_run_test/src/features/screens/nearbylocation/locker_site_details.dart';
 
@@ -52,11 +51,7 @@ class NearbyLocationsScreenState extends State<NearbyLocationsScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const NearbyLocationPage()),
-            );
+            Navigator.pop(context);
           },
         ),
       ),

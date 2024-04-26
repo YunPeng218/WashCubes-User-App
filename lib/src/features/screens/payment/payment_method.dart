@@ -59,7 +59,7 @@ class PaymentScreenState extends State<PaymentScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    startTimer();
+    //startTimer();
   }
 
   @override
@@ -174,13 +174,13 @@ class PaymentScreenState extends State<PaymentScreen>
             },
           ),
           actions: <Widget>[
-            OutlinedButton(
-                onPressed: () {},
-                child: Text(
-                  '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}',
-                  style: CTextTheme.blackTextTheme.headlineSmall,
-                )),
-            const SizedBox(width: 20),
+            // OutlinedButton(
+            //     onPressed: () {},
+            //     child: Text(
+            //       '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}',
+            //       style: CTextTheme.blackTextTheme.headlineSmall,
+            //     )),
+            // const SizedBox(width: 20),
           ],
         ),
         body: Container(

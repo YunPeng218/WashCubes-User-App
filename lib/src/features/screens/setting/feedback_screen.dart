@@ -132,10 +132,12 @@ class _FeedbackRatingsPageState extends State<FeedbackRatingsPage> {
     // Decode the token and get the user ID
     Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
     String userId = jwtDecodedToken['_id'];
+    int phoneNumber = jwtDecodedToken['phoneNumber'];
 
     // Create the newFeedback map
     Map<String, dynamic> newFeedback = {
       'user.userID': userId,
+      'user.phoneNumber': phoneNumber,
       'starRating': _rating,
       'improvementCategories': _selectedImprovements,
       'message': _feedbackController.text,

@@ -12,7 +12,6 @@ import 'package:device_run_test/src/features/models/service.dart';
 import 'package:device_run_test/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:device_run_test/src/features/screens/order/dropoff_qr_popup.dart';
 
 class OrderErrorStatusScreen extends StatefulWidget {
   final Order order;
@@ -99,19 +98,6 @@ class OrderErrorStatusState extends State<OrderErrorStatusScreen> {
       return false;
     });
     return true;
-  }
-
-  void displayOrderQRCode() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DropoffQRScreen(
-            lockerSite: lockerSite,
-            compartment: lockerSite?.compartments.firstWhere((compartment) =>
-                compartment.id == widget.order.lockerDetails?.compartmentId),
-            order: widget.order);
-      },
-    );
   }
 
   @override

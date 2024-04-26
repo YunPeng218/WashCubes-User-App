@@ -23,7 +23,7 @@ class PickupQRScreen extends StatefulWidget {
 
 class PickupQRScreenState extends State<PickupQRScreen> {
   Future<void> confirmOrderPickup() async {
-    Navigator.pop(context);
+    //Navigator.pop(context);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -93,7 +93,7 @@ class PickupQRScreenState extends State<PickupQRScreen> {
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
               Text(
-                widget.compartment?.compartmentNumber ?? 'Loading...',
+                widget.order!.collectionSite?.compartmentNumber ?? 'Loading...',
                 style: CTextTheme.blackTextTheme.headlineMedium,
               ),
             ],
